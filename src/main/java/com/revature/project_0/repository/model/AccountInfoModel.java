@@ -92,7 +92,7 @@ public class AccountInfoModel {
 		}
 		
 		public AccountInfoModel build() {
-			return new AccountInfoModel(accountId, accountId, accountId, dateClosed, dateClosed, status, status, balance);
+			return new AccountInfoModel(accountId, customerId, jointCustomerId, dateOpened, dateClosed, type, status, balance);
 		}
 	}
 	
