@@ -102,4 +102,60 @@ public class AccountInfoModelTest {
 		accountInfoModel.setType(AccountInfoModel.AccountStatus.CLOSED);
 		assertEquals(AccountInfoModel.AccountStatus.CLOSED, accountInfoModel.getType());
 	}
+	
+	@Test
+	public void lesserAccountIdComparesAsLesser() {
+		AccountInfoModel p1, p2;
+		
+		p1 = AccountInfoModel.getBuilder()
+				.withAccountId(0)
+				.build();
+		p2 = AccountInfoModel.getBuilder()
+				.withAccountId(1)
+				.build();
+		
+		assertTrue(0 > p1.compareTo(p2));
+	}
+	
+	@Test
+	public void lesserCustomerIdComparesAsLesser() {
+		AccountInfoModel p1, p2;
+		
+		p1 = AccountInfoModel.getBuilder()
+				.withCustomerId(0l)
+				.build();
+		p2 = AccountInfoModel.getBuilder()
+				.withCustomerId(1l)
+				.build();
+		
+		assertTrue(0 > p1.compareTo(p2));
+	}
+	
+	@Test
+	public void lesserJointCustomerIdComparesAsLesser() {
+		AccountInfoModel p1, p2;
+		
+		p1 = AccountInfoModel.getBuilder()
+				.withJointCustomerId(0l)
+				.build();
+		p2 = AccountInfoModel.getBuilder()
+				.withJointCustomerId(1l)
+				.build();
+		
+		assertTrue(0 > p1.compareTo(p2));
+	}
+	
+	@Test
+	public void equalAccountIdCustomerIdJointCustomerIdComparesAsEqual() {
+		AccountInfoModel p1, p2;
+		
+		p1 = AccountInfoModel.getBuilder()
+				.withType(0)
+				.build();
+		p2 = AccountInfoModel.getBuilder()
+				.withType(1)
+				.build();
+		
+		assertTrue(0 == p1.compareTo(p2));
+	}
 }

@@ -4,7 +4,9 @@ import java.util.Date;
 
 import org.jetbrains.annotations.Nullable;
 
-public class AccountInfoModel {
+import com.revature.project_0.util.Util;
+
+public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private long accountId;
 	private long customerId;
 	private long jointCustomerId;
@@ -16,7 +18,7 @@ public class AccountInfoModel {
 	
 	private static final Builder builder = new Builder();
 	
-	public static final int NO_ID = -1;
+	public static final long NO_ID = -1;
 	
 	public static class AccountType {
 		public static final int CHECKING = 0;
@@ -172,8 +174,18 @@ public class AccountInfoModel {
 		switch (type) {
 			case AccountType.SAVINGS:
 				return AccountType.SAVINGS;
+			default:
+				return AccountType.CHECKING;				
 		}
-		return AccountType.CHECKING;
+	}
+	
+	public String prettyPrintType() {
+		switch (getType()) {
+		case AccountType.SAVINGS:
+			return "SAVINGS";
+		default:
+			return "CHECKING";
+		}
 	}
 
 	public void setType(int type) {
@@ -184,8 +196,18 @@ public class AccountInfoModel {
 		switch (status) {
 		case AccountStatus.CLOSED:
 				return AccountStatus.CLOSED;
+		default:
+			return AccountStatus.OPENED;
 		}
-		return AccountStatus.OPENED;
+	}
+	
+	public String prettyPrintStatus() {
+		switch (getStatus()) {
+		case AccountStatus.CLOSED:
+			return "CLOSED";
+		default:
+			return "OPENED";
+		}
 	}
 
 	public void setStatus(int status) {
@@ -201,5 +223,38 @@ public class AccountInfoModel {
 			return false;
 		this.balance = balance;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder()
+				.append("Account Id: ")
+				.append(Util.zeroPadId(accountId))
+				.append("\nBalance: ")
+				.append(Util.currencyFormat(balance))
+				.append("\nCustomer \tId: ")
+				.append(Util.zeroPadCondensedId(customerId))
+				.append("\nCustomer, Joint Id: ")
+				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : "")
+				.append("\nOpened On: ")
+				.append(dateOpened != null ? dateOpened : Util.NOT_AVAILABLE)
+				.append("\nClosed On: ")
+				.append(dateClosed != null ? dateClosed : Util.NOT_AVAILABLE)
+				.append("\nType: ")
+				.append(prettyPrintType())
+				.append("\nStatus: ")
+				.append(prettyPrintStatus())
+				.toString();
+	}
+
+	@Override
+	public int compareTo(AccountInfoModel m) {
+		return this.accountId < m.accountId ? -1 :
+			this.accountId > m.accountId ? 1 :
+				this.customerId < m.customerId ? -1 :
+					this.customerId > m.customerId ? 1 :
+						this.jointCustomerId < m.jointCustomerId ? -1 :
+							this.jointCustomerId > m.jointCustomerId ? 1 :
+								0;
 	}
 }

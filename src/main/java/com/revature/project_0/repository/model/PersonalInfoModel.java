@@ -1,7 +1,6 @@
 package com.revature.project_0.repository.model;
 
 import java.util.Date;
-import java.util.zip.ZipError;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +17,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	private String phoneNumber;
 	private String beneficiary;
 	
-	public static final int NO_ID = -1;
+	public static final long NO_ID = -1;
 	
 	private static final Builder builder = new Builder();
 	
@@ -224,7 +223,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	public String toString() {
 		return new StringBuilder()
 				.append("Customer Id: ")
-				.append(Util.zeroPadId(customerId))
+				.append(Util.zeroPadCondensedId(customerId))
 				.append("\nLast name: ")
 				.append(lastName)
 				.append("\nFirst name (MI): ")
@@ -245,9 +244,9 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	}
 
 	@Override
-	public int compareTo(PersonalInfoModel p) {
-		return this.customerId < p.customerId ? -1 :
-			this.customerId == p.customerId ? 0 :
+	public int compareTo(PersonalInfoModel m) {
+		return this.customerId < m.customerId ? -1 :
+			this.customerId == m.customerId ? 0 :
 				1;
 	}
 }
