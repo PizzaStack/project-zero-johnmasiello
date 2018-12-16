@@ -54,7 +54,8 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 	}
 	
 	public boolean validateNewUsername(@NotNull String newUsername) {
-		return !(newUsername.contains(" ") || 
+		return newUsername != null && 
+				!(newUsername.contains(" ") || 
 				newUsername.contains("\n") ||
 				newUsername.contains("\r") ||
 				newUsername.contains("\t") ||
@@ -62,7 +63,8 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 	}
 	
 	public boolean validateNewPassword(@NotNull String newPassword) {
-		return validateNewUsername(newPassword);
+		return newPassword != null && 
+				validateNewUsername(newPassword);
 	}
 	
 	@Override
@@ -70,5 +72,10 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 		return this.customerId < m.customerId ? -1 :
 			this.customerId == m.customerId ? 0 :
 				1;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof CustomerLoginModel && compareTo((CustomerLoginModel)obj) == 0;
 	}
 }

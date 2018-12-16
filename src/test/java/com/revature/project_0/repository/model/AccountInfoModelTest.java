@@ -158,4 +158,14 @@ public class AccountInfoModelTest {
 		
 		assertTrue(0 == p1.compareTo(p2));
 	}
+	
+	@Test
+	public void outOfBoxModelEqualsOutOfBoxModel() {
+		assertTrue(accountInfoModel.equals(AccountInfoModel.getBuilder().build()));
+	}
+	
+	@Test 
+	public void notEqualToNull() {
+		assertFalse(accountInfoModel.equals(null));
+	}
 }

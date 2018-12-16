@@ -41,4 +41,14 @@ public class CustomerLoginModelTest {
 	public void setting6CharacterPasswordPasses() {
 		assertTrue(customerLoginModel.setPassword("swordf"));
 	}
+	
+	@Test
+	public void outOfBoxModelEqualsOutOfBoxModel() {
+		assertTrue(customerLoginModel.equals(new CustomerLoginModel(0, null, null)));
+	}
+	
+	@Test 
+	public void notEqualToNull() {
+		assertFalse(customerLoginModel.equals(null));
+	}
 }

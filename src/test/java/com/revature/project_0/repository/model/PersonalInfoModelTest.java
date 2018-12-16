@@ -105,4 +105,14 @@ public class PersonalInfoModelTest {
 		
 		assertTrue(0 < p1.compareTo(p2));
 	}
+	
+	@Test
+	public void outOfBoxModelEqualsOutOfBoxModel() {
+		assertTrue(personalInfoModel.equals(PersonalInfoModel.getBuilder().build()));
+	}
+	
+	@Test 
+	public void notEqualToNull() {
+		assertFalse(personalInfoModel.equals(null));
+	}
 }

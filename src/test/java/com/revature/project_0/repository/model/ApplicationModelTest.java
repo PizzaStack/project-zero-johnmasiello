@@ -2,9 +2,18 @@ package com.revature.project_0.repository.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.revature.project_0.App;
+
 public class ApplicationModelTest {	
+	private ApplicationModel applicationModel;
+	@Before
+	public void init() {
+		applicationModel = ApplicationModel.getBuilder().build();
+	}
+	
 	@Test
 	public void buildApplicationModel() {
 		ApplicationModel applicationModel = ApplicationModel.getBuilder()
@@ -68,5 +77,15 @@ public class ApplicationModelTest {
 				.build();
 		
 		assertTrue(0 < m1.compareTo(m2));
+	}
+	
+	@Test
+	public void outOfBoxModelEqualsOutOfBoxModel() {
+		assertTrue(applicationModel.equals(ApplicationModel.getBuilder().build()));
+	}
+	
+	@Test 
+	public void notEqualToNull() {
+		assertFalse(applicationModel.equals(null));
 	}
 }

@@ -257,4 +257,9 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 							this.jointCustomerId > m.jointCustomerId ? 1 :
 								0;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof AccountInfoModel && compareTo((AccountInfoModel)obj) == 0;
+	}
 }

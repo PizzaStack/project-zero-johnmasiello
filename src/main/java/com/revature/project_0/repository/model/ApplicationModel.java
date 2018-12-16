@@ -82,4 +82,9 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 			applicationId > m.applicationId ? 1 :
 				0;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ApplicationModel && compareTo((ApplicationModel)obj) == 0;
+	}
 }
