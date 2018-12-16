@@ -2,8 +2,12 @@ package com.revature.project_0.repository.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Test;
 
@@ -82,5 +86,23 @@ public class ModelUnitTest {
 		accountInfoModel.setStatus(AccountInfoModel.AccountStatus.CLOSED);
 		accountInfoModel.setDateClosed(dateClosed);
 		System.out.println("\n\nCloseAccount\n" + accountInfoModel);
+	}
+	
+	@Test
+	public void ValidateUsernameAndPasswordToCreateCustomerLoginModel() throws Exception{
+		CustomerLoginModel helper = new CustomerLoginModel();
+		final String username = "Choochoo";
+		assertTrue("Username not set to helper object", helper.setUsername(username));
+		List<CustomerLoginModel> customerLoginTable = new ArrayList<>();
+		CustomerLoginModelUsernameComparator sameUsername = new CustomerLoginModelUsernameComparator();
+		for (CustomerLoginModel c : customerLoginTable) {
+			if (sameUsername.compare(helper, c) == 0) {
+				throw new Exception("duplicate username: username already found in table");
+			}
+		}
+		final String password = "mysecr3t";
+		assertTrue("Intended password is not a valid password", helper.setPassword(password));
+		final long newCustomerId = 1l;
+		CustomerLoginModel customerLoginModel = new CustomerLoginModel(newCustomerId, username, password);
 	}
 }
