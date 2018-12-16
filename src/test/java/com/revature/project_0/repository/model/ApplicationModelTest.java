@@ -47,13 +47,6 @@ public class ApplicationModelTest {
 	}
 	
 	@Test
-	public void setApplicationId() {
-		ApplicationModel applicationModel = ApplicationModel.getBuilder().build();
-		applicationModel.setApplicationId(99);
-		assertEquals(99, applicationModel.getApplicationId());
-	}
-	
-	@Test
 	public void lesserApplicationIdComparesLess() {
 		ApplicationModel m1 = ApplicationModel.getBuilder()
 				.withApplicationId(0)

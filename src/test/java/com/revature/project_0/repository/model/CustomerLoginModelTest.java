@@ -18,11 +18,6 @@ public class CustomerLoginModelTest {
 	}
 	
 	@Test
-	public void settingNegativeCustomerIdFails() {
-		assertFalse(customerLoginModel.setCustomerId(-1));
-	}
-	
-	@Test
 	public void settingtooShortUsernameFails() {
 		assertFalse(customerLoginModel.setUsername("asdf"));
 	}

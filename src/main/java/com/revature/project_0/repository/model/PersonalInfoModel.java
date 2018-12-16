@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import com.revature.project_0.util.Util;
 
 public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
-	private long customerId;
+	private final long customerId;
 	private String firstName;
 	private String lastName;
 	private char middleInitial;
@@ -125,13 +125,6 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 
 	public long getCustomerId() {
 		return customerId;
-	}
-
-	public boolean setCustomerId(long customerId) {
-		if (customerId < 0)
-			return false;
-		this.customerId = customerId;
-		return true;
 	}
 
 	public String getFirstName() {

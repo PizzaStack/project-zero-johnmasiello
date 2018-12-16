@@ -50,21 +50,6 @@ public class AccountInfoModelTest {
 	}
 	
 	@Test
-	public void settingNegativeAccountIdFails() {
-		assertFalse(accountInfoModel.setAccountId(-100l));
-	}
-	
-	@Test
-	public void settingNegativeCustomerIdFails() {
-		assertFalse(accountInfoModel.setCustomerId(-100l));
-	}
-	
-	@Test
-	public void settingNegativeJointCustomerIdFails() {
-		assertFalse(accountInfoModel.setJointCustomerId(-100l));
-	}
-	
-	@Test
 	public void settingNullAccountOpenedDateFails() {
 		assertFalse(accountInfoModel.setDateOpened(null));
 	}

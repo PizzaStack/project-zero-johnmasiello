@@ -3,13 +3,9 @@ package com.revature.project_0.repository.model;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
-	private long customerId;
+	private final long customerId;
 	private String username;
 	private String password;
-	
-	public CustomerLoginModel() {
-		
-	}
 	
 	public CustomerLoginModel(long customerId, @NotNull String username,@NotNull  String password) {
 		this.customerId = customerId;
@@ -19,14 +15,6 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 
 	public long getCustomerId() {
 		return customerId;
-	}
-
-
-	public boolean setCustomerId(long customerId) {
-		if (customerId < 0)
-			return false;
-		this.customerId = customerId;
-		return true;
 	}
 	
 	@NotNull

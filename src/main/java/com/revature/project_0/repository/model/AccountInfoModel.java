@@ -7,9 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import com.revature.project_0.util.Util;
 
 public class AccountInfoModel implements Comparable<AccountInfoModel> {
-	private long accountId;
-	private long customerId;
-	private long jointCustomerId;
+	private final long accountId;
+	private final long customerId;
+	private final long jointCustomerId;
 	private Date dateOpened;
 	private Date dateClosed;
 	private int type;
@@ -119,33 +119,12 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return accountId;
 	}
 
-	public boolean setAccountId(long accountId) {
-		if (accountId < 0)
-			return false;
-		this.accountId = accountId;
-		return true;
-	}
-
 	public long getCustomerId() {
 		return customerId;
 	}
 
-	public boolean setCustomerId(long customerId) {
-		if (customerId < 0)
-			return false;
-		this.customerId = customerId;
-		return true;
-	}
-
 	public long getJointCustomerId() {
 		return jointCustomerId;
-	}
-
-	public boolean setJointCustomerId(long jointCustomerId) {
-		if (jointCustomerId < 0)
-			return false;
-		this.jointCustomerId = jointCustomerId;
-		return true;
 	}
 
 	public Date getDateOpened() {

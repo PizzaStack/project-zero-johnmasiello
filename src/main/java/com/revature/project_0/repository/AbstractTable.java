@@ -1,15 +1,22 @@
 package com.revature.project_0.repository;
 
-import java.util.TreeSet;
+import java.util.TreeMap;
 
-public abstract class AbstractTable<Model extends Comparable<Model>> {
-	private TreeSet<Model> table = new TreeSet<>();
+public abstract class AbstractTable<K extends Comparable<K>, Model > {
+	private TreeMap<K, Model> table = new TreeMap<>();
 	
-	boolean addNewRecord(Model record) {
-		return table.add(record);
+	boolean addRecord(K key, Model record) {
+		if (table.containsKey(key))
+			return false;
+		table.put(key, record);
+		return true;
 	}
 	
-	boolean deleteRecord(Model record) {
-		return table.remove(record);
+	boolean deleteRecord(K key) {
+		return table.remove(key) != null;
+	}
+	
+	Model selectRecord(K k) {
+		return table.get(k);
 	}
 }

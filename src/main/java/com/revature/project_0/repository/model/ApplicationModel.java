@@ -1,7 +1,7 @@
 package com.revature.project_0.repository.model;
 
 public class ApplicationModel implements Comparable<ApplicationModel>{
-	private long applicationId;
+	private final long applicationId;
 	private long customerId;
 	private long jointCustomerId;
 	
@@ -55,11 +55,6 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	public long getApplicationId() {
 		return applicationId;
 	}
-
-	public void setApplicationId(long applicationId) {
-		this.applicationId = applicationId;
-	}
-
 	public long getCustomerId() {
 		return customerId;
 	}
