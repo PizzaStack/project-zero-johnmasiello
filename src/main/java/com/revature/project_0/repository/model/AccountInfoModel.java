@@ -230,11 +230,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	public int compareTo(AccountInfoModel m) {
 		return this.accountId < m.accountId ? -1 :
 			this.accountId > m.accountId ? 1 :
-				this.customerId < m.customerId ? -1 :
-					this.customerId > m.customerId ? 1 :
-						this.jointCustomerId < m.jointCustomerId ? -1 :
-							this.jointCustomerId > m.jointCustomerId ? 1 :
-								0;
+				0;
 	}
 
 	@Override
