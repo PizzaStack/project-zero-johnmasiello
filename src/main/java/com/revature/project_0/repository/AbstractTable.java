@@ -23,4 +23,14 @@ abstract class AbstractTable<K extends Comparable<K>, M > {
 	TreeMap<K, M> getTable() {
 		return table;
 	}
+	
+	K generateNextPrimaryKey() {
+		if (table.isEmpty())
+			return firstPrimaryKey();
+		return incrementPrimaryKey(table.lastKey());
+	}
+	
+	abstract K incrementPrimaryKey(K key);
+	
+	abstract K firstPrimaryKey();
 }

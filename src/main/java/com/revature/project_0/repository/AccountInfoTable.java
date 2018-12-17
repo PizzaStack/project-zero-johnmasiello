@@ -26,4 +26,14 @@ class AccountInfoTable extends AbstractTable<Long, AccountInfoModel> {
 			});
 		return accounts;
 	}
+
+	@Override
+	Long incrementPrimaryKey(Long key) {
+		return ++key;
+	}
+
+	@Override
+	Long firstPrimaryKey() {
+		return 0l;
+	}
 }

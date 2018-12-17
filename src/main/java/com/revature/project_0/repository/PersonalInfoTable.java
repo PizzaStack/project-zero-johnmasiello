@@ -14,4 +14,14 @@ public class PersonalInfoTable extends AbstractTable<Long, PersonalInfoModel> {
 	public PersonalInfoModel selectRecord(long customerId) {
 		return super.selectRecord(customerId);
 	}
+	
+	@Override
+	Long incrementPrimaryKey(Long key) {
+		return ++key;
+	}
+	
+	@Override
+	Long firstPrimaryKey() {
+		return 0l;
+	}
 }

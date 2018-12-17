@@ -14,4 +14,14 @@ public class CustomerLoginTable extends AbstractTable<String, CustomerLoginModel
 	public CustomerLoginModel selectRecord(String username) {
 		return super.selectRecord(username);
 	}
+	
+	@Override
+	String incrementPrimaryKey(String key) {
+		return key;
+	}
+	
+	@Override
+	String firstPrimaryKey() {
+		return null;
+	}
 }

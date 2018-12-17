@@ -3,7 +3,6 @@ package com.revature.project_0.repository;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.ApplicationModel;
 
 public class ApplicationTable extends AbstractTable<Long, ApplicationModel> {
@@ -26,5 +25,15 @@ public class ApplicationTable extends AbstractTable<Long, ApplicationModel> {
 				applications.add($);
 			});
 		return applications;
+	}
+	
+	@Override
+	Long incrementPrimaryKey(Long key) {
+		return ++key;
+	}
+	
+	@Override
+	Long firstPrimaryKey() {
+		return 0l;
 	}
 }

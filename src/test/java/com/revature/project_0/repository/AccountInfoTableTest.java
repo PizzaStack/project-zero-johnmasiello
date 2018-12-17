@@ -81,4 +81,15 @@ public class AccountInfoTableTest {
 		
 		associatedAccounts.forEach(($) -> {System.out.println($ + "\n");});
 	}
+	
+	@Test
+	public void testFirstPrimaryKey( ) {
+		assertTrue(0l == accountInfoTable.generateNextPrimaryKey());
+	}
+	
+	@Test
+	public void testNextPrimaryKey( ) {
+		accountInfoTable.addRecord(0, accountInfos[0]);
+		assertTrue(1l == accountInfoTable.generateNextPrimaryKey());
+	}
 }
