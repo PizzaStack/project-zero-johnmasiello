@@ -1,5 +1,7 @@
 package com.revature.project_0.repository.model;
 
+import com.revature.project_0.util.Util;
+
 public class ApplicationModel implements Comparable<ApplicationModel>{
 	private final long applicationId;
 	private long customerId;
@@ -55,6 +57,11 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	public long getApplicationId() {
 		return applicationId;
 	}
+	
+	public String prettyPrintApplicationId() {
+		return Util.zeroPadCondensedId(applicationId);
+	}
+	
 	public long getCustomerId() {
 		return customerId;
 	}

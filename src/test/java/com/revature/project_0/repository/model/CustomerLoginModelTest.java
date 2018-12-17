@@ -10,36 +10,42 @@ public class CustomerLoginModelTest {
 	
 	@Before
 	public void init() {
-		customerLoginModel = new CustomerLoginModel(0, "", "");
-	}
-	@Test
-	public void createCustomerLoginModel() {
-		CustomerLoginModel customerLoginModel = new CustomerLoginModel(0, "john83", "secret");
+		customerLoginModel = CustomerLoginModel.getBuilder()
+				.build();
 	}
 	
 	@Test
-	public void settingtooShortUsernameFails() {
-		assertFalse(customerLoginModel.setUsername("asdf"));
+	public void buildWithUsername() {
+		final String username = "abcdefg";
+		CustomerLoginModel customerLoginModel = CustomerLoginModel.getBuilder()
+				.withUsername(username)
+				.build();
+		assertEquals(username, customerLoginModel.getUsername());
+	}
+
+	@Test
+	public void validatingTooShortUsernameFails() {
+		assertFalse(customerLoginModel.validateNewUsername("asdf"));
 	}
 	
 	@Test
-	public void setting6characterUsernamePasses() {
-		assertTrue(customerLoginModel.setUsername("John83"));
+	public void validating6characterUsernamePasses() {
+		assertTrue(customerLoginModel.validateNewUsername("John83"));
 	}
 	
 	@Test
-	public void settingWhiteSpaceInPasswordFails() {
-		assertFalse(customerLoginModel.setPassword("43 6577"));
+	public void validatingWhiteSpaceInPasswordFails() {
+		assertFalse(customerLoginModel.validateNewPassword("43 6577"));
 	}
 	
 	@Test
-	public void setting6CharacterPasswordPasses() {
-		assertTrue(customerLoginModel.setPassword("swordf"));
+	public void validating6CharacterPasswordPasses() {
+		assertTrue(customerLoginModel.validateNewPassword("swordf"));
 	}
 	
 	@Test
 	public void outOfBoxModelEqualsOutOfBoxModel() {
-		assertTrue(customerLoginModel.equals(new CustomerLoginModel(0, null, null)));
+		assertTrue(customerLoginModel.equals(CustomerLoginModel.getBuilder().build()));
 	}
 	
 	@Test 

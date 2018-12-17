@@ -3,13 +3,53 @@ package com.revature.project_0.repository.model;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
+	private final String username;
 	private final long customerId;
-	private String username;
 	private String password;
 	
-	public CustomerLoginModel(long customerId, @NotNull String username,@NotNull  String password) {
-		this.customerId = customerId;
+	private static final Builder builder = new Builder();
+	public static final int NO_ID = -1;
+	
+	public static class Builder {
+		private String username;
+		private long customerId;
+		private String password;
+		
+		{
+			reset();
+		}
+		
+		private void reset() {
+			username = password = "";
+			customerId = NO_ID;
+		}
+		
+		public Builder withUsername(String username) {
+			this.username = username;
+			return this;
+		}
+		public Builder withCustomerId(long customerId) {
+			this.customerId = customerId;
+			return this;
+		}
+		public Builder withPassword(String password) {
+			this.password = password;
+			return this;
+		}
+		
+		public CustomerLoginModel build() {
+			return new CustomerLoginModel(username, customerId, password);
+		}
+	}
+	
+	public static Builder getBuilder() {
+		builder.reset();
+		return builder;
+	}
+	
+	private CustomerLoginModel(@NotNull String username, long customerId, @NotNull String password) {
 		this.username = username;
+		this.customerId = customerId;
 		this.password = password;
 	}
 
@@ -20,13 +60,6 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 	@NotNull
 	public String getUsername() {
 		return username;
-	}
-
-	public boolean setUsername(@NotNull String username) {
-		if (!validateNewUsername(username))
-			return false;
-		this.username = username;
-		return true;
 	}
 	
 	@NotNull
@@ -57,9 +90,7 @@ public class CustomerLoginModel implements Comparable<CustomerLoginModel>{
 	
 	@Override
 	public int compareTo(CustomerLoginModel m) {
-		return this.customerId < m.customerId ? -1 :
-			this.customerId == m.customerId ? 0 :
-				1;
+		return username.compareTo(m.username);
 	}
 	
 	@Override

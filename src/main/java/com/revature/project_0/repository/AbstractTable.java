@@ -20,7 +20,7 @@ abstract class AbstractTable<K extends Comparable<K>, M > {
 		return table.get(key);
 	}
 
-	public TreeMap<K, M> getTable() {
+	TreeMap<K, M> getTable() {
 		return table;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.revature.project_0.repository.model.AccountInfoModel;
 
-class AccountInfoTable extends SimpleTable<AccountInfoModel> {
+class AccountInfoTable extends AbstractTable<Long, AccountInfoModel> {
 	public boolean addRecord(long accountId, AccountInfoModel accountInfoModel) {
 		return super.addRecord(accountId, accountInfoModel);
 	}
