@@ -3,9 +3,10 @@ package com.revature.project_0.repository.model;
 import com.revature.project_0.util.Util;
 
 public class ApplicationModel implements Comparable<ApplicationModel>{
-	private final long applicationId;
+	private long applicationId;
 	private long customerId;
 	private long jointCustomerId;
+	private int type;
 	
 	public static final int NO_ID = -1;
 	private static Builder builder = new Builder(); 
@@ -14,6 +15,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		private long applicationId;
 		private long customerId;
 		private long jointCustomerId;
+		private int type;
 		
 		{
 			reset();
@@ -21,6 +23,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		
 		private void reset() {
 			applicationId = customerId = jointCustomerId = NO_ID;
+			type = AccountType.CHECKING;
 		}
 
 		public Builder withApplicationId(long applicationId) {
@@ -38,20 +41,30 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 			return this;
 		}
 		
+		public Builder withType(int type) {
+			this.type = type;
+			return this;
+		}
+		
 		public ApplicationModel build() {
-			return new ApplicationModel(applicationId, customerId, jointCustomerId);
+			return new ApplicationModel(applicationId, customerId, jointCustomerId, type);
 		}
 	}
 	
-	private ApplicationModel(long applicationId, long customerId, long jointCustomerId) {
+	private ApplicationModel(long applicationId, long customerId, long jointCustomerId, int type) {
 		this.applicationId = applicationId;
 		this.customerId = customerId;
 		this.jointCustomerId = jointCustomerId;
+		this.type = type;
 	}
 	
 	public static Builder getBuilder() {
 		builder.reset();
 		return builder;
+	}
+	
+	public void setApplicationId(long applicationId) {
+		this.applicationId = applicationId;
 	}
 
 	public long getApplicationId() {
@@ -76,6 +89,14 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 
 	public void setJointCustomerId(long jointCustomerId) {
 		this.jointCustomerId = jointCustomerId;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	@Override

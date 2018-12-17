@@ -34,7 +34,7 @@ public class ModelUnitTest {
 	@Test
 	public void testAccountInfoModelAsClosedPrintsClosed() {
 		AccountInfoModel accountInfoModel = AccountInfoModel.getBuilder()
-				.withStatus(AccountInfoModel.AccountStatus.CLOSED)
+				.withStatus(AccountStatus.CLOSED)
 				.build();
 		assertEquals("CLOSED", accountInfoModel.prettyPrintStatus());
 	}
@@ -42,7 +42,7 @@ public class ModelUnitTest {
 	@Test
 	public void testAccountInfoModelAsOpenedPrintsOpened() {
 		AccountInfoModel accountInfoModel = AccountInfoModel.getBuilder()
-				.withStatus(AccountInfoModel.AccountStatus.OPENED)
+				.withStatus(AccountStatus.OPENED)
 				.build();
 		assertEquals("OPENED", accountInfoModel.prettyPrintStatus());
 	}
@@ -50,7 +50,7 @@ public class ModelUnitTest {
 	@Test
 	public void testAccountInfoModelAsCheckingPrintsChecking() {
 		AccountInfoModel accountInfoModel = AccountInfoModel.getBuilder()
-				.withType(AccountInfoModel.AccountType.CHECKING)
+				.withType(AccountType.CHECKING)
 				.build();
 		assertEquals("CHECKING", accountInfoModel.prettyPrintType());
 	}
@@ -58,7 +58,7 @@ public class ModelUnitTest {
 	@Test
 	public void testAccountInfoModelAsSavingsPrintsSavings() {
 		AccountInfoModel accountInfoModel = AccountInfoModel.getBuilder()
-				.withType(AccountInfoModel.AccountType.SAVINGS)
+				.withType(AccountType.SAVINGS)
 				.build();
 		assertEquals("SAVINGS", accountInfoModel.prettyPrintType());
 	}
@@ -73,8 +73,8 @@ public class ModelUnitTest {
 				.withCustomerId(1l)
 				.withJointCustomerId(29l)
 				.withDateOpened(dateOpened)
-				.withType(AccountInfoModel.AccountType.CHECKING)
-				.withStatus(AccountInfoModel.AccountStatus.OPENED)
+				.withType(AccountType.CHECKING)
+				.withStatus(AccountStatus.OPENED)
 				.build();
 		System.out.println("\n\nCreate Account\n" + accountInfoModel);
 		
@@ -83,26 +83,8 @@ public class ModelUnitTest {
 		
 		calendar.set(2017, 11, 31);
 		Date dateClosed = calendar.getTime();
-		accountInfoModel.setStatus(AccountInfoModel.AccountStatus.CLOSED);
+		accountInfoModel.setStatus(AccountStatus.CLOSED);
 		accountInfoModel.setDateClosed(dateClosed);
 		System.out.println("\n\nCloseAccount\n" + accountInfoModel);
-	}
-	
-	@Test
-	public void ValidateUsernameAndPasswordToCreateCustomerLoginModel() throws Exception{
-//		CustomerLoginModel helper = new CustomerLoginModel();
-//		final String username = "Choochoo";
-//		assertTrue("Username not set to helper object", helper.setUsername(username));
-//		List<CustomerLoginModel> customerLoginTable = new ArrayList<>();
-//		CustomerLoginModelUsernameComparator sameUsername = new CustomerLoginModelUsernameComparator();
-//		for (CustomerLoginModel c : customerLoginTable) {
-//			if (sameUsername.compare(helper, c) == 0) {
-//				throw new Exception("duplicate username: username already found in table");
-//			}
-//		}
-//		final String password = "mysecr3t";
-//		assertTrue("Intended password is not a valid password", helper.setPassword(password));
-//		final long newCustomerId = 1l;
-//		CustomerLoginModel customerLoginModel = new CustomerLoginModel(newCustomerId, username, password);
 	}
 }

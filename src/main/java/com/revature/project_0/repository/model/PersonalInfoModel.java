@@ -46,8 +46,6 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 			phoneNumber = "";
 			beneficiary = "";
 		}
-		
-		private Builder() { }
 
 		public Builder withCustomerId(long customerId) {
 			this.customerId = customerId;

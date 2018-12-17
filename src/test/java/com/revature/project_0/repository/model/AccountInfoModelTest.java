@@ -34,9 +34,9 @@ public class AccountInfoModelTest {
 	@Test
 	public void buildAccountInfoWithSettingStatus() {
 		AccountInfoModel model = AccountInfoModel.getBuilder()
-				.withStatus(AccountInfoModel.AccountStatus.CLOSED)
+				.withStatus(AccountStatus.CLOSED)
 				.build();
-		assertEquals(AccountInfoModel.AccountStatus.CLOSED, model.getStatus());
+		assertEquals(AccountStatus.CLOSED, model.getStatus());
 	}
 	
 	@Test 
@@ -66,26 +66,26 @@ public class AccountInfoModelTest {
 	
 	@Test
 	public void setGetChecking() {
-		accountInfoModel.setType(AccountInfoModel.AccountType.CHECKING);
-		assertEquals(AccountInfoModel.AccountType.CHECKING, accountInfoModel.getType());
+		accountInfoModel.setType(AccountType.CHECKING);
+		assertEquals(AccountType.CHECKING, accountInfoModel.getType());
 	}
 	
 	@Test
 	public void setGetSavings() {
-		accountInfoModel.setType(AccountInfoModel.AccountType.SAVINGS);
-		assertEquals(AccountInfoModel.AccountType.SAVINGS, accountInfoModel.getType());
+		accountInfoModel.setType(AccountType.SAVINGS);
+		assertEquals(AccountType.SAVINGS, accountInfoModel.getType());
 	}
 	
 	@Test
 	public void setGetOpened() {
-		accountInfoModel.setType(AccountInfoModel.AccountStatus.OPENED);
-		assertEquals(AccountInfoModel.AccountStatus.OPENED, accountInfoModel.getType());
+		accountInfoModel.setType(AccountStatus.OPENED);
+		assertEquals(AccountStatus.OPENED, accountInfoModel.getType());
 	}
 	
 	@Test
 	public void setGetClosed() {
-		accountInfoModel.setType(AccountInfoModel.AccountStatus.CLOSED);
-		assertEquals(AccountInfoModel.AccountStatus.CLOSED, accountInfoModel.getType());
+		accountInfoModel.setType(AccountStatus.CLOSED);
+		assertEquals(AccountStatus.CLOSED, accountInfoModel.getType());
 	}
 	
 	@Test

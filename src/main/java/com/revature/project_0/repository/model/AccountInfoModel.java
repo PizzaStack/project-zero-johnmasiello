@@ -15,20 +15,12 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private int type;
 	private int status;
 	private double balance;
+	private String adminId;
+	private String empId;
 	
 	private static final Builder builder = new Builder();
 	
 	public static final long NO_ID = -1;
-	
-	public static class AccountType {
-		public static final int CHECKING = 0;
-		public static final int SAVINGS = 1;
-	}
-	
-	public static class AccountStatus {
-		public static final int OPENED = 0;
-		public static final int CLOSED = 1;
-	}
 	
 	public final static class Builder {
 		private long accountId;
@@ -36,9 +28,11 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		private long jointCustomerId;
 		private Date dateOpened;
 		private Date dateClosed;
-		private int type = AccountType.CHECKING;
-		private int status = AccountStatus.OPENED;
+		private int type;
+		private int status;
 		private double balance;
+		private String adminId;
+		private String empId;
 		
 		{
 			reset();
@@ -53,10 +47,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 			type = AccountType.CHECKING;
 			status = AccountStatus.OPENED;
 			balance = 0;
-		}
-		
-		private Builder() {}
-		
+			adminId = empId = null;
+		}		
 		
 		public Builder withAccountId(long accountId) {
 			this.accountId = accountId;
@@ -92,14 +84,23 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 			this.balance = balance;
 			return this;
 		}
+		public Builder withAdminId(String adminId) {
+			this.adminId = adminId;
+			return this;
+		}
+		public Builder withEmpId(String empId) {
+			this.empId = empId;
+			return this;
+		}
 		
 		public AccountInfoModel build() {
-			return new AccountInfoModel(accountId, customerId, jointCustomerId, dateOpened, dateClosed, type, status, balance);
+			return new AccountInfoModel(accountId, customerId, jointCustomerId, dateOpened, dateClosed, type, 
+					status, balance, adminId, empId);
 		}
 	}
 	
 	private AccountInfoModel(long accountId, long customerId, long jointCustomerId, Date dateOpened, Date dateClosed,
-			int type, int status, double balance) {
+			int type, int status, double balance, String adminId, String empId) {
 		this.accountId = accountId;
 		this.customerId = customerId;
 		this.jointCustomerId = jointCustomerId;
@@ -108,6 +109,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		this.type = type;
 		this.status = status;
 		this.balance = balance;
+		this.adminId = adminId;
+		this.empId = empId;
 	}
 	
 	public static Builder getBuilder() {
@@ -150,12 +153,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	}
 
 	public int getType() {
-		switch (type) {
-			case AccountType.SAVINGS:
-				return AccountType.SAVINGS;
-			default:
-				return AccountType.CHECKING;				
-		}
+		return type;
 	}
 	
 	public String prettyPrintType() {
@@ -172,18 +170,17 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	}
 
 	public int getStatus() {
-		switch (status) {
-		case AccountStatus.CLOSED:
-				return AccountStatus.CLOSED;
-		default:
-			return AccountStatus.OPENED;
-		}
+		return status;
 	}
 	
 	public String prettyPrintStatus() {
 		switch (getStatus()) {
 		case AccountStatus.CLOSED:
 			return "CLOSED";
+		case AccountStatus.APPROVED:
+			return "APPROVED";
+		case AccountStatus.DENIED:
+			return "DENIED";
 		default:
 			return "OPENED";
 		}
@@ -204,6 +201,22 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return true;
 	}
 	
+	public String getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
+
+	public String getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(String empId) {
+		this.empId = empId;
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder()
@@ -223,6 +236,10 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 				.append(prettyPrintType())
 				.append("\nStatus: ")
 				.append(prettyPrintStatus())
+				.append("\nEmpl Id: ")
+				.append(empId != null ? empId : Util.NOT_AVAILABLE)
+				.append("\nAdmin Id: ")
+				.append(adminId != null ? adminId : Util.NOT_AVAILABLE)
 				.toString();
 	}
 
