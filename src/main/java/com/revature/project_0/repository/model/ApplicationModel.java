@@ -94,6 +94,15 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	public int getType() {
 		return type;
 	}
+	
+	public String prettyPrintType() {
+		switch (type) {
+		case AccountType.SAVINGS:
+			return "SAVINGS";
+		default:
+			return "CHECKING";
+		}
+	}
 
 	public void setType(int type) {
 		this.type = type;
@@ -109,5 +118,19 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof ApplicationModel && compareTo((ApplicationModel)obj) == 0;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder()
+				.append("Account Id: ")
+				.append(Util.zeroPadId(applicationId))
+				.append("\nCustomer \tId: ")
+				.append(Util.zeroPadCondensedId(customerId))
+				.append("\nCustomer, Joint Id: ")
+				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : "")
+				.append("\nType: ")
+				.append(prettyPrintType())
+				.toString();
 	}
 }

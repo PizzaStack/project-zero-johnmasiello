@@ -1,5 +1,7 @@
 package com.revature.project_0.view;
 
+import java.util.Scanner;
+
 import com.revature.project_0.repository.Repository;
 
 public class AdminView extends ContextMenuView implements Operational {
@@ -13,7 +15,7 @@ public class AdminView extends ContextMenuView implements Operational {
 	}
 	
 	@Override
-	public void goLive() {
+	public void goLive(Scanner scanenr) {
 		while (true) {
 			displayRootContextMenu();
 			

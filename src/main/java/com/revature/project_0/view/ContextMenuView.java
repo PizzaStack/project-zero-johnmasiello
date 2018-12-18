@@ -14,7 +14,7 @@ public abstract class ContextMenuView {
 		.append(' ')
 		.append("<-Back")
 		.append("\nEnter a number: ");
-		System.out.println(strBuilder);
+		System.out.print(strBuilder);
 	}
 	
 	public void displayRootContextMenu() {

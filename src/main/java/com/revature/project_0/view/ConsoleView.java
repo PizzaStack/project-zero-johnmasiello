@@ -1,11 +1,14 @@
 package com.revature.project_0.view;
 
+import java.util.Scanner;
+
 import com.revature.project_0.repository.Repository;
 
 public class ConsoleView extends ContextMenuView implements Operational {
 	private CustomerView customerView;
 	private EmployeeView employeeView;
 	private AdminView adminView;
+	private Scanner scanner;
 	
 	private final String[] rootOptions = new String[] {
 			"Customer",
@@ -20,7 +23,8 @@ public class ConsoleView extends ContextMenuView implements Operational {
 	}
 
 	@Override
-	public void goLive() {
+	public void goLive(Scanner scanner) {
+		this.scanner = scanner;
 		while (true) {
 			displayRootContextMenu();
 			
@@ -39,13 +43,13 @@ public class ConsoleView extends ContextMenuView implements Operational {
 	public boolean consumedChoice(int choice) {
 		switch (choice) {
 		case 1:
-			customerView.goLive();
+			customerView.goLive(scanner);
 			return true;
 		case 2:
-			employeeView.goLive();
+			employeeView.goLive(scanner);
 			return true;
 		case 3:
-			adminView.goLive();
+			adminView.goLive(scanner);
 			return true;
 		default:
 			return false;

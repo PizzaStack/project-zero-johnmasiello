@@ -1,6 +1,7 @@
 package com.revature.project_0.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,6 +100,11 @@ public class Repository {
 	}
 	
 	@Nullable
+	public ApplicationModel getApplicationModel(long applicationId) {
+		return applicationTable.selectRecord(applicationId);
+	}
+	
+	@Nullable
 	public AccountInfoModel approveAccount(long accountId, @NotNull String adminId) {
 		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
 		if (account != null) {
@@ -118,6 +124,10 @@ public class Repository {
 		return account;
 	}
 	
+	public Collection<ApplicationModel> getAllApplications() {
+		return applicationTable.getTable().values();
+	}
+	
 	public Collection<AccountInfoModel> getAllAccounts() {
 		return accountInfoTable.getTable().values();
 	}
@@ -129,11 +139,16 @@ public class Repository {
 		return accountInfoTable.deleteRecord(accountId) ? account : null;
 	}
 	
-	public AccumulatedCustomerInformationView getAllCustomerInfo(long customerId) {
-		return new AccumulatedCustomerInformationView(
-				personalInfoTable.selectRecord(customerId), 
-				applicationTable.getAllAssociatedApplications(customerId), 
-				accountInfoTable.getAllAssociatedAccounts(customerId));
+	public List<ApplicationModel> getAllAssociatedApplications(long customerId) {
+		return applicationTable.getAllAssociatedApplications(customerId);
+	}
+	
+	public PersonalInfoModel getPersonalInformation(long customerId) {
+		return personalInfoTable.selectRecord(customerId);
+	}
+	
+	public List<AccountInfoModel> getAllAssociatedAccounts(long customerId) {
+		return accountInfoTable.getAllAssociatedAccounts(customerId);
 	}
 	
 	@Nullable
