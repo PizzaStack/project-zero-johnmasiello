@@ -156,6 +156,10 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return type;
 	}
 	
+	public boolean isAccountReadyForTransactions() {
+		return status == AccountStatus.APPROVED;
+	}
+	
 	public String prettyPrintType() {
 		switch (getType()) {
 		case AccountType.SAVINGS:

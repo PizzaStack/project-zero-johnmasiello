@@ -136,23 +136,24 @@ public class Repository {
 				accountInfoTable.getAllAssociatedAccounts(customerId));
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	// Return Customer facing side
-	/////////////////////////////////////////////////////////////////////////////////////////////////
+	@Nullable
+	public AccountInfoModel getAccountInfo(long accountId) {
+		return accountInfoTable.selectRecord(accountId);
+	}
 
-	protected AccountInfoTable getAccountInfoTable() {
+	AccountInfoTable getAccountInfoTable() {
 		return accountInfoTable;
 	}
 
-	protected ApplicationTable getApplicationTable() {
+	ApplicationTable getApplicationTable() {
 		return applicationTable;
 	}
 
-	protected CustomerLoginTable getCustomerLoginTable() {
+	CustomerLoginTable getCustomerLoginTable() {
 		return customerLoginTable;
 	}
 
-	protected PersonalInfoTable getPersonalInfoTable() {
+	PersonalInfoTable getPersonalInfoTable() {
 		return personalInfoTable;
 	}
 }

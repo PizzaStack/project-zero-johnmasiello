@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.revature.project_0.entity.TransactionOutcome;
 import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 

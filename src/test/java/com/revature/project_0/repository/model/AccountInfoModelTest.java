@@ -101,56 +101,17 @@ public class AccountInfoModelTest {
 		
 		assertTrue(0 > p1.compareTo(p2));
 	}
-	
-	@Test
-	public void lesserCustomerIdComparesAsLesser() {
-		AccountInfoModel p1, p2;
-		
-		p1 = AccountInfoModel.getBuilder()
-				.withCustomerId(0l)
-				.build();
-		p2 = AccountInfoModel.getBuilder()
-				.withCustomerId(1l)
-				.build();
-		
-		assertTrue(0 > p1.compareTo(p2));
-	}
-	
-	@Test
-	public void lesserJointCustomerIdComparesAsLesser() {
-		AccountInfoModel p1, p2;
-		
-		p1 = AccountInfoModel.getBuilder()
-				.withJointCustomerId(0l)
-				.build();
-		p2 = AccountInfoModel.getBuilder()
-				.withJointCustomerId(1l)
-				.build();
-		
-		assertTrue(0 > p1.compareTo(p2));
-	}
-	
-	@Test
-	public void equalAccountIdCustomerIdJointCustomerIdComparesAsEqual() {
-		AccountInfoModel p1, p2;
-		
-		p1 = AccountInfoModel.getBuilder()
-				.withType(0)
-				.build();
-		p2 = AccountInfoModel.getBuilder()
-				.withType(1)
-				.build();
-		
-		assertTrue(0 == p1.compareTo(p2));
-	}
-	
 	@Test
 	public void outOfBoxModelEqualsOutOfBoxModel() {
 		assertTrue(accountInfoModel.equals(AccountInfoModel.getBuilder().build()));
 	}
-	
 	@Test 
 	public void notEqualToNull() {
 		assertFalse(accountInfoModel.equals(null));
+	}
+	@Test
+	public void accountIsReadyForTransactions() {
+		accountInfoModel.setStatus(AccountStatus.APPROVED);
+		assertTrue(accountInfoModel.isAccountReadyForTransactions());
 	}
 }
