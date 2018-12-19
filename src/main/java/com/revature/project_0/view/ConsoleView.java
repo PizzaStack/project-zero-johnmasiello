@@ -1,14 +1,13 @@
 package com.revature.project_0.view;
 
-import java.util.Scanner;
-
+import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 
 public class ConsoleView extends ContextMenuView implements Operational {
 	private CustomerView customerView;
 	private EmployeeView employeeView;
 	private AdminView adminView;
-	private Scanner scanner;
+	private WrapperScanner scanner;
 	
 	private final String[] rootOptions = new String[] {
 			"Customer",
@@ -23,7 +22,7 @@ public class ConsoleView extends ContextMenuView implements Operational {
 	}
 
 	@Override
-	public void goLive(Scanner scanner) {
+	public void goLive(WrapperScanner scanner) {
 		this.scanner = scanner;
 		int choice;
 		while (true) {
@@ -31,13 +30,13 @@ public class ConsoleView extends ContextMenuView implements Operational {
 			if (scanner.hasNextInt()) {
 				System.out.println();
 				choice = scanner.nextInt();
-				purgeScanner(scanner);
+				scanner.purgeLine();
 				if (!consumedChoice(choice))
 					break;
 				System.out.println();
 			} else {
-				purgeScanner(scanner);
-				System.out.println("\nPlease enter a number 1 - " + (rootOptions.length + 1));
+				scanner.purgeLine();
+				System.out.println("\nPlease enter a number 1 - " + (provideCurrentMenu().length + 1));
 			}
 		}
 	}

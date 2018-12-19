@@ -1,21 +1,26 @@
 package com.revature.project_0.view;
 
-import java.util.Scanner;
-
+import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 
 public class CustomerView extends ContextMenuView implements Operational {
 	private Repository repository;
+	private int view;
 	private final String[] rootOptions = new String[] {
-			"Do Customer things"
+			"Login",
+			"Sign Up"
 	};
+	
+	private final int ROOT 			= 0;
+	private final int MAIN 			= 1;
 	
 	public CustomerView(Repository repository) {
 		this.repository = repository;
+		view = ROOT;
 	}
 
 	@Override
-	public void goLive(Scanner scanenr) {
+	public void goLive(WrapperScanner scanenr) {
 		while (true) {
 			displayCurrentMenu();
 			
@@ -24,7 +29,7 @@ public class CustomerView extends ContextMenuView implements Operational {
 				break;
 		}
 	}
-
+	
 	@Override
 	public String[] provideCurrentMenu() {
 		return rootOptions;

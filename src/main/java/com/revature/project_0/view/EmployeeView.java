@@ -1,20 +1,18 @@
 package com.revature.project_0.view;
 
-import java.util.Scanner;
-
 import com.revature.project_0.entity.Employee;
 import com.revature.project_0.entity.actions.EmployeeManageApplication;
+import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 
 public class EmployeeView extends ContextMenuView implements Operational {
 	private Employee employee;
-	private Scanner scanner;
+	private WrapperScanner scanner;
 	private int view; 
 	
-	private final String[] nullOptions = new String[0];
 	private final String[] rootOptions = new String[] {
-		"Employee Login"	
+		"Login"	
 	};
 	private final String[] mainOptions = new String[] {
 			"View/Approve Applications",
@@ -38,19 +36,19 @@ public class EmployeeView extends ContextMenuView implements Operational {
 	}
 
 	@Override
-	public void goLive(Scanner scanner) {
+	public void goLive(WrapperScanner scanner) {
 		this.scanner = scanner;
 		while (true) {
 			displayCurrentMenu();
 			if (scanner.hasNextInt()) {
 				System.out.println();
 				int choice = scanner.nextInt();
-				purgeScanner(scanner);
+				scanner.purgeLine();
 				if (!consumedChoice(choice))
 					break;
 			} else {
-				purgeScanner(scanner);
-				System.out.println("\nPlease enter a number 1 - " + (rootOptions.length + 1));
+				scanner.purgeLine();
+				System.out.println("\nPlease enter a number 1 - " + (provideCurrentMenu().length + 1));
 			}
 		}
 	}
@@ -101,12 +99,12 @@ public class EmployeeView extends ContextMenuView implements Operational {
 			case 3:
 				System.out.print("\nPlease Enter Customer ID: ");
 				if (!scanner.hasNextLong()) {
-					purgeScanner(scanner);
-					System.out.println("\nA Valid Customer Id Was Not Entered");
+					scanner.purgeLine();
+					System.out.println("\nA Valid Customer Id Was Not Entered\n");
 					break;
 				}
 				long id = scanner.nextLong();
-				purgeScanner(scanner);
+				scanner.purgeLine();
 				System.out.println();
 				String recordDump = employee.getViewInfos().viewAllAssociatedCustomerInfo(id);
 				System.out.println(recordDump.length() == 0 ? NO_MATCHING_RECORDS :
@@ -124,12 +122,12 @@ public class EmployeeView extends ContextMenuView implements Operational {
 			case 1:
 				System.out.print("\nPlease Enter Application ID to Approve: ");
 				if (!scanner.hasNextLong()) {
-					purgeScanner(scanner);
+					scanner.purgeLine();
 					System.out.println("\nA Valid Application Id Was Not Entered");
 					break;
 				}
 				id = scanner.nextLong();
-				purgeScanner(scanner);
+				scanner.purgeLine();
 				System.out.println();
 				result = e.approveApplication(id, 
 						employee.getSelfIdentify().getEmployeeId());
@@ -144,12 +142,12 @@ public class EmployeeView extends ContextMenuView implements Operational {
 			case 2:
 				System.out.print("\nPlease Enter Application ID to Deny: ");
 				if (!scanner.hasNextLong()) {
-					purgeScanner(scanner);
-					System.out.println("\nA Valid Application Id Was Not Entered");
+					scanner.purgeLine();
+					System.out.println("\nA Valid Application Id Was Not Entered\n");
 					break;
 				}
 				id = scanner.nextLong();
-				purgeScanner(scanner);
+				scanner.purgeLine();
 				System.out.println();
 				result = e.denyApplication(id, 
 						employee.getSelfIdentify().getEmployeeId());

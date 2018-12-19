@@ -1,7 +1,7 @@
 package com.revature.project_0.view;
 
-import java.util.Scanner;
+import com.revature.project_0.io.WrapperScanner;
 
 public interface Operational {
-	void goLive(Scanner scanner);
+	void goLive(WrapperScanner scanner);
 }

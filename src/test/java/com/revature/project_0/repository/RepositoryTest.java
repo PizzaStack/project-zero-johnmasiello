@@ -163,27 +163,4 @@ public class RepositoryTest {
 		assertEquals(AccountStatus.DENIED, 
 				repository.denyAccount(accountId, ADMIN_ID).getStatus());
 	}
-	@Test
-	public void getAllCustomerInformation() {
-		CustomerLoginModel login = repository.
-				createNewCustomerUponValidUsernameAndPassword("_John_", "psswrd");
-		final long customerId = login.getCustomerId(); 
-		repository.createNewPersonalInformation(new PersonalInfoModel.Builder()
-				.withCustomerId(customerId)
-				.withFirstName("John")
-				.withLastName("Masiello")
-				.withDob(Util.getCurrentDate())
-				.build());
-		ApplicationModel application = repository
-				.createNewApplication(new ApplicationModel.Builder()
-						.withCustomerId(customerId)
-						.withType(AccountType.SAVINGS)
-						.build());
-		AccountInfoModel account = repository.approveApplication(application, EMP_ID);
-		repository.approveAccount(account.getAccountId(), ADMIN_ID);
-		AccumulatedCustomerInformationView allInfo = repository.getAllCustomerInfo(customerId);
-		assertTrue(allInfo.getPersonalInfo() != null && 
-				allInfo.getAccountApplications().size() == 1 &&
-				allInfo.getAccounts().size() == 1);
-	}
 }

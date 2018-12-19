@@ -1,10 +1,10 @@
 package com.revature.project_0.view;
 
-import java.util.Scanner;
-
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class ContextMenuView {
+	
 	public void displayCurrentMenu() {
 		String[] commands = provideCurrentMenu();
 		int i = 1;
@@ -27,10 +27,9 @@ public abstract class ContextMenuView {
 		System.out.print(strBuilder);
 	}
 	
-	protected void purgeScanner(Scanner scanner) {
-		scanner.nextLine();
-	}
+	protected final String[] nullOptions = new String[0];
 	
+	@NotNull
 	public abstract String[] provideCurrentMenu();
 	
 	public abstract boolean consumedChoice(int choice);
