@@ -36,4 +36,12 @@ public class WrapperScanner {
 	public int nextInt() {
 		return scanner.nextInt();
 	}
+	
+	public boolean hasNext() {
+		return scanner.hasNext();
+	}
+	
+	public String next() {
+		return scanner.next();
+	}
 }

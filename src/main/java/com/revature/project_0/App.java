@@ -19,7 +19,6 @@ public class App
 			e.printStackTrace();
 			System.out.println("Repository is down!");
 		} finally {
-			scanner.purgeLine();
 			try {
 				closeRepository();
 			} catch (IOException ignore) {

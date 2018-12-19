@@ -1,9 +1,8 @@
 package com.revature.project_0.view;
 
-import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 
-public class AdminView extends ContextMenuView implements Operational {
+public class AdminView extends BasicContextMenuView implements Operational {
 	private Repository repository;
 	private final String[] rootOptions = new String[] {
 			"Do Admin things"
@@ -11,17 +10,6 @@ public class AdminView extends ContextMenuView implements Operational {
 	
 	public AdminView(Repository repository) {
 		this.repository = repository;
-	}
-	
-	@Override
-	public void goLive(WrapperScanner scanenr) {
-		while (true) {
-			displayCurrentMenu();
-			
-			// input entered
-			if (!consumedChoice(4))
-				break;
-		}
 	}
 
 	@Override

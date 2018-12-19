@@ -3,6 +3,8 @@ package com.revature.project_0.util;
 import java.time.Instant;
 import java.util.Date;
 
+import org.jetbrains.annotations.Nullable;
+
 public final class Util {
 	public static final String ZERO_PADDING_ID_PATTERN = "%019d";
 	public static final String ZERO_PADDING_SHORTER_ID_PATTERN = "%010d";
@@ -27,5 +29,9 @@ public final class Util {
 	
 	public static final Date getCurrentDate() {
 		return Date.from(Instant.now());
+	}
+	
+	public static final String printMember(@Nullable Object o) {
+		return o != null ? String.valueOf(o) : "";
 	}
 }

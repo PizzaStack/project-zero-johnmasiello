@@ -1,13 +1,11 @@
 package com.revature.project_0.view;
 
-import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 
-public class ConsoleView extends ContextMenuView implements Operational {
+public class ConsoleView extends BasicContextMenuView implements Operational {
 	private CustomerView customerView;
 	private EmployeeView employeeView;
 	private AdminView adminView;
-	private WrapperScanner scanner;
 	
 	private final String[] rootOptions = new String[] {
 			"Customer",
@@ -19,26 +17,6 @@ public class ConsoleView extends ContextMenuView implements Operational {
 		customerView = new CustomerView(repository);
 		employeeView = new EmployeeView(repository);
 		adminView = new AdminView(repository);
-	}
-
-	@Override
-	public void goLive(WrapperScanner scanner) {
-		this.scanner = scanner;
-		int choice;
-		while (true) {
-			displayCurrentMenu();
-			if (scanner.hasNextInt()) {
-				System.out.println();
-				choice = scanner.nextInt();
-				scanner.purgeLine();
-				if (!consumedChoice(choice))
-					break;
-				System.out.println();
-			} else {
-				scanner.purgeLine();
-				System.out.println("\nPlease enter a number 1 - " + (provideCurrentMenu().length + 1));
-			}
-		}
 	}
 
 	@Override

@@ -2,13 +2,11 @@ package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Employee;
 import com.revature.project_0.entity.actions.EmployeeManageApplication;
-import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 
-public class EmployeeView extends ContextMenuView implements Operational {
+public class EmployeeView extends BasicContextMenuView implements Operational {
 	private Employee employee;
-	private WrapperScanner scanner;
 	private int view; 
 	
 	private final String[] rootOptions = new String[] {
@@ -33,24 +31,6 @@ public class EmployeeView extends ContextMenuView implements Operational {
 	public EmployeeView(Repository repository) {
 		view = ROOT;
 		employee = new Employee(repository);
-	}
-
-	@Override
-	public void goLive(WrapperScanner scanner) {
-		this.scanner = scanner;
-		while (true) {
-			displayCurrentMenu();
-			if (scanner.hasNextInt()) {
-				System.out.println();
-				int choice = scanner.nextInt();
-				scanner.purgeLine();
-				if (!consumedChoice(choice))
-					break;
-			} else {
-				scanner.purgeLine();
-				System.out.println("\nPlease enter a number 1 - " + (provideCurrentMenu().length + 1));
-			}
-		}
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.revature.project_0.entity.actions.CustomerSelfIdentify;
 import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 
@@ -32,6 +33,10 @@ public class Repository {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Prospective Customer facing side
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean isValidUsername(String requestedUsername) {
+		return loginValidationHelper.validateNewUsername(requestedUsername);
+	}
 	
 	// First Create a username and password to get a customer id
 	public boolean isValidAndUniqueUsername(String requestedUsername) {
@@ -69,6 +74,14 @@ public class Repository {
 		applicationModel.setApplicationId(appId);
 		return applicationTable.addRecord(appId, applicationModel) ? applicationModel :
 			null;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// Returning Customer side
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	public CustomerLoginModel authenticateCustomer(@NotNull String username, @NotNull String password) {
+		CustomerLoginModel login = customerLoginTable.selectRecord(username);
+		return login != null && password.equals(login.getPassword()) ? login : null;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
