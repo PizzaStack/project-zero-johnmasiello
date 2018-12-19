@@ -17,7 +17,7 @@ public class CustomerView extends ContextMenuView implements Operational {
 	@Override
 	public void goLive(Scanner scanenr) {
 		while (true) {
-			displayRootContextMenu();
+			displayCurrentMenu();
 			
 			// input entered
 			if (!consumedChoice(4))
@@ -26,7 +26,7 @@ public class CustomerView extends ContextMenuView implements Operational {
 	}
 
 	@Override
-	public String[] provideRootOptions() {
+	public String[] provideCurrentMenu() {
 		return rootOptions;
 	}
 
@@ -34,5 +34,13 @@ public class CustomerView extends ContextMenuView implements Operational {
 	public boolean consumedChoice(int choice) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public String provideSalutation() {
+		return new StringBuilder()
+				.append("(Member) ")
+		.append("Hi")
+		.toString();
 	}
 }

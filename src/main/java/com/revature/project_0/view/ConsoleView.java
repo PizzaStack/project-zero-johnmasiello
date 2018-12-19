@@ -25,17 +25,25 @@ public class ConsoleView extends ContextMenuView implements Operational {
 	@Override
 	public void goLive(Scanner scanner) {
 		this.scanner = scanner;
+		int choice;
 		while (true) {
-			displayRootContextMenu();
-			
-			// input entered
-			if (!consumedChoice(2));
-				break;
+			displayCurrentMenu();
+			if (scanner.hasNextInt()) {
+				System.out.println();
+				choice = scanner.nextInt();
+				purgeScanner(scanner);
+				if (!consumedChoice(choice))
+					break;
+				System.out.println();
+			} else {
+				purgeScanner(scanner);
+				System.out.println("\nPlease enter a number 1 - " + (rootOptions.length + 1));
+			}
 		}
 	}
 
 	@Override
-	public String[] provideRootOptions() {
+	public String[] provideCurrentMenu() {
 		return rootOptions;
 	}
 
@@ -54,5 +62,10 @@ public class ConsoleView extends ContextMenuView implements Operational {
 		default:
 			return false;
 		}
+	}
+	
+	@Override
+	public String provideSalutation() {
+		return null;
 	}
 }
