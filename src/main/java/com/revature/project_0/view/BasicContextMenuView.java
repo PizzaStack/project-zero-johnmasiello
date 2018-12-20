@@ -15,7 +15,7 @@ public abstract class BasicContextMenuView extends ContextMenuView implements Op
 		int choice;
 		while (true) {
 			
-			System.out.println("Please enter a number 1 - " + provideCurrentMenu().length);
+			System.out.println("\nPlease enter a number 1 - " + provideCurrentMenu().length);
 			displayCurrentMenu();
 			if (scanner.hasNextInt()) {
 				System.out.println();

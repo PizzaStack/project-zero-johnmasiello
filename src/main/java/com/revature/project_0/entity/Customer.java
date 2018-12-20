@@ -4,12 +4,16 @@ import java.util.List;
 
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
+import com.revature.project_0.repository.model.ApplicationModel;
 import com.revature.project_0.repository.model.CustomerLoginModel;
+import com.revature.project_0.repository.model.PersonalInfoModel;
 
 public class Customer {
 	private Repository repository;
 	private List<AccountInfoModel> listOfAccounts;
-	private CustomerLoginModel customerInfoModel;
+	private CustomerLoginModel customerLoginModel;
+	private PersonalInfoModel personalInfoModel;
+	private ApplicationModel applicationModel;
 
 	public Customer(Repository repository) {
 		this.repository = repository;
@@ -17,8 +21,10 @@ public class Customer {
 	}
 	
 	private void reset() {
-		customerInfoModel = null;
 		listOfAccounts = null;
+		customerLoginModel = null;
+		personalInfoModel = null;
+		applicationModel = null;
 	}
 	
 	/**
@@ -37,18 +43,22 @@ public class Customer {
 	}
 	
 	public boolean createNewCustomer(String username, String password) {
-		customerInfoModel = repository.createNewCustomerUponValidUsernameAndPassword(
+		customerLoginModel = repository.createNewCustomerUponValidUsernameAndPassword(
 				username, password);
-		return customerInfoModel != null;
+		return customerLoginModel != null;
 	}
 	
 	public String getUserName() {
-		return customerInfoModel != null ? customerInfoModel.getUsername() : null;
+		return customerLoginModel != null ? customerLoginModel.getUsername() : null;
+	}
+	
+	public long getCustomerId() {
+		return customerLoginModel != null ? customerLoginModel.getCustomerId() : CustomerLoginModel.NO_ID;
 	}
 	
 	public boolean signInSuccessful(String username, String password) {
-		customerInfoModel = repository.authenticateCustomer(username, password);
-		return customerInfoModel != null;
+		customerLoginModel = repository.authenticateCustomer(username, password);
+		return customerLoginModel != null;
 	}
 	
 	public void signOut() {
@@ -69,5 +79,44 @@ public class Customer {
 	
 	public List<AccountInfoModel> getAccounts() {
 		return listOfAccounts;
+	}
+	
+	/*
+	 * Manage Applications
+	 */
+	
+	public boolean createApplication(ApplicationModel application) {
+		return repository.createNewApplication(application) != null;
+	}
+
+	public ApplicationModel getApplication() {
+		return applicationModel;
+	}
+
+	public void setApplicationModel(ApplicationModel applicationModel) {
+		this.applicationModel = applicationModel;
+	}
+	
+	public boolean hasPersonalRecordOnFile() {
+		if (personalInfoModel != null)
+			return true;
+		long id = getCustomerId();
+		if (id == CustomerLoginModel.NO_ID)
+			return false;
+		personalInfoModel = repository.getPersonalRecord(id);
+		return personalInfoModel != null;
+	}
+	
+	public boolean createPersonalInfo(PersonalInfoModel personalInfo) {
+		personalInfoModel = repository.createNewPersonalInformation(personalInfo);
+		return personalInfo != null;
+	}
+
+	public PersonalInfoModel getPersonalInfoModel() {
+		return personalInfoModel;
+	}
+
+	public void setPersonalInfoModel(PersonalInfoModel personalInfoModel) {
+		this.personalInfoModel = personalInfoModel;
 	}
 }

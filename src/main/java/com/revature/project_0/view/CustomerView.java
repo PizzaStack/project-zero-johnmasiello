@@ -3,6 +3,8 @@ package com.revature.project_0.view;
 import com.revature.project_0.entity.Customer;
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
+import com.revature.project_0.repository.model.ApplicationModel;
+import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
 
 public class CustomerView extends BasicContextMenuView implements Operational {
@@ -19,14 +21,22 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 			"Open New Account",
 			"Update Personal Info"
 	};
+	private final String[] transactionsMenu = new String[] {
+			"Deposit",
+			"Withdraw",
+			"Transfer",
+			BACK
+	};
 	private final String[] applicationSubmitMenu = new String[] {
 			"Cancel",
 			"Submit"
 	};
 	
 	private final int ROOT 							= 0;
-	private final int COMPLETE_APPICATION			= 1;
+	private final int COMPLETE_APPLICATION			= 1;
+	private final int COMPLETE_DETAILS				= 2;
 	private final int MAIN							= 3;
+	private final int TRANSACTION					= 4;
 	
 	public CustomerView(Repository repository, Scanner scanner) {
 		super(scanner);
@@ -41,8 +51,11 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 			return rootOptions;
 		case MAIN:
 			return mainOptions;
-		case COMPLETE_APPICATION:
+		case COMPLETE_APPLICATION:
+		case COMPLETE_DETAILS:
 			return applicationSubmitMenu;
+		case TRANSACTION:
+			return transactionsMenu;
 		default:
 			return nullOptions;
 		}
@@ -115,9 +128,73 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 			switch (choice) {
 			case 1:
 				signCustomerOut();
-			case 2:
 				break;
-			}
+			case 2:
+				if (!customer.fetchAccounts(customer.getCustomerId()))
+					System.out.println("No Accounts On Record");
+				else {
+					customer.getAccounts().forEach(($) -> {
+						System.out.println($); 
+						System.out.println();
+					});
+					view = TRANSACTION;
+				}
+				break;
+			case 3:
+				if (!customer.hasPersonalRecordOnFile()) {
+					System.out.println("We Appreciate Your Business");
+					System.out.println("We Would Like To Know A Little More About You\n");
+					fillOutPersonalInformation();
+				} else {
+					System.out.println("We Are Pleased To Assist You "
+							+ "With Applying For A New Account\n");
+					applyForAccount();
+				}
+				break;
+			case 4:
+				System.out.println("Stay Up-To-Date\n");
+				fillOutPersonalInformation();
+				break;
+			} break;
+			
+		case TRANSACTION:
+			switch (choice) {
+			case 1:
+				break;
+			} break;
+			
+		case COMPLETE_APPLICATION:
+			switch (choice) {
+			case 1:
+				System.out.println("Application Canceled by User");
+				view = MAIN;
+				break;
+			case 2:
+				System.out.println("Application Submitted by User");
+				System.out.println("Please Wait For Your Account To Be Created");
+				if (!customer.createApplication(customer.getApplication())) {
+					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
+				}
+				view = MAIN;
+				break;
+			} break;
+			
+		case COMPLETE_DETAILS:
+			switch (choice) {
+			case 1:
+				System.out.println("Personal Details Canceled by User");
+				view = MAIN;
+				break;
+			case 2:
+				if (!customer.createPersonalInfo(customer.getPersonalInfoModel())) {
+					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
+				} else {
+					System.out.println("Details Update Successful");					
+				}
+				view = MAIN;
+				break;
+			} break;
+			
 		}
 		return true;
 	}
@@ -126,6 +203,22 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 		customer.signOut();
 		System.out.println("Logout Successful");
 		view = ROOT;
+	}
+	
+	private void fillOutPersonalInformation() {
+		PersonalInfoModel personalInfo = null;
+		
+		// All Done
+		customer.setPersonalInfoModel(personalInfo);
+		view = COMPLETE_DETAILS;
+	}
+	
+	private void applyForAccount() {
+		ApplicationModel application = null;
+		
+		// All Done
+		customer.setApplicationModel(application);
+		view = COMPLETE_APPLICATION;
 	}
 	
 	@Override
