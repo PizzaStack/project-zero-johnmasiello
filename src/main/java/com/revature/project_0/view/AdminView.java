@@ -1,5 +1,6 @@
 package com.revature.project_0.view;
 
+import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 
 public class AdminView extends BasicContextMenuView implements Operational {
@@ -8,7 +9,8 @@ public class AdminView extends BasicContextMenuView implements Operational {
 			"Do Admin things"
 	};
 	
-	public AdminView(Repository repository) {
+	public AdminView(Repository repository, Scanner scanner) {
+		super(scanner);
 		this.repository = repository;
 	}
 

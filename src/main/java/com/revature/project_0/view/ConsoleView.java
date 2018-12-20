@@ -1,5 +1,6 @@
 package com.revature.project_0.view;
 
+import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 
 public class ConsoleView extends BasicContextMenuView implements Operational {
@@ -10,13 +11,15 @@ public class ConsoleView extends BasicContextMenuView implements Operational {
 	private final String[] rootOptions = new String[] {
 			"Customer",
 			"Employee",
-			"Admin"
+			"Admin",
+			BACK
 	};
 	
-	public ConsoleView(Repository repository) {
-		customerView = new CustomerView(repository);
-		employeeView = new EmployeeView(repository);
-		adminView = new AdminView(repository);
+	public ConsoleView(Repository repository, Scanner scanner) {
+		super(scanner);
+		customerView = new CustomerView(repository, scanner);
+		employeeView = new EmployeeView(repository, scanner);
+		adminView = new AdminView(repository, scanner);
 	}
 
 	@Override
@@ -28,16 +31,18 @@ public class ConsoleView extends BasicContextMenuView implements Operational {
 	public boolean consumedChoice(int choice) {
 		switch (choice) {
 		case 1:
-			customerView.goLive(scanner);
+			customerView.goLive();
 			return true;
 		case 2:
-			employeeView.goLive(scanner);
+			employeeView.goLive();
 			return true;
 		case 3:
-			adminView.goLive(scanner);
+			adminView.goLive();
 			return true;
-		default:
+		case 4:
 			return false;
+		default:
+				return true;
 		}
 	}
 	

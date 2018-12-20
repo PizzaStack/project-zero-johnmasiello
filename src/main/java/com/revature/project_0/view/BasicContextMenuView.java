@@ -1,27 +1,34 @@
 package com.revature.project_0.view;
 
-import com.revature.project_0.io.WrapperScanner;
+import java.util.Scanner;
 
 public abstract class BasicContextMenuView extends ContextMenuView implements Operational{
-	protected WrapperScanner scanner;
+	Scanner scanner;
 	
-	@Override
-	public void goLive(WrapperScanner scanner) {
+	public BasicContextMenuView(Scanner scanner) {
+		super();
 		this.scanner = scanner;
+	}
+
+	@Override
+	public void goLive() {
 		int choice;
 		while (true) {
+			
+			System.out.println("Please enter a number 1 - " + provideCurrentMenu().length);
 			displayCurrentMenu();
 			if (scanner.hasNextInt()) {
 				System.out.println();
 				choice = scanner.nextInt();
-				scanner.purgeLine();
+				purgeLine(scanner);
 				if (!consumedChoice(choice))
 					break;
-				System.out.println();
-			} else {
-				scanner.purgeLine();
-				System.out.println("\nPlease enter a number 1 - " + (provideCurrentMenu().length + 1));
-			}
+			} else
+				purgeLine(scanner);
 		}
+	}
+	
+	protected void purgeLine(Scanner scanner) {
+		scanner.nextLine();
 	}
 }

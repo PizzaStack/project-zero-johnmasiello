@@ -3,7 +3,6 @@ package com.revature.project_0;
 import java.io.IOException;
 import java.util.Scanner;
 
-import com.revature.project_0.io.WrapperScanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.view.ConsoleView;
 
@@ -11,14 +10,15 @@ public class App
 {
     public static void main( String[] args )
     {
-    	WrapperScanner scanner = null;
+    	Scanner scanner = null;
         try {
-        	scanner = new WrapperScanner(new Scanner(System.in));
-			new ConsoleView(connectToRepository()).goLive(scanner);
+        	scanner = new Scanner(System.in);
+			new ConsoleView(connectToRepository(), scanner).goLive();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Repository is down!");
 		} finally {
+			scanner.close();
 			try {
 				closeRepository();
 			} catch (IOException ignore) {

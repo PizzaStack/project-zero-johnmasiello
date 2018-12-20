@@ -7,18 +7,15 @@ public abstract class ContextMenuView {
 	
 	public void displayCurrentMenu() {
 		String[] commands = provideCurrentMenu();
-		int i = 1;
 		StringBuilder strBuilder = new StringBuilder();
-		for (String command : commands) {
+		int i = 1;
+		for (String command : commands ) {
 			strBuilder.append(i++)
 			.append(' ')
 			.append(command)
-			.append("\t");
+			.append("\n");
 		}
-		strBuilder.append(i)
-		.append(' ')
-		.append("<-Back")
-		.append("\n");
+		strBuilder.append("\n");
 		if (provideSalutation() != null) {
 			strBuilder.append(provideSalutation())
 			.append(", ");
@@ -28,6 +25,7 @@ public abstract class ContextMenuView {
 	}
 	
 	protected final String[] nullOptions = new String[0];
+	protected final String BACK = "<-Back";
 	
 	@NotNull
 	public abstract String[] provideCurrentMenu();

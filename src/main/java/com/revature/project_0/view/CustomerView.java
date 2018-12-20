@@ -1,6 +1,7 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Customer;
+import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.util.Util;
 
@@ -9,28 +10,26 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 	private int view;
 	private final String[] rootOptions = new String[] {
 			"Login",
-			"Sign Up"
-	};
-	private final String[] applicationOptions = new String[] {
-			"Sign Out",
-			"Create Application"
-	};
-	private final String[] personalInfoOptions = new String[] {
-			"Sign Out",
-			"Enter Personal Information"
+			"Sign Up",
+			BACK
 	};
 	private final String[] mainOptions = new String[] {
 			"Sign Out",
 			"View Accounts",
+			"Open New Account",
 			"Update Personal Info"
 	};
+	private final String[] applicationSubmitMenu = new String[] {
+			"Cancel",
+			"Submit"
+	};
 	
-	private final int ROOT 						= 0;
-	private final int FILL_OUT_APPICATION		= 1;
-	private final int FILL_OUT_PERSONAL_INFO 	= 2;
-	private final int MAIN						= 3;
+	private final int ROOT 							= 0;
+	private final int COMPLETE_APPICATION			= 1;
+	private final int MAIN							= 3;
 	
-	public CustomerView(Repository repository) {
+	public CustomerView(Repository repository, Scanner scanner) {
+		super(scanner);
 		view = ROOT;
 		customer = new Customer(repository);
 	}
@@ -40,12 +39,10 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 		switch (view) {
 		case ROOT:
 			return rootOptions;
-		case FILL_OUT_APPICATION:
-			return applicationOptions;
-		case FILL_OUT_PERSONAL_INFO:
-			return personalInfoOptions;
 		case MAIN:
 			return mainOptions;
+		case COMPLETE_APPICATION:
+			return applicationSubmitMenu;
 		default:
 			return nullOptions;
 		}
@@ -65,7 +62,7 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 				System.out.print("Please Enter Password: ");
 				password = scanner.nextLine();
 				System.out.println();
-				if (customer.getCustomerSelfIdentify().signInSuccessful(name,  password)) {
+				if (customer.signInSuccessful(name,  password)) {
 					System.out.println("Login Successful\n");
 					view = MAIN;
 				} else {
@@ -78,9 +75,9 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 					System.out.print("Please Enter New Username (Length > 6): ");
 					name = scanner.nextLine();
 					System.out.println();
-					if (!customer.getCustomerSelfIdentify().isValidUsername(name)) {
+					if (!customer.isValidUsername(name)) {
 						System.out.println("Username Is Not Valid");
-					} else if (!customer.getCustomerSelfIdentify().isUniqueUsername(name)) {
+					} else if (!customer.isUniqueUsername(name)) {
 						System.out.println("Username taken already. Please choose another");
 					} else
 						break;
@@ -94,64 +91,33 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 					System.out.print("Please Enter New Password (Length > 6): ");
 					password = scanner.nextLine();
 					System.out.println();
-					if (customer.getCustomerSelfIdentify().isValidPassword(password))
+					if (customer.isValidPassword(password))
 						break;
 					System.out.println(String.valueOf(numberOfTriesLeft) +
 							" more attempts...\n");
 				}
 				if (numberOfTriesLeft < 0)
 					break;
-				if (customer.getCustomerSelfIdentify().createNewCustomer(name, password)) {
+				if (customer.createNewCustomer(name, password)) {
 					System.out.print("User Login Created Successfully\n");
-					view = FILL_OUT_APPICATION;
+					view = MAIN;
 				} else {
-					System.out.print("System Error");
+					System.out.print(Operational.VISIBLE_SYSTEMS_ERROR);
 				}
 				break;
-			default:
+			case 3:
 				if (customer.isSignedIn())
 					signCustomerOut();
 				return false;
 			} break;
-		case FILL_OUT_APPICATION:
-			switch (choice) {
-			case 1: 
-				signCustomerOut();
-				break;
-			case 2:
-				// TODO fill out account application
-				break;
-			default:
-				signCustomerOut();
-			} break;
-		case FILL_OUT_PERSONAL_INFO:
-			switch (choice) {
-			case 1: 
-				signCustomerOut();
-				break;
-			case 2:
-				// TODO fill out personal info
-				break;
-			default:
-				view = FILL_OUT_APPICATION;
-			} break;
+			
 		case MAIN:
 			switch (choice) {
 			case 1:
 				signCustomerOut();
-				break;
 			case 2:
-				// todo view accounts
 				break;
-			case 3:
-				// todo update personal info
-				break;
-			default:
-				// todo determine back navigation by setting view
-			} break;
-		default: 
-			signCustomerOut();
-			return false;
+			}
 		}
 		return true;
 	}
@@ -168,7 +134,7 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 			return "(Member)";
 		return new StringBuilder()
 				.append("(Member) ")
-		.append(Util.printMember(customer.getCustomerSelfIdentify().getUserName()))
+		.append(Util.printMember(customer.getUserName()))
 		.toString();
 	}
 }

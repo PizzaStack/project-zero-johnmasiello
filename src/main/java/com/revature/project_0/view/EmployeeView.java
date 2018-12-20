@@ -1,7 +1,7 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Employee;
-import com.revature.project_0.entity.actions.EmployeeManageApplication;
+import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 
@@ -10,16 +10,19 @@ public class EmployeeView extends BasicContextMenuView implements Operational {
 	private int view; 
 	
 	private final String[] rootOptions = new String[] {
-		"Login"	
+		"Login",
+		BACK
 	};
 	private final String[] mainOptions = new String[] {
 			"View/Approve Applications",
 			"View Accounts",
-			"View Customer Information"
+			"View Customer Information",
+			BACK
 	};
 	private final String[] applicationOptions = new String[] {
 			"Approve Application",
-			"Deny Application"
+			"Deny Application",
+			BACK
 	};
 	private final int ROOT 			= 0;
 	private final int MAIN 			= 1;
@@ -28,7 +31,8 @@ public class EmployeeView extends BasicContextMenuView implements Operational {
 	private final String NO_MATCHING_RECORDS = "NO MATCHING RECORDS";
 	private final String NO_ARCHIVED_RECORDS = "NO ARCHIVED RECORDS";
 	
-	public EmployeeView(Repository repository) {
+	public EmployeeView(Repository repository, Scanner scanner) {
+		super(scanner);
 		view = ROOT;
 		employee = new Employee(repository);
 	}
@@ -56,64 +60,65 @@ public class EmployeeView extends BasicContextMenuView implements Operational {
 				System.out.print("\nPlease Enter Employee Name or ID: ");
 				String name = scanner.nextLine();
 				System.out.println();
-				employee.getSelfIdentify().setEmployeeId(name);
+				employee.setEmployeeId(name);
 				view = MAIN;
 				break;
-			default:
+			case 2:
 				return false;
 			} break;
 		
 		case MAIN:
 			switch (choice) {
 			case 1:
-				employee.getViewInfos().viewAllApplications();
+				employee.viewAllApplications();
 				System.out.println(NO_ARCHIVED_RECORDS);
 				System.out.println();
 				view = APPLICATION;
 				break;
 			case 2:
-				employee.getViewInfos().viewAllAccounts();
+				employee.viewAllAccounts();
 				System.out.println(NO_ARCHIVED_RECORDS);
 				System.out.println();
 				break;
 			case 3:
 				System.out.print("\nPlease Enter Customer ID: ");
 				if (!scanner.hasNextLong()) {
-					scanner.purgeLine();
+					purgeLine(scanner);
 					System.out.println("\nA Valid Customer Id Was Not Entered\n");
 					break;
 				}
 				long id = scanner.nextLong();
-				scanner.purgeLine();
+				purgeLine(scanner);
 				System.out.println();
-				String recordDump = employee.getViewInfos().viewAllAssociatedCustomerInfo(id);
+				String recordDump = employee.viewAllAssociatedCustomerInfo(id);
 				System.out.println(recordDump.length() == 0 ? NO_MATCHING_RECORDS :
 					recordDump);
 				System.out.println();
 				break;
-			default:
+			case 4:
 				view = ROOT;
+				employee.resetEmployeeId();
 			} break;
+			
 		case APPLICATION:
-			EmployeeManageApplication e = employee.getManageApplication();
 			boolean result;
 			long id;
 			switch (choice) {
 			case 1:
 				System.out.print("\nPlease Enter Application ID to Approve: ");
 				if (!scanner.hasNextLong()) {
-					scanner.purgeLine();
+					purgeLine(scanner);
 					System.out.println("\nA Valid Application Id Was Not Entered");
 					break;
 				}
 				id = scanner.nextLong();
-				scanner.purgeLine();
+				purgeLine(scanner);
 				System.out.println();
-				result = e.approveApplication(id, 
-						employee.getSelfIdentify().getEmployeeId());
+				result = employee.approveApplication(id, 
+						employee.getEmployeeId());
 				if (result)
 					System.out.println("Success");
-				else if (e.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println("System Error");
@@ -122,39 +127,37 @@ public class EmployeeView extends BasicContextMenuView implements Operational {
 			case 2:
 				System.out.print("\nPlease Enter Application ID to Deny: ");
 				if (!scanner.hasNextLong()) {
-					scanner.purgeLine();
+					purgeLine(scanner);
 					System.out.println("\nA Valid Application Id Was Not Entered\n");
 					break;
 				}
 				id = scanner.nextLong();
-				scanner.purgeLine();
+				purgeLine(scanner);
 				System.out.println();
-				result = e.denyApplication(id, 
-						employee.getSelfIdentify().getEmployeeId());
+				result = employee.denyApplication(id, 
+						employee.getEmployeeId());
 				if (result)
 					System.out.println("Success");
-				else if (e.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
-					System.out.println("System Error");
+					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				System.out.println();
 				break;
-			default:
+			case 3:
 				view = MAIN;
 			} break;
-		default:
-			return false;
 		}
 		return true;
 	}
 
 	@Override
 	public String provideSalutation() {
-		if (employee.getSelfIdentify().getEmployeeId() == null)
+		if (employee.getEmployeeId() == null)
 			return "(Employee)";
 		return new StringBuilder()
 				.append("(Employee) ")
-			.append(employee.getSelfIdentify().getEmployeeId())
+			.append(employee.getEmployeeId())
 		.toString();
 	}
 }
