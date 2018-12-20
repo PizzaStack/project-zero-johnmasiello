@@ -3,7 +3,7 @@ package com.revature.project_0.view;
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 
-public class AdminView extends BasicContextMenuView implements Operational {
+public class AdminView extends InputtingContextMenuView implements Operational {
 	private Repository repository;
 	private final String[] rootOptions = new String[] {
 			"Do Admin things"

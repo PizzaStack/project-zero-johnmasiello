@@ -119,4 +119,8 @@ public class Customer {
 	public void setPersonalInfoModel(PersonalInfoModel personalInfoModel) {
 		this.personalInfoModel = personalInfoModel;
 	}
+
+	public void resetPersonalInfo() {
+		this.personalInfoModel = null;
+	}
 }

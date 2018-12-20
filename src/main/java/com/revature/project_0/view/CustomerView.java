@@ -1,14 +1,17 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Customer;
+import com.revature.project_0.entity.Validating;
+
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.ApplicationModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
 
-public class CustomerView extends BasicContextMenuView implements Operational {
+public class CustomerView extends InputtingContextMenuView implements Operational {
 	private Customer customer;
+	private PersonalInfoModel personalInfoModelValidator;
 	private int view;
 	private final String[] rootOptions = new String[] {
 			"Login",
@@ -28,8 +31,8 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 			BACK
 	};
 	private final String[] applicationSubmitMenu = new String[] {
-			"Cancel",
-			"Submit"
+			"Submit",
+			"Cancel"
 	};
 	
 	private final int ROOT 							= 0;
@@ -146,8 +149,7 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 					System.out.println("We Would Like To Know A Little More About You\n");
 					fillOutPersonalInformation();
 				} else {
-					System.out.println("We Are Pleased To Assist You "
-							+ "With Applying For A New Account\n");
+					System.out.println("Let's Help You Apply For A New Account\n");
 					applyForAccount();
 				}
 				break;
@@ -166,10 +168,6 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 		case COMPLETE_APPLICATION:
 			switch (choice) {
 			case 1:
-				System.out.println("Application Canceled by User");
-				view = MAIN;
-				break;
-			case 2:
 				System.out.println("Application Submitted by User");
 				System.out.println("Please Wait For Your Account To Be Created");
 				if (!customer.createApplication(customer.getApplication())) {
@@ -177,20 +175,25 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 				}
 				view = MAIN;
 				break;
+			case 2:
+				System.out.println("Application Canceled by User");
+				view = MAIN;
+				break;
 			} break;
 			
 		case COMPLETE_DETAILS:
 			switch (choice) {
 			case 1:
-				System.out.println("Personal Details Canceled by User");
-				view = MAIN;
-				break;
-			case 2:
 				if (!customer.createPersonalInfo(customer.getPersonalInfoModel())) {
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				} else {
 					System.out.println("Details Update Successful");					
 				}
+				view = MAIN;
+				break;
+			case 2:
+				System.out.println("Personal Details Canceled by User");
+				customer.resetPersonalInfo();
 				view = MAIN;
 				break;
 			} break;
@@ -205,11 +208,113 @@ public class CustomerView extends BasicContextMenuView implements Operational {
 		view = ROOT;
 	}
 	
+	private void printAbortMessage() {
+		System.out.println("Aborting Update");
+	}
+	
+	private void failPersonalInfoForm() {
+		printAbortMessage();
+		personalInfoModelValidator = null;
+		view = MAIN;
+	}
+	
+	private final Validating validateFirstName = ($) -> {
+		return personalInfoModelValidator.setFirstName($);
+	};
+	private final Validating validateLastName = ($) -> {
+		return personalInfoModelValidator.setLastName($);
+	};
+	private final Validating validateMI = ($) -> {
+		if ($.length() == 1) {
+			personalInfoModelValidator.setMiddleInitial($.charAt(0));
+			return true;
+		}
+		return false;
+	};
+	private final Validating validateSSN = ($) -> {
+		return personalInfoModelValidator.setLast4ssn($);
+	};
+	
+	private final Validating validateDob = ($) -> {
+		return personalInfoModelValidator.setDob(Util.parseDate($));
+	};
+	private final Validating validatePhone = ($) -> {
+		return personalInfoModelValidator.setPhoneNumber($);
+	};
+	private final Validating validateEmail= ($) -> {
+		return personalInfoModelValidator.setEmail($);
+	};
+	private final Validating validateBeneficiary = ($) -> {
+		return personalInfoModelValidator.setBeneficiary($);
+	};
+	
 	private void fillOutPersonalInformation() {
-		PersonalInfoModel personalInfo = null;
+		personalInfoModelValidator = new PersonalInfoModel.Builder()
+				.withCustomerId(customer.getCustomerId())
+				.build();
+		final int numberOfTriesPerField = 3;
 		
-		// All Done
-		customer.setPersonalInfoModel(personalInfo);
+		System.out.println("Please Enter The Following: \n");
+		if (!acceptStringAsTokenWithAttempts("First Name: ",
+				"\nMust be at least three letters",
+				numberOfTriesPerField,
+				validateFirstName)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("Last Name: ",
+				"\nMust be at least three letters",
+				numberOfTriesPerField,
+				validateLastName)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("Middle Initial: ",
+				"\nMust be at exactly one letter",
+				numberOfTriesPerField,
+				validateMI)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts(
+				String.format("Date Of Birth (%s): ", Util.getPrintableDatePattern()),
+				"\nExample, December 1st, 2000 is 12-01-2000",
+				numberOfTriesPerField,
+				validateDob)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("SSN (last 4 digits): ",
+				"\nExample, xxx-xx-7777 is 7777",
+				numberOfTriesPerField,
+				validateSSN)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("Phone Number: (XXX)XXX-XXXX", 
+				"Ten Digit Phone Number With Area Code: Example, (888)333-3333", 
+				numberOfTriesPerField, 
+				validatePhone)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("Email: ", 
+				"Example, john@gmail.com",
+				numberOfTriesPerField, 
+				validateEmail)) {
+			failPersonalInfoForm();
+			return;
+		}
+		if (!acceptStringAsTokenWithAttempts("Beneficiary, Full Name: ", 
+				"Example, John Doe",
+				numberOfTriesPerField, 
+				validateBeneficiary)) {
+			failPersonalInfoForm();
+			return;
+		}
+		customer.setPersonalInfoModel(personalInfoModelValidator);
+		personalInfoModelValidator = null;
+		System.out.println("\nReady To Submit");
 		view = COMPLETE_DETAILS;
 	}
 	

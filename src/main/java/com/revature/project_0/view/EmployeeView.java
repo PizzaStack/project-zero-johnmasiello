@@ -5,7 +5,7 @@ import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 
-public class EmployeeView extends BasicContextMenuView implements Operational {
+public class EmployeeView extends InputtingContextMenuView implements Operational {
 	private Employee employee;
 	private int view; 
 	
