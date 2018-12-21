@@ -19,6 +19,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		private long customerId;
 		private long jointCustomerId;
 		private int type;
+		private String jointCustomerSSN;
 		
 		{
 			reset();
@@ -27,6 +28,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		private void reset() {
 			applicationId = customerId = jointCustomerId = NO_ID;
 			type = AccountType.CHECKING;
+			jointCustomerSSN = "";
 		}
 
 		public Builder withApplicationId(long applicationId) {
@@ -50,15 +52,18 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		}
 		
 		public ApplicationModel build() {
-			return new ApplicationModel(applicationId, customerId, jointCustomerId, type);
+			return new ApplicationModel(applicationId, customerId, jointCustomerId, type,
+					jointCustomerSSN);
 		}
 	}
 	
-	private ApplicationModel(long applicationId, long customerId, long jointCustomerId, int type) {
+	private ApplicationModel(long applicationId, long customerId, long jointCustomerId, int type,
+			String jointCustomerSSN) {
 		this.applicationId = applicationId;
 		this.customerId = customerId;
 		this.jointCustomerId = jointCustomerId;
 		this.type = type;
+		this.jointCustomerSSN = jointCustomerSSN;
 	}
 	
 	public static Builder getBuilder() {
@@ -102,13 +107,20 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		if (ssn == null)
 			return false;
 		String trimmedLastSsn = trimToJustDigits(ssn);
-		if (trimmedLastSsn.length() < 9)
+		if (trimmedLastSsn.length() != 9)
 			return false;
 		this.jointCustomerSSN = trimmedLastSsn;
 		return true;
 	}
 	private String trimToJustDigits(String raw) {
 		return raw.replaceAll("[^0-9]+", "");
+	}
+	
+	public String prettyPrintLast4SSN() {
+		if (jointCustomerSSN == null ||
+				jointCustomerSSN.length() == 0)
+			return Util.NOT_AVAILABLE;
+		return "XXX-XX-" + jointCustomerSSN.substring(5);
 	}
 
 	public int getType() {
@@ -154,6 +166,8 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 				.append(Util.zeroPadCondensedId(customerId))
 				.append("\nCustomer, Joint Id: ")
 				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : "")
+				.append("\nSSN: ")
+				.append(prettyPrintLast4SSN())
 				.append("\nType: ")
 				.append(prettyPrintType())
 				.toString();

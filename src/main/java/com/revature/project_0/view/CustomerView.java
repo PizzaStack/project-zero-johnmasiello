@@ -1,9 +1,14 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Customer;
+import com.revature.project_0.entity.FundsTransactionManager;
+import com.revature.project_0.entity.TransactionOutcome;
 
+import java.util.List;
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
+import com.revature.project_0.repository.model.AccountInfoModel;
+import com.revature.project_0.repository.model.AccountType;
 import com.revature.project_0.repository.model.ApplicationModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
@@ -12,6 +17,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 	private Customer customer;
 	private PersonalInfoModel personalInfoValidator;
 	private ApplicationModel applicationValidator;
+	private FundsTransactionManager fundsTransactionManager = new FundsTransactionManager();
 	private int view;
 	private final String[] rootOptions = new String[] {
 			"Login",
@@ -160,8 +166,175 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			} break;
 			
 		case TRANSACTION:
+			AccountInfoModel targetAccount;
+			List<AccountInfoModel> accounts = customer.getAccounts();
+			int pickAccount;
+			double amount;
+			StringBuilder snapshotAccounts = new StringBuilder();
+			for (int i = 0; i < accounts.size(); i++) {
+				snapshotAccounts
+				.append(i+1)
+				.append("\t")
+				.append(accounts.get(i).provideGlimpse())
+				.append("\n");
+			}
+			
 			switch (choice) {
 			case 1:
+				System.out.println(snapshotAccounts.toString());
+				System.out.print("Select Account For Deposit: ");
+				if (!scanner.hasNextInt()) {
+					purgeLine(scanner);
+					System.out.println("No Account Selected");
+					break;
+				}
+				pickAccount = scanner.nextInt();
+				purgeLine(scanner);
+				if (pickAccount > 0 && pickAccount <= accounts.size()) {
+					targetAccount = accounts.get(pickAccount - 1);
+					
+					System.out.print("Enter the amount for Deposit: $");
+					if (!scanner.hasNextDouble()) {
+						purgeLine(scanner);
+						System.out.println("Amount Not Entered");
+						break;
+					}
+					amount = scanner.nextDouble();
+					purgeLine(scanner);
+					if (amount <= 0) {
+						System.out.println("Amount Must Be > 0");
+						break;
+					}
+					switch (fundsTransactionManager.makeDeposit(targetAccount, amount)) {
+					case TransactionOutcome.SUCCESS:
+						System.out.println("\nDeposit Made Successfully");
+						System.out.println(targetAccount.provideGlimpse());
+						break;
+					case TransactionOutcome.ACCOUNT_FROZEN:
+						System.out.println("\nDeposit Unsuccessful");
+						System.out.println("Reason: The Account With Id " 
+								+ targetAccount.getAccountId()
+								+ " Is Not Currently Active");
+						break;
+					}
+					
+				} else {
+					System.out.println("No Account Selected");
+				}
+				break;
+			case 2:
+				System.out.println(snapshotAccounts.toString());
+				System.out.print("Select Account For Withdrawal: ");
+				if (!scanner.hasNextInt()) {
+					purgeLine(scanner);
+					System.out.println("No Account Selected");
+					break;
+				}
+				pickAccount = scanner.nextInt();
+				purgeLine(scanner);
+				if (pickAccount > 0 && pickAccount <= accounts.size()) {
+					targetAccount = accounts.get(pickAccount - 1);
+					
+					System.out.print("Enter the amount for Withdrawal: $");
+					if (!scanner.hasNextDouble()) {
+						purgeLine(scanner);
+						System.out.println("Amount Not Entered");
+						break;
+					}
+					amount = scanner.nextDouble();
+					purgeLine(scanner);
+					if (amount <= 0) {
+						System.out.println("Amount Must Be > 0");
+						break;
+					}
+					switch (fundsTransactionManager.makeWithdrawal(targetAccount, amount)) {
+					case TransactionOutcome.SUCCESS:
+						System.out.println("\nWithdrawal Made Successfully");
+						System.out.println(targetAccount.provideGlimpse());
+						break;
+					case TransactionOutcome.ACCOUNT_FROZEN:
+						System.out.println("\nWithdrawal Unsuccessful");
+						System.out.println("Reason: The Account With Id " 
+								+ targetAccount.getAccountId()
+								+ " Is Not Currently Active");
+						break;
+					case TransactionOutcome.INSUFFICIENT_FUNDS:
+						System.out.println("\nWithdrawal Unsuccessful");
+						System.out.println("Reason: InSufficient Funds"); 
+						break;
+					}
+					
+				} else {
+					System.out.println("No Account Selected");
+				}
+				break;
+			case 3:
+				System.out.println(snapshotAccounts.toString());
+				System.out.print("Transfer Funds Into Account: ");
+				if (!scanner.hasNextInt()) {
+					purgeLine(scanner);
+					System.out.println("No Account Selected");
+					break;
+				}
+				pickAccount = scanner.nextInt();
+				purgeLine(scanner);
+				if (pickAccount <= 0 || pickAccount > accounts.size()) {
+					System.out.println("No Account Selected");
+				}
+				targetAccount = accounts.get(pickAccount - 1);
+				System.out.print("From Account: ");
+				if (!scanner.hasNextInt()) {
+					purgeLine(scanner);
+					System.out.println("No Account Selected");
+					break;
+				}
+				int pickAccount2 = scanner.nextInt();
+				purgeLine(scanner);
+				if (pickAccount2 <= 0 || pickAccount2 > accounts.size()) {
+					System.out.println("No Account Selected");
+				} else if (pickAccount2 == pickAccount)
+					System.out.println("Cannot Pick The Same Account");
+				AccountInfoModel originAccount = accounts.get(pickAccount2 - 1);
+				System.out.print("Enter Transfer Amount: $");
+				if (!scanner.hasNextDouble()) {
+					purgeLine(scanner);
+					System.out.println("Amount Not Entered");
+					break;
+				}
+				amount = scanner.nextDouble();
+				purgeLine(scanner);
+				if (amount <= 0) {
+					System.out.println("Amount Must Be > 0");
+					break;
+				}
+				switch (fundsTransactionManager.makeTransferOfFunds(originAccount, 
+						targetAccount, 
+						amount)) {
+				case TransactionOutcome.SUCCESS:
+					System.out.println("\nTransfer Made Successfully");
+					System.out.println(targetAccount.provideGlimpse());
+					System.out.println(originAccount.provideGlimpse());
+					break;
+				case TransactionOutcome.ACCOUNT_FROZEN:
+					System.out.println("\nTransfer Not Made");
+					System.out.println("Reason: The Account With Id " 
+							+ originAccount.getAccountId()
+							+ " Is Not Currently Active");
+					break;
+				case TransactionOutcome.RECIPIENT_ACCOUNT_FROZEN:
+					System.out.println("\nTransfer Not Made");
+					System.out.println("Reason: The Account With Id " 
+							+ targetAccount.getAccountId()
+							+ " Is Not Currently Active");
+					break;
+				case TransactionOutcome.INSUFFICIENT_FUNDS:
+					System.out.println("\nTransfer Not Made");
+					System.out.println("Reason: InSufficient Funds"); 
+					break;
+				}
+				break;
+			case 4:
+				view = MAIN;
 				break;
 			} break;
 			
@@ -325,7 +498,13 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 	}
 	
 	private final Validating validateAccountType = ($) -> {
-		return applicationValidator.setType(Util.parseStringAsInt($));
+		switch (Util.parseStringAsInt($)) {
+		case 1:
+			return applicationValidator.setType(AccountType.CHECKING);
+		case 2:
+			return applicationValidator.setType(AccountType.SAVINGS);
+		}
+		return false;
 	};
 	private final Validating validateAccountOwner = ($) -> {
 		switch (Util.parseStringAsInt($)) {

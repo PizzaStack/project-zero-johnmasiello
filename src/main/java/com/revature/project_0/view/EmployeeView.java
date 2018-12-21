@@ -70,15 +70,21 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 		case MAIN:
 			switch (choice) {
 			case 1:
-				employee.viewAllApplications();
-				System.out.println(NO_ARCHIVED_RECORDS);
-				System.out.println();
+				String applications = employee.viewAllApplications();
+				System.out.println("\n");
+				if (applications.length() > 0)
+					System.out.println(applications);
+				else
+					System.out.println(NO_ARCHIVED_RECORDS);
 				view = APPLICATION;
 				break;
 			case 2:
-				employee.viewAllAccounts();
-				System.out.println(NO_ARCHIVED_RECORDS);
-				System.out.println();
+				String accounts = employee.viewAllAccounts();
+				System.out.println("\n");
+				if (accounts.length() > 0)
+					System.out.println(accounts);
+				else
+					System.out.println(NO_ARCHIVED_RECORDS);
 				break;
 			case 3:
 				System.out.print("\nPlease Enter Customer ID: ");

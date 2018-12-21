@@ -58,7 +58,38 @@ public class AppTest
 				+ "1\n"									// Make it for individual
 				+ "1\n";									// Submit
 		
-		consoleInput = customerSignInAndCreateApplication;
+		String customerAppliesForAccount_EmployeeApproves = 
+				customerSignInAndCreateApplication
+			+ "1\n"										// sign out
+			+ "3\n"										// back
+			+ "2\n"
+			+ "1\n"										// employee login
+			+ "employee_0\n"								// employee handle
+			+ "1\n"										// view applications
+			+ "1\n"										// approve applications
+			+ "0\n"										// enter application id
+			+ "3\n"
+			+ "4\n"
+			+ "2\n";									// Get back to main console
+		
+		String customerLogsInToCheckAccountAfterItIsApproved = 
+				customerAppliesForAccount_EmployeeApproves
+			+ "1\n"							//choose customer
+			+ "1\n"							//login in as returning customer
+			+ "John00\n" 					// enter username
+			+ "password\n" 					// enter password
+			+ "2\n";						// view accounts
+		
+		String customerMakesTransactionsWithHerAccounts = 
+				customerLogsInToCheckAccountAfterItIsApproved
+			+ "1\n"							// make deposit
+			+ "1\n"							// in the first account
+			+ "5.00\n"						// by amount
+			+ "2\n"							// make a withdrawal
+			+ "1\n"							// from account
+			+ "6.00\n";						// by amount
+		
+		consoleInput = customerMakesTransactionsWithHerAccounts;
 	}
 			
 	@Test 

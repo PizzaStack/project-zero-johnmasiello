@@ -246,6 +246,13 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 				.append(adminId != null ? adminId : Util.NOT_AVAILABLE)
 				.toString();
 	}
+	
+	public String provideGlimpse() {
+		return "Id: " + Util.zeroPadCondensedId(accountId) 
+				+ "    Type: " + prettyPrintType()
+				+ "    Balance: " + Util.currencyFormat(balance);
+					
+	}
 
 	@Override
 	public int compareTo(AccountInfoModel m) {

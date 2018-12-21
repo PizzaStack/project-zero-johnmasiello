@@ -104,13 +104,13 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	}
 	
 	private PersonalInfoModel(long customerId, String firstName, String lastName, char middleInitial, Date dob,
-			String last4ssn, String email, String phoneNumber, String beneficiary) {
+			String ssn, String email, String phoneNumber, String beneficiary) {
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleInitial = middleInitial;
 		this.dob = dob;
-		this.ssn = last4ssn;
+		this.ssn = ssn;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.beneficiary = beneficiary;
@@ -176,10 +176,16 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		if (ssn == null)
 			return false;
 		String trimmedLastSsn = trimToJustDigits(ssn);
-		if (trimmedLastSsn.length() < 9)
+		if (trimmedLastSsn.length() != 9)
 			return false;
 		this.ssn = trimmedLastSsn;
 		return true;
+	}
+	
+	public String prettyPrintLast4SSN() {
+		if (ssn == null || ssn.length() != 9)
+			return Util.NOT_AVAILABLE;
+		return "XXX-XX-" + ssn.substring(5);
 	}
 
 	public String getEmail() {
@@ -248,7 +254,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 				.append("\nDOB: ")
 				.append(dob == null ? "" : dob)
 				.append("\nSSN: ")
-				.append(ssn)
+				.append(prettyPrintLast4SSN())
 				.append("\nEmail: ")
 				.append(email)
 				.append("\nPhn (xxx)xxx-xxxx: ")
