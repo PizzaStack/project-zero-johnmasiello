@@ -54,4 +54,11 @@ public final class Util {
 	public static final String getPrintableDatePattern() {
 		return PRINTABLE_DATE_PATTERN;
 	}
+	
+	public static final int parseStringAsInt(String strInt) {
+		try {
+			return Integer.parseInt(strInt);
+		} catch (NumberFormatException e) {}
+		return 0;
+	}
 }

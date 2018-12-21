@@ -14,15 +14,17 @@ public class AppTest
 	
 	@Before
 	public void initScannerResource() {
-		consoleInput = "1\n" // choose customer
-				+ "1\n"			//sign in
-				+ "John_86\n" 	// enter username
+		String testCustomerSignIn = 
+				"1\n" // choose customer
+				+ "2\n"			//sign in
+				+ "John_00\n" 	// enter username
 				+ "password\n" 	// enter password
-				+ "3\n"			// sign out"
-				+ "4\n"			// exit program
-				+ "";
+				+ "1\n"			// sign out"
+				+ "3\n"
+				+ "4\n";		// exit program
 		
-		consoleInput = "2\n" // choose employee
+		String employeeLoginLogout = 
+				"2\n" // choose employee
 				+ "1\n"			// login
 				+ "Banker1\n" 	// enter username
 				+ "3\n"			// view by customer"
@@ -31,13 +33,40 @@ public class AppTest
 				+ "3\n"			// go back to root console
 				+ "4\n"			// exit program
 				+ "";
+		
+		String customerSignInAndFillOutInformation = 
+				"1\n"							//choose customer
+				+ "2\n"							//sign in
+				+ "John00\n" 					// enter username
+				+ "password\n" 					// enter password
+				+ "3\n"							//'open account' ->redirected to personal info form
+				+ "John\n"
+				+ "QT\n"
+				+ "P\n"
+				+ "12-01-1995\n"
+				+ "777-77-7777\n"
+				+ "(888)333-3333\n"
+				+ "john@gmail.com\n"
+				+ "Jane Doe\n"
+				+ "1\n"							//submit
+				+ "";
+		
+		String customerSignInAndCreateApplication = 
+				customerSignInAndFillOutInformation 
+				+"3\n"									// Apply/Open for an account
+				+ "1\n"									// Make it for checking
+				+ "1\n"									// Make it for individual
+				+ "1\n";									// Submit
+		
+		consoleInput = customerSignInAndCreateApplication;
 	}
 			
 	@Test 
 	public void testAppWithConsole() {
 		Scanner scanner = new Scanner(consoleInput);
-		new ConsoleView(new Repository(), scanner).goLive();
-		
+		try {
+			new ConsoleView(new Repository(), scanner).goLive();
+		} catch (Exception ignore) {}
 		scanner.close();
 	}
 }

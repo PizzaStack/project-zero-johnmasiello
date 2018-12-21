@@ -1,11 +1,14 @@
 package com.revature.project_0.repository.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.revature.project_0.util.Util;
 
 public class ApplicationModel implements Comparable<ApplicationModel>{
 	private long applicationId;
 	private long customerId;
 	private long jointCustomerId;
+	private String jointCustomerSSN;
 	private int type;
 	
 	public static final int NO_ID = -1;
@@ -90,6 +93,23 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	public void setJointCustomerId(long jointCustomerId) {
 		this.jointCustomerId = jointCustomerId;
 	}
+	
+	public String getJointCustomerSSN() {
+		return jointCustomerSSN;
+	}
+	
+	public boolean setJointCustomerSSN(@NotNull String ssn) {
+		if (ssn == null)
+			return false;
+		String trimmedLastSsn = trimToJustDigits(ssn);
+		if (trimmedLastSsn.length() < 9)
+			return false;
+		this.jointCustomerSSN = trimmedLastSsn;
+		return true;
+	}
+	private String trimToJustDigits(String raw) {
+		return raw.replaceAll("[^0-9]+", "");
+	}
 
 	public int getType() {
 		return type;
@@ -104,8 +124,13 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		}
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public boolean setType(int type) {
+		switch (type) {
+		case AccountType.CHECKING:
+		case AccountType.SAVINGS:
+			this.type = type;		
+			return true;
+		} return false;
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class ModelUnitTest {
 				.withDob(dob)
 				.withCustomerId(1)
 				.withEmail("john.doe@gmail.com")
-				.withLast4ssn("1111")
+				.withSSN("1111")
 				.withPhoneNumber("1234567890")
 				.withBeneficiary("Zoe Jo")
 				.build();

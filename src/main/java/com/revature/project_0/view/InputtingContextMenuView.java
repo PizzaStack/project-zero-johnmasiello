@@ -2,7 +2,6 @@ package com.revature.project_0.view;
 
 import java.util.Scanner;
 
-import com.revature.project_0.entity.Validating;
 import com.revature.project_0.io.DataInputting;
 
 public abstract class InputtingContextMenuView extends BasicContextMenuView implements DataInputting {
@@ -21,12 +20,12 @@ public abstract class InputtingContextMenuView extends BasicContextMenuView impl
 		System.out.print(fieldLabel);
 		numberOfTries = numberOfAttempts;
 		strIn = scanner.next();
-		scanner.nextLine(); 
+		purgeLine(scanner);
 		while (!validator.validate(strIn) && --numberOfTries > 0) {
 			System.out.println(showCondition + " (" + numberOfTries  + " more tries/try)");
 			System.out.print(fieldLabel);
 			strIn = scanner.next();
-			scanner.nextLine();
+			purgeLine(scanner);
 		}
 		return numberOfTries > 0;
 	}

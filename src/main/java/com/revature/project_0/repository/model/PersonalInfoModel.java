@@ -12,7 +12,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	private String lastName;
 	private char middleInitial;
 	private Date dob;
-	private String last4ssn;
+	private String ssn;
 	private String email;
 	private String phoneNumber;
 	private String beneficiary;
@@ -27,7 +27,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		private String lastName;
 		private char middleInitial;
 		private Date dob;
-		private String last4ssn;
+		private String ssn;
 		private String email;
 		private String phoneNumber;
 		private String beneficiary;
@@ -41,7 +41,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 			firstName = lastName = "";
 			middleInitial = ' ';
 			dob = null;
-			last4ssn = "";
+			ssn = "";
 			email = "";
 			phoneNumber = "";
 			beneficiary = "";
@@ -74,9 +74,9 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 			return this;
 		}
 
-		public Builder withLast4ssn(@NotNull String last4ssn) {
-			if (last4ssn != null)
-				this.last4ssn = last4ssn;
+		public Builder withSSN(@NotNull String ssn) {
+			if (ssn != null)
+				this.ssn = ssn;
 			return this;
 		}
 
@@ -99,7 +99,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		}
 		
 		public PersonalInfoModel build() {
-			return new PersonalInfoModel(customerId, firstName, lastName, middleInitial, dob, last4ssn, email, phoneNumber, beneficiary);
+			return new PersonalInfoModel(customerId, firstName, lastName, middleInitial, dob, ssn, email, phoneNumber, beneficiary);
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		this.lastName = lastName;
 		this.middleInitial = middleInitial;
 		this.dob = dob;
-		this.last4ssn = last4ssn;
+		this.ssn = last4ssn;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.beneficiary = beneficiary;
@@ -130,7 +130,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	}
 
 	public boolean setFirstName(@NotNull String firstName) {
-		if (firstName != null && firstName.length() > 2) {
+		if (firstName != null && firstName.length() > 1) {
 			this.firstName = firstName;
 			return true;
 		}
@@ -142,7 +142,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	}
 
 	public boolean setLastName(@NotNull String lastName) {
-		if (lastName != null && lastName.length() > 2) {
+		if (lastName != null && lastName.length() > 1) {
 			this.lastName = lastName;
 			return true;
 		} return false;
@@ -168,17 +168,17 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		} return false;
 	}
 
-	public String getLast4ssn() {
-		return last4ssn;
+	public String getSSN() {
+		return ssn;
 	}
 
-	public boolean setLast4ssn(@NotNull String last4ssn) {
-		if (last4ssn == null)
+	public boolean setSSN(@NotNull String ssn) {
+		if (ssn == null)
 			return false;
-		String trimmedLastSsn = trimToJustDigits(last4ssn);
-		if (trimmedLastSsn.length() < 4)
+		String trimmedLastSsn = trimToJustDigits(ssn);
+		if (trimmedLastSsn.length() < 9)
 			return false;
-		this.last4ssn = trimmedLastSsn.substring(trimmedLastSsn.length() - 4);
+		this.ssn = trimmedLastSsn;
 		return true;
 	}
 
@@ -224,7 +224,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	}
 
 	public boolean setBeneficiary(@NotNull String beneficiary) {
-		if (beneficiary != null && beneficiary.length() > 2) {
+		if (beneficiary != null && beneficiary.length() > 1) {
 			this.beneficiary = beneficiary;
 			return true;
 		} return false;
@@ -247,8 +247,8 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 				.append(middleInitial)
 				.append("\nDOB: ")
 				.append(dob == null ? "" : dob)
-				.append("\nLast Four SSN: ")
-				.append(last4ssn)
+				.append("\nSSN: ")
+				.append(ssn)
 				.append("\nEmail: ")
 				.append(email)
 				.append("\nPhn (xxx)xxx-xxxx: ")

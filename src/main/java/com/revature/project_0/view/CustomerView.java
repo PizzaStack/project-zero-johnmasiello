@@ -1,7 +1,6 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Customer;
-import com.revature.project_0.entity.Validating;
 
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
@@ -11,7 +10,8 @@ import com.revature.project_0.util.Util;
 
 public class CustomerView extends InputtingContextMenuView implements Operational {
 	private Customer customer;
-	private PersonalInfoModel personalInfoModelValidator;
+	private PersonalInfoModel personalInfoValidator;
+	private ApplicationModel applicationValidator;
 	private int view;
 	private final String[] rootOptions = new String[] {
 			"Login",
@@ -154,7 +154,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				break;
 			case 4:
-				System.out.println("Stay Up-To-Date\n");
+				System.out.println("Stay Up-To-Date");
 				fillOutPersonalInformation();
 				break;
 			} break;
@@ -187,7 +187,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (!customer.createPersonalInfo(customer.getPersonalInfoModel())) {
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				} else {
-					System.out.println("Details Update Successful");					
+					System.out.println("Details Updated Successfully");					
 				}
 				view = MAIN;
 				break;
@@ -214,56 +214,56 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 	
 	private void failPersonalInfoForm() {
 		printAbortMessage();
-		personalInfoModelValidator = null;
+		personalInfoValidator = null;
 		view = MAIN;
 	}
 	
 	private final Validating validateFirstName = ($) -> {
-		return personalInfoModelValidator.setFirstName($);
+		return personalInfoValidator.setFirstName($);
 	};
 	private final Validating validateLastName = ($) -> {
-		return personalInfoModelValidator.setLastName($);
+		return personalInfoValidator.setLastName($);
 	};
 	private final Validating validateMI = ($) -> {
 		if ($.length() == 1) {
-			personalInfoModelValidator.setMiddleInitial($.charAt(0));
+			personalInfoValidator.setMiddleInitial($.charAt(0));
 			return true;
 		}
 		return false;
 	};
 	private final Validating validateSSN = ($) -> {
-		return personalInfoModelValidator.setLast4ssn($);
+		return personalInfoValidator.setSSN($);
 	};
 	
 	private final Validating validateDob = ($) -> {
-		return personalInfoModelValidator.setDob(Util.parseDate($));
+		return personalInfoValidator.setDob(Util.parseDate($));
 	};
 	private final Validating validatePhone = ($) -> {
-		return personalInfoModelValidator.setPhoneNumber($);
+		return personalInfoValidator.setPhoneNumber($);
 	};
 	private final Validating validateEmail= ($) -> {
-		return personalInfoModelValidator.setEmail($);
+		return personalInfoValidator.setEmail($);
 	};
 	private final Validating validateBeneficiary = ($) -> {
-		return personalInfoModelValidator.setBeneficiary($);
+		return personalInfoValidator.setBeneficiary($);
 	};
 	
 	private void fillOutPersonalInformation() {
-		personalInfoModelValidator = new PersonalInfoModel.Builder()
+		personalInfoValidator = new PersonalInfoModel.Builder()
 				.withCustomerId(customer.getCustomerId())
 				.build();
 		final int numberOfTriesPerField = 3;
 		
 		System.out.println("Please Enter The Following: \n");
 		if (!acceptStringAsTokenWithAttempts("First Name: ",
-				"\nMust be at least three letters",
+				"\nMust be at least two letters",
 				numberOfTriesPerField,
 				validateFirstName)) {
 			failPersonalInfoForm();
 			return;
 		}
 		if (!acceptStringAsTokenWithAttempts("Last Name: ",
-				"\nMust be at least three letters",
+				"\nMust be at least two letters",
 				numberOfTriesPerField,
 				validateLastName)) {
 			failPersonalInfoForm();
@@ -284,45 +284,96 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			failPersonalInfoForm();
 			return;
 		}
-		if (!acceptStringAsTokenWithAttempts("SSN (last 4 digits): ",
-				"\nExample, xxx-xx-7777 is 7777",
+		if (!acceptStringAsTokenWithAttempts("SSN: ",
+				"\nExample, 777-77-7777",
 				numberOfTriesPerField,
 				validateSSN)) {
 			failPersonalInfoForm();
 			return;
 		}
 		if (!acceptStringAsTokenWithAttempts("Phone Number: (XXX)XXX-XXXX", 
-				"Ten Digit Phone Number With Area Code: Example, (888)333-3333", 
+				"\nTen Digit Phone Number With Area Code: Example, (888)333-3333", 
 				numberOfTriesPerField, 
 				validatePhone)) {
 			failPersonalInfoForm();
 			return;
 		}
 		if (!acceptStringAsTokenWithAttempts("Email: ", 
-				"Example, john@gmail.com",
+				"\nExample, john@gmail.com",
 				numberOfTriesPerField, 
 				validateEmail)) {
 			failPersonalInfoForm();
 			return;
 		}
 		if (!acceptStringAsTokenWithAttempts("Beneficiary, Full Name: ", 
-				"Example, John Doe",
+				"\nExample, John Doe",
 				numberOfTriesPerField, 
 				validateBeneficiary)) {
 			failPersonalInfoForm();
 			return;
 		}
-		customer.setPersonalInfoModel(personalInfoModelValidator);
-		personalInfoModelValidator = null;
+		customer.setPersonalInfoModel(personalInfoValidator);
+		personalInfoValidator = null;
 		System.out.println("\nReady To Submit");
 		view = COMPLETE_DETAILS;
 	}
 	
+	private void failApplication() {
+		printAbortMessage();
+		applicationValidator = null;
+		view = MAIN;
+	}
+	
+	private final Validating validateAccountType = ($) -> {
+		return applicationValidator.setType(Util.parseStringAsInt($));
+	};
+	private final Validating validateAccountOwner = ($) -> {
+		switch (Util.parseStringAsInt($)) {
+		case 2:
+			applicationValidator.setJointCustomerId(1l);
+		case 1:
+			return true;
+		} return false;
+	};
+	private final Validating validateAccountJointCustomerSSN = ($) -> {
+		return applicationValidator.setJointCustomerSSN($);
+	};
+	
 	private void applyForAccount() {
-		ApplicationModel application = null;
+		applicationValidator = new ApplicationModel.Builder()
+				.withCustomerId(customer.getCustomerId())
+				.build();
+		final String typePrompt = "Select Account Type\n1\tChecking\n2\tSavings\nType: "; 
+		if (!acceptStringAsTokenWithAttempts(typePrompt, 
+				"Enter 1 Or 2", 
+				2,
+				validateAccountType)) {
+			failApplication();
+			return;
+		}
+		final String ownerPrompt = "Account Owner\n1\tIndividual\n2\tJoint\nOwner: ";
+		if (!acceptStringAsTokenWithAttempts(ownerPrompt, 
+				"Enter 1 Or 2", 
+				2,
+				validateAccountOwner)) {
+			failApplication();
+			return;
+		}
+		if (applicationValidator.getJointCustomerId() == 1l) {
+			applicationValidator.setJointCustomerId(ApplicationModel.NO_ID);
+			
+			System.out.println("Enter Joint Holder's SSN: ");
+			if (!acceptStringAsTokenWithAttempts("SSN: ", 
+					"Example, 123-45-6789", 
+					3, validateAccountJointCustomerSSN)) {
+				failApplication();
+				return;
+			}
+		}
 		
-		// All Done
-		customer.setApplicationModel(application);
+		customer.setApplicationModel(applicationValidator);
+		applicationValidator = null;
+		System.out.println("\nReady To Submit");
 		view = COMPLETE_APPLICATION;
 	}
 	

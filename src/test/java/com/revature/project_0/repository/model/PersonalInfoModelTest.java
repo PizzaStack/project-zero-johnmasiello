@@ -39,14 +39,14 @@ public class PersonalInfoModelTest {
 	
 	@Test
 	public void validateBadSsnNotSet() {
-		assertFalse(personalInfoModel.setLast4ssn("abc123"));
+		assertFalse(personalInfoModel.setSSN("abc123"));
 	}
 	
 	@Test
 	public void validateSSnSet() {
 		final String ssn = "123-45-6789";
-		personalInfoModel.setLast4ssn(ssn);
-		assertEquals("6789", personalInfoModel.getLast4ssn());
+		personalInfoModel.setSSN(ssn);
+		assertEquals("123456789", personalInfoModel.getSSN());
 	}
 	
 	@Test
