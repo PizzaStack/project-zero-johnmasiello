@@ -1,22 +1,23 @@
 package com.revature.project_0.view;
 
-import com.revature.project_0.entity.Employee;
 import java.util.Scanner;
+
+import com.revature.project_0.entity.Administrator;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 
-public class EmployeeView extends InputtingContextMenuView implements Operational {
-	private Employee employee;
+public class AdministratorView extends InputtingContextMenuView implements Operational {
+	private Administrator administrator;
 	private int view; 
 	
 	private final String[] rootOptions = new String[] {
-		"Login",
-		BACK
+			"Login",
+			BACK
 	};
 	private final String[] mainOptions = new String[] {
 			"Manage Applications",
-			"View Accounts",
-			"View Customer Information",
+			"Manage Accounts",
+			"Manage Customer Information",
 			BACK
 	};
 	private final String[] applicationOptions = new String[] {
@@ -24,17 +25,37 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 			"Deny Application",
 			BACK
 	};
-	private final int ROOT 			= 0;
-	private final int MAIN 			= 1;
-	private final int APPLICATION 	= 2;
+	private final String[] accountOptions = new String[] {
+			"Manage Transactions",
+			"Approve Accounts",
+			"Cancel Accounts",
+			BACK
+	};
+	private final String[] transactionOptions = new String[] {
+			"Deposit Funds",
+			"Withdrawal Funds",
+			"Transfer Funds",
+			BACK
+	};
+	private final String[] accountApprovalOptions = new String[] {
+			"Approve Account",
+			"Deny Account",
+			BACK
+	};
+	private final int ROOT 					= 0;
+	private final int MAIN 					= 1;
+	private final int APPLICATION 			= 2;
+	private final int ACCOUNT	 			= 3;
+	private final int ACCOUNT_TRANSACTION 	= 4;
+	private final int ACCOUNT_APPROVAL		= 5;
 	
 	private final String NO_MATCHING_RECORDS = "NO MATCHING RECORDS";
 	private final String NO_ARCHIVED_RECORDS = "NO ARCHIVED RECORDS";
 	
-	public EmployeeView(Repository repository, Scanner scanner) {
+	public AdministratorView(Repository repository, Scanner scanner) {
 		super(scanner);
 		view = ROOT;
-		employee = new Employee(repository);
+		administrator = new Administrator(repository);
 	}
 
 	@Override
@@ -60,7 +81,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				System.out.print("\nPlease Enter Employee Name or ID: ");
 				String name = scanner.nextLine();
 				System.out.println();
-				employee.setEmployeeId(name);
+				administrator.setEmployeeId(name);
 				view = MAIN;
 				break;
 			case 2:
@@ -70,7 +91,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 		case MAIN:
 			switch (choice) {
 			case 1:
-				String applications = employee.viewAllApplications();
+				String applications = administrator.viewAllApplications();
 				System.out.println("\n");
 				if (applications.length() > 0)
 					System.out.println(applications);
@@ -79,7 +100,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				view = APPLICATION;
 				break;
 			case 2:
-				String accounts = employee.viewAllAccounts();
+				String accounts = administrator.viewAllAccounts();
 				System.out.println("\n");
 				if (accounts.length() > 0)
 					System.out.println(accounts);
@@ -96,14 +117,14 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				long id = scanner.nextLong();
 				purgeLine(scanner);
 				System.out.println();
-				String recordDump = employee.viewAllAssociatedCustomerInfo(id);
+				String recordDump = administrator.viewAllAssociatedCustomerInfo(id);
 				System.out.println(recordDump.length() == 0 ? NO_MATCHING_RECORDS :
 					recordDump);
 				System.out.println();
 				break;
 			case 4:
 				view = ROOT;
-				employee.resetEmployeeId();
+				administrator.resetEmployeeId();
 			} break;
 			
 		case APPLICATION:
@@ -120,11 +141,11 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				id = scanner.nextLong();
 				purgeLine(scanner);
 				System.out.println();
-				result = employee.approveApplication(id, 
-						employee.getEmployeeId());
+				result = administrator.approveApplication(id, 
+						administrator.getEmployeeId());
 				if (result)
 					System.out.println("Success");
-				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println("System Error");
@@ -140,11 +161,11 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				id = scanner.nextLong();
 				purgeLine(scanner);
 				System.out.println();
-				result = employee.denyApplication(id, 
-						employee.getEmployeeId());
+				result = administrator.denyApplication(id, 
+						administrator.getEmployeeId());
 				if (result)
 					System.out.println("Success");
-				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
@@ -159,11 +180,11 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 
 	@Override
 	public String provideSalutation() {
-		if (employee.getEmployeeId() == null)
+		if (administrator.getEmployeeId() == null)
 			return "(Employee)";
 		return new StringBuilder()
 				.append("(Employee) ")
-			.append(employee.getEmployeeId())
+			.append(administrator.getEmployeeId())
 		.toString();
 	}
 }

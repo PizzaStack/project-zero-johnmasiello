@@ -6,7 +6,7 @@ import com.revature.project_0.repository.Repository;
 public class ConsoleView extends BasicContextMenuView implements Operational {
 	private CustomerView customerView;
 	private EmployeeView employeeView;
-	private AdminView adminView;
+	private AdministratorView adminView;
 	
 	private final String[] rootOptions = new String[] {
 			"Customer",
@@ -19,7 +19,7 @@ public class ConsoleView extends BasicContextMenuView implements Operational {
 		super(scanner);
 		customerView = new CustomerView(repository, scanner);
 		employeeView = new EmployeeView(repository, scanner);
-		adminView = new AdminView(repository, scanner);
+		adminView = new AdministratorView(repository, scanner);
 	}
 
 	@Override

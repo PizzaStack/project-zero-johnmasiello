@@ -3,6 +3,7 @@ package com.revature.project_0.view;
 import java.util.Scanner;
 
 import com.revature.project_0.io.DataInputting;
+import com.revature.project_0.io.Validating;
 
 public abstract class InputtingContextMenuView extends BasicContextMenuView implements DataInputting {
 

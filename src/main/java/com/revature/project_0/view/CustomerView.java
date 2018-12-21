@@ -3,6 +3,7 @@ package com.revature.project_0.view;
 import com.revature.project_0.entity.Customer;
 import com.revature.project_0.entity.FundsTransactionManager;
 import com.revature.project_0.entity.TransactionOutcome;
+import com.revature.project_0.io.Validating;
 
 import java.util.List;
 import java.util.Scanner;

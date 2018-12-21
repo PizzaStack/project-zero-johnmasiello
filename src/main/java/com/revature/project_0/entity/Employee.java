@@ -17,6 +17,10 @@ public class Employee {
 		this.repository = repository;
 	}
 	
+	protected Repository getRepository() {
+		return repository;
+	}
+	
 	/*
 	 * View Infos
 	 */

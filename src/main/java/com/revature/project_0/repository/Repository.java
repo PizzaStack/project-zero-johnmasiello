@@ -148,6 +148,7 @@ public class Repository {
 		return accountInfoTable.getTable().values();
 	}
 	
+	@Nullable
 	public AccountInfoModel cancelAccount(long accountId) {
 		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
 		account.setStatus(AccountStatus.CLOSED);
