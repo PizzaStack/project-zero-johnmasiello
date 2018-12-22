@@ -17,7 +17,7 @@ public class Employee {
 		this.repository = repository;
 	}
 	
-	protected Repository getRepository() {
+	Repository getRepository() {
 		return repository;
 	}
 	

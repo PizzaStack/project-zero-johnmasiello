@@ -28,7 +28,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 	private final int MAIN 			= 1;
 	private final int APPLICATION 	= 2;
 	
-	private final String NO_MATCHING_RECORDS = "NO MATCHING RECORDS";
+	private final String NO_MATCHING_RECORDS = "\nNO MATCHING RECORDS";
 	private final String NO_ARCHIVED_RECORDS = "NO ARCHIVED RECORDS";
 	
 	public EmployeeView(Repository repository, Scanner scanner) {
@@ -57,9 +57,8 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 		case ROOT:
 			switch (choice) {
 			case 1:
-				System.out.print("\nPlease Enter Employee Name or ID: ");
+				System.out.print("Please Enter Employee Name or ID: ");
 				String name = scanner.nextLine();
-				System.out.println();
 				employee.setEmployeeId(name);
 				view = MAIN;
 				break;
@@ -71,7 +70,6 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 			switch (choice) {
 			case 1:
 				String applications = employee.viewAllApplications();
-				System.out.println("\n");
 				if (applications.length() > 0)
 					System.out.println(applications);
 				else
@@ -80,26 +78,23 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				break;
 			case 2:
 				String accounts = employee.viewAllAccounts();
-				System.out.println("\n");
 				if (accounts.length() > 0)
 					System.out.println(accounts);
 				else
 					System.out.println(NO_ARCHIVED_RECORDS);
 				break;
 			case 3:
-				System.out.print("\nPlease Enter Customer ID: ");
+				System.out.print("Please Enter Customer ID: ");
 				if (!scanner.hasNextLong()) {
 					purgeLine(scanner);
-					System.out.println("\nA Valid Customer Id Was Not Entered\n");
+					System.out.println("\nA Valid Customer Id Was Not Entered");
 					break;
 				}
 				long id = scanner.nextLong();
 				purgeLine(scanner);
-				System.out.println();
 				String recordDump = employee.viewAllAssociatedCustomerInfo(id);
 				System.out.println(recordDump.length() == 0 ? NO_MATCHING_RECORDS :
 					recordDump);
-				System.out.println();
 				break;
 			case 4:
 				view = ROOT;
@@ -111,7 +106,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 			long id;
 			switch (choice) {
 			case 1:
-				System.out.print("\nPlease Enter Application ID to Approve: ");
+				System.out.print("Please Enter Application ID to Approve: ");
 				if (!scanner.hasNextLong()) {
 					purgeLine(scanner);
 					System.out.println("\nA Valid Application Id Was Not Entered");
@@ -119,7 +114,6 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				}
 				id = scanner.nextLong();
 				purgeLine(scanner);
-				System.out.println();
 				result = employee.approveApplication(id, 
 						employee.getEmployeeId());
 				if (result)
@@ -128,27 +122,24 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println("System Error");
-				System.out.println();
 				break;
 			case 2:
-				System.out.print("\nPlease Enter Application ID to Deny: ");
+				System.out.print("Please Enter Application ID to Deny: ");
 				if (!scanner.hasNextLong()) {
 					purgeLine(scanner);
-					System.out.println("\nA Valid Application Id Was Not Entered\n");
+					System.out.println("\nA Valid Application Id Was Not Entered");
 					break;
 				}
 				id = scanner.nextLong();
 				purgeLine(scanner);
-				System.out.println();
 				result = employee.denyApplication(id, 
 						employee.getEmployeeId());
 				if (result)
 					System.out.println("Success");
 				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
-					System.out.println("No such Application with id = " + id);
+					System.out.println("\nNo such Application with id = " + id);
 				else
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
-				System.out.println();
 				break;
 			case 3:
 				view = MAIN;

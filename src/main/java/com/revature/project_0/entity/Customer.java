@@ -9,7 +9,8 @@ import com.revature.project_0.repository.model.CustomerLoginModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
 
 public class Customer {
-	private Repository repository;
+	final private Repository repository;
+	final private FundsTransactionManager fundsTransactionManager;
 	private List<AccountInfoModel> listOfAccounts;
 	private CustomerLoginModel customerLoginModel;
 	private PersonalInfoModel personalInfoModel;
@@ -17,6 +18,7 @@ public class Customer {
 
 	public Customer(Repository repository) {
 		this.repository = repository;
+		fundsTransactionManager = new FundsTransactionManager(repository);
 		reset();
 	}
 	
@@ -79,6 +81,10 @@ public class Customer {
 	
 	public List<AccountInfoModel> getAccounts() {
 		return listOfAccounts;
+	}
+	
+	public FundsTransactionManager getFundsTransactionManager() {
+		return fundsTransactionManager;
 	}
 	
 	/*

@@ -1,7 +1,6 @@
 package com.revature.project_0.view;
 
 import com.revature.project_0.entity.Customer;
-import com.revature.project_0.entity.FundsTransactionManager;
 import com.revature.project_0.entity.TransactionOutcome;
 import com.revature.project_0.io.Validating;
 
@@ -16,9 +15,8 @@ import com.revature.project_0.util.Util;
 
 public class CustomerView extends InputtingContextMenuView implements Operational {
 	private Customer customer;
-	private PersonalInfoModel personalInfoValidator;
-	private ApplicationModel applicationValidator;
-	private FundsTransactionManager fundsTransactionManager = new FundsTransactionManager();
+	private PersonalInfoModel personalInfoForm;
+	private ApplicationModel applicationForm;
 	private int view;
 	private final String[] rootOptions = new String[] {
 			"Login",
@@ -81,15 +79,13 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			case 1:
 				System.out.print("Please Enter Username: ");
 				name = scanner.nextLine();
-				System.out.println();
 				System.out.print("Please Enter Password: ");
 				password = scanner.nextLine();
-				System.out.println();
 				if (customer.signInSuccessful(name,  password)) {
-					System.out.println("Login Successful\n");
+					System.out.println("\nLogin Successful");
 					view = MAIN;
 				} else {
-					System.out.println("Login Failed\n");
+					System.out.println("\nLogin Failed");
 				}
 				break;
 			case 2:
@@ -97,7 +93,6 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				while (numberOfTriesLeft-- > 0) {
 					System.out.print("Please Enter New Username (Length > 6): ");
 					name = scanner.nextLine();
-					System.out.println();
 					if (!customer.isValidUsername(name)) {
 						System.out.println("Username Is Not Valid");
 					} else if (!customer.isUniqueUsername(name)) {
@@ -113,7 +108,6 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				while (numberOfTriesLeft-- > 0 ) {
 					System.out.print("Please Enter New Password (Length > 6): ");
 					password = scanner.nextLine();
-					System.out.println();
 					if (customer.isValidPassword(password))
 						break;
 					System.out.println(String.valueOf(numberOfTriesLeft) +
@@ -122,7 +116,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (numberOfTriesLeft < 0)
 					break;
 				if (customer.createNewCustomer(name, password)) {
-					System.out.print("User Login Created Successfully\n");
+					System.out.println("\nUser Login Created Successfully");
 					view = MAIN;
 				} else {
 					System.out.print(Operational.VISIBLE_SYSTEMS_ERROR);
@@ -152,11 +146,11 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				break;
 			case 3:
 				if (!customer.hasPersonalRecordOnFile()) {
-					System.out.println("We Appreciate Your Business");
-					System.out.println("We Would Like To Know A Little More About You\n");
+					System.out.println("We appreciate your business");
+					System.out.println("We would like to know a little more about you\n");
 					fillOutPersonalInformation();
 				} else {
-					System.out.println("Let's Help You Apply For A New Account\n");
+					System.out.println("Let's help you apply for a new account\n");
 					applyForAccount();
 				}
 				break;
@@ -183,7 +177,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			switch (choice) {
 			case 1:
 				System.out.println(snapshotAccounts.toString());
-				System.out.print("Select Account For Deposit: ");
+				System.out.print("Select Account for Deposit: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
@@ -194,7 +188,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (pickAccount > 0 && pickAccount <= accounts.size()) {
 					targetAccount = accounts.get(pickAccount - 1);
 					
-					System.out.print("Enter the amount for Deposit: $");
+					System.out.print("Enter Amount for Deposit: $");
 					if (!scanner.hasNextDouble()) {
 						purgeLine(scanner);
 						System.out.println("Amount Not Entered");
@@ -206,13 +200,13 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Amount Must Be > 0");
 						break;
 					}
-					switch (fundsTransactionManager.makeDeposit(targetAccount, amount)) {
+					switch (customer.getFundsTransactionManager().makeDeposit(targetAccount, amount)) {
 					case TransactionOutcome.SUCCESS:
-						System.out.println("\nDeposit Made Successfully");
+						System.out.println("Deposit Made Successfully");
 						System.out.println(targetAccount.provideGlimpse());
 						break;
 					case TransactionOutcome.ACCOUNT_FROZEN:
-						System.out.println("\nDeposit Unsuccessful");
+						System.out.println("Deposit Unsuccessful");
 						System.out.println("Reason: The Account With Id " 
 								+ targetAccount.getAccountId()
 								+ " Is Not Currently Active");
@@ -225,7 +219,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				break;
 			case 2:
 				System.out.println(snapshotAccounts.toString());
-				System.out.print("Select Account For Withdrawal: ");
+				System.out.print("Select Account for Withdrawal: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
@@ -236,7 +230,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (pickAccount > 0 && pickAccount <= accounts.size()) {
 					targetAccount = accounts.get(pickAccount - 1);
 					
-					System.out.print("Enter the amount for Withdrawal: $");
+					System.out.print("Enter Amount for Withdrawal: $");
 					if (!scanner.hasNextDouble()) {
 						purgeLine(scanner);
 						System.out.println("Amount Not Entered");
@@ -248,19 +242,19 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Amount Must Be > 0");
 						break;
 					}
-					switch (fundsTransactionManager.makeWithdrawal(targetAccount, amount)) {
+					switch (customer.getFundsTransactionManager().makeWithdrawal(targetAccount, amount)) {
 					case TransactionOutcome.SUCCESS:
-						System.out.println("\nWithdrawal Made Successfully");
+						System.out.println("Withdrawal Made Successfully");
 						System.out.println(targetAccount.provideGlimpse());
 						break;
 					case TransactionOutcome.ACCOUNT_FROZEN:
-						System.out.println("\nWithdrawal Unsuccessful");
+						System.out.println("Withdrawal Unsuccessful");
 						System.out.println("Reason: The Account With Id " 
 								+ targetAccount.getAccountId()
 								+ " Is Not Currently Active");
 						break;
 					case TransactionOutcome.INSUFFICIENT_FUNDS:
-						System.out.println("\nWithdrawal Unsuccessful");
+						System.out.println("Withdrawal Unsuccessful");
 						System.out.println("Reason: InSufficient Funds"); 
 						break;
 					}
@@ -308,28 +302,28 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					System.out.println("Amount Must Be > 0");
 					break;
 				}
-				switch (fundsTransactionManager.makeTransferOfFunds(originAccount, 
+				switch (customer.getFundsTransactionManager().makeTransferOfFunds(originAccount, 
 						targetAccount, 
 						amount)) {
 				case TransactionOutcome.SUCCESS:
-					System.out.println("\nTransfer Made Successfully");
+					System.out.println("Transfer Made Successfully");
 					System.out.println(targetAccount.provideGlimpse());
 					System.out.println(originAccount.provideGlimpse());
 					break;
 				case TransactionOutcome.ACCOUNT_FROZEN:
-					System.out.println("\nTransfer Not Made");
+					System.out.println("Transfer Not Made");
 					System.out.println("Reason: The Account With Id " 
 							+ originAccount.getAccountId()
 							+ " Is Not Currently Active");
 					break;
 				case TransactionOutcome.RECIPIENT_ACCOUNT_FROZEN:
-					System.out.println("\nTransfer Not Made");
+					System.out.println("Transfer Not Made");
 					System.out.println("Reason: The Account With Id " 
 							+ targetAccount.getAccountId()
 							+ " Is Not Currently Active");
 					break;
 				case TransactionOutcome.INSUFFICIENT_FUNDS:
-					System.out.println("\nTransfer Not Made");
+					System.out.println("Transfer Not Made");
 					System.out.println("Reason: InSufficient Funds"); 
 					break;
 				}
@@ -343,14 +337,14 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			switch (choice) {
 			case 1:
 				System.out.println("Application Submitted by User");
-				System.out.println("Please Wait For Your Account To Be Created");
+				System.out.println("Please Wait for Your Account to be Created");
 				if (!customer.createApplication(customer.getApplication())) {
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				}
 				view = MAIN;
 				break;
 			case 2:
-				System.out.println("Application Canceled by User");
+				System.out.println("Application Canceled by User\n");
 				view = MAIN;
 				break;
 			} break;
@@ -366,7 +360,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				view = MAIN;
 				break;
 			case 2:
-				System.out.println("Personal Details Canceled by User");
+				System.out.println("Personal Details Canceled by User\n");
 				customer.resetPersonalInfo();
 				view = MAIN;
 				break;
@@ -388,42 +382,42 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 	
 	private void failPersonalInfoForm() {
 		printAbortMessage();
-		personalInfoValidator = null;
+		personalInfoForm = null;
 		view = MAIN;
 	}
 	
 	private final Validating validateFirstName = ($) -> {
-		return personalInfoValidator.setFirstName($);
+		return personalInfoForm.setFirstName($);
 	};
 	private final Validating validateLastName = ($) -> {
-		return personalInfoValidator.setLastName($);
+		return personalInfoForm.setLastName($);
 	};
 	private final Validating validateMI = ($) -> {
 		if ($.length() == 1) {
-			personalInfoValidator.setMiddleInitial($.charAt(0));
+			personalInfoForm.setMiddleInitial($.charAt(0));
 			return true;
 		}
 		return false;
 	};
 	private final Validating validateSSN = ($) -> {
-		return personalInfoValidator.setSSN($);
+		return personalInfoForm.setSSN($);
 	};
 	
 	private final Validating validateDob = ($) -> {
-		return personalInfoValidator.setDob(Util.parseDate($));
+		return personalInfoForm.setDob(Util.parseDate($));
 	};
 	private final Validating validatePhone = ($) -> {
-		return personalInfoValidator.setPhoneNumber($);
+		return personalInfoForm.setPhoneNumber($);
 	};
 	private final Validating validateEmail= ($) -> {
-		return personalInfoValidator.setEmail($);
+		return personalInfoForm.setEmail($);
 	};
 	private final Validating validateBeneficiary = ($) -> {
-		return personalInfoValidator.setBeneficiary($);
+		return personalInfoForm.setBeneficiary($);
 	};
 	
 	private void fillOutPersonalInformation() {
-		personalInfoValidator = new PersonalInfoModel.Builder()
+		personalInfoForm = new PersonalInfoModel.Builder()
 				.withCustomerId(customer.getCustomerId())
 				.build();
 		final int numberOfTriesPerField = 3;
@@ -465,7 +459,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			failPersonalInfoForm();
 			return;
 		}
-		if (!acceptStringAsTokenWithAttempts("Phone Number: (XXX)XXX-XXXX", 
+		if (!acceptStringAsTokenWithAttempts("Phone Number: (XXX)XXX-XXXX: ", 
 				"\nTen Digit Phone Number With Area Code: Example, (888)333-3333", 
 				numberOfTriesPerField, 
 				validatePhone)) {
@@ -479,48 +473,48 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			failPersonalInfoForm();
 			return;
 		}
-		if (!acceptStringAsTokenWithAttempts("Beneficiary, Full Name: ", 
+		if (!acceptStringAsTokenWithAttempts("Beneficiary, full name: ", 
 				"\nExample, John Doe",
 				numberOfTriesPerField, 
 				validateBeneficiary)) {
 			failPersonalInfoForm();
 			return;
 		}
-		customer.setPersonalInfoModel(personalInfoValidator);
-		personalInfoValidator = null;
-		System.out.println("\nReady To Submit");
+		customer.setPersonalInfoModel(personalInfoForm);
+		personalInfoForm = null;
+		System.out.println("\nReady to Submit");
 		view = COMPLETE_DETAILS;
 	}
 	
 	private void failApplication() {
 		printAbortMessage();
-		applicationValidator = null;
+		applicationForm = null;
 		view = MAIN;
 	}
 	
 	private final Validating validateAccountType = ($) -> {
 		switch (Util.parseStringAsInt($)) {
 		case 1:
-			return applicationValidator.setType(AccountType.CHECKING);
+			return applicationForm.setType(AccountType.CHECKING);
 		case 2:
-			return applicationValidator.setType(AccountType.SAVINGS);
+			return applicationForm.setType(AccountType.SAVINGS);
 		}
 		return false;
 	};
 	private final Validating validateAccountOwner = ($) -> {
 		switch (Util.parseStringAsInt($)) {
 		case 2:
-			applicationValidator.setJointCustomerId(1l);
+			applicationForm.setJointCustomerId(1l);
 		case 1:
 			return true;
 		} return false;
 	};
 	private final Validating validateAccountJointCustomerSSN = ($) -> {
-		return applicationValidator.setJointCustomerSSN($);
+		return applicationForm.setJointCustomerSSN($);
 	};
 	
 	private void applyForAccount() {
-		applicationValidator = new ApplicationModel.Builder()
+		applicationForm = new ApplicationModel.Builder()
 				.withCustomerId(customer.getCustomerId())
 				.build();
 		final String typePrompt = "Select Account Type\n1\tChecking\n2\tSavings\nType: "; 
@@ -531,6 +525,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			failApplication();
 			return;
 		}
+		System.out.println();
 		final String ownerPrompt = "Account Owner\n1\tIndividual\n2\tJoint\nOwner: ";
 		if (!acceptStringAsTokenWithAttempts(ownerPrompt, 
 				"Enter 1 Or 2", 
@@ -539,8 +534,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			failApplication();
 			return;
 		}
-		if (applicationValidator.getJointCustomerId() == 1l) {
-			applicationValidator.setJointCustomerId(ApplicationModel.NO_ID);
+		if (applicationForm.getJointCustomerId() == 1l) {
+			applicationForm.setJointCustomerId(ApplicationModel.NO_ID);
 			
 			System.out.println("Enter Joint Holder's SSN: ");
 			if (!acceptStringAsTokenWithAttempts("SSN: ", 
@@ -551,9 +546,9 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			}
 		}
 		
-		customer.setApplicationModel(applicationValidator);
-		applicationValidator = null;
-		System.out.println("\nReady To Submit");
+		customer.setApplicationModel(applicationForm);
+		applicationForm = null;
+		System.out.println("\nReady to Submit");
 		view = COMPLETE_APPLICATION;
 	}
 	
