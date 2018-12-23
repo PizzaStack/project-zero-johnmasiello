@@ -2,7 +2,9 @@ package com.revature.project_0.util;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +13,8 @@ public final class Util {
 	public static final String ZERO_PADDING_SHORTER_ID_PATTERN = "%010d";
 	public static final String NOT_AVAILABLE = "N/A";
 	public static final String CURRENCY_SYMBOL = "$";
+	public static final String PRINT_COLUMN_DELIMITER = "  ";
+	public static final String PRINT_ROW_DELIMITER = "\n";
 	private static final String DATE_PATTERN = "MM-dd-yyyy";
 	private static final String PRINTABLE_DATE_PATTERN = "MM-DD-YYYY";
 	private static final SimpleDateFormat simpleDateFormat;
@@ -60,5 +64,20 @@ public final class Util {
 			return Integer.parseInt(strInt);
 		} catch (NumberFormatException e) {}
 		return 0;
+	}
+	
+	public static final <T> String printAllRecords(Collection<T> records) {
+		return printAllRecords(records, Util.PRINT_ROW_DELIMITER);
+	}
+	
+	public static final <T> String printAllRecords(Collection<T> records, String delimiter) {
+		Iterator<T> it = records.iterator();
+		if (!it.hasNext()) {
+			return "";
+		}
+		StringBuilder builder = new StringBuilder(it.next().toString());
+		while (it.hasNext())
+			builder.append(delimiter).append(it.next());
+		return builder.toString();
 	}
 }

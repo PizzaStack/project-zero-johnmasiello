@@ -99,20 +99,35 @@ public class Repository {
 	}
 	
 	@Nullable
+	private PersonalInfoModel trackJointCustomerBySSN(String SSN) {
+		return personalInfoTable.fetchCustomerBySSN(SSN);
+	}
+	
+	@Nullable
 	public AccountInfoModel approveApplication(@NotNull ApplicationModel application, @NotNull String empId) {
+		long jointCustomerId = PersonalInfoModel.NO_ID;
+		if (application.isJointApplication()) {
+			PersonalInfoModel person = trackJointCustomerBySSN(application.getJointCustomerSSN());
+			if (person == null)
+				return null;
+			jointCustomerId = person.getCustomerId();
+		}
 		final long accountId = accountInfoTable.generateNextPrimaryKey();
 		AccountInfoModel accountInfoModel = new AccountInfoModel.Builder()
 				.withAccountId(accountId)
 				.withBalance(0.00)
 				.withCustomerId(application.getCustomerId())
-				.withJointCustomerId(application.getJointCustomerId())
+				.withJointCustomerId(jointCustomerId)
 				.withDateOpened(Util.getCurrentDate())
 				.withType(application.getType())
 				.withStatus(AccountStatus.OPENED)
 				.withEmpId(empId)
 				.build();
-		return accountInfoTable.addRecord(accountId, accountInfoModel) ? accountInfoModel : 
-			null;
+		if (accountInfoTable.addRecord(accountId, accountInfoModel)) {
+			applicationTable.deleteRecord(application.getApplicationId());
+			return accountInfoModel;
+		}
+		return null;
 	}
 	
 	@Nullable
@@ -148,6 +163,10 @@ public class Repository {
 		return accountInfoTable.getTable().values();
 	}
 	
+	public Collection<PersonalInfoModel> getAllCustomersPersonalInformation() {
+		return personalInfoTable.getTable().values();
+	}
+	
 	@Nullable
 	public AccountInfoModel cancelAccount(long accountId) {
 		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
@@ -160,12 +179,12 @@ public class Repository {
 		return applicationTable.getAllAssociatedApplications(customerId);
 	}
 	
-	public PersonalInfoModel getPersonalInformation(long customerId) {
-		return personalInfoTable.selectRecord(customerId);
-	}
-	
 	public List<AccountInfoModel> getAllAssociatedAccounts(long customerId) {
 		return accountInfoTable.getAllAssociatedAccounts(customerId);
+	}
+	
+	public PersonalInfoModel getPersonalInformation(long customerId) {
+		return personalInfoTable.selectRecord(customerId);
 	}
 	
 	@Nullable

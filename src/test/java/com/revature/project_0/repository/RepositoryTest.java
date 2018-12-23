@@ -123,7 +123,7 @@ public class RepositoryTest {
 						.build());
 		repository.approveApplication(applicationRequest, EMP_ID);
 		assertEquals(2, repository.getAllAccounts().size());
-//		repository.getAllAccounts().forEach(($) -> {System.out.println($ + "\n");});
+		System.out.println(Util.printAllRecords(repository.getAllAccounts()));
 	}
 	@Test
 	public void cancelAccount() {

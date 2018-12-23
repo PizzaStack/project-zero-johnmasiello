@@ -26,9 +26,15 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 			"Manage Customer Information",
 			BACK
 	};
+	private final String[] customerInfoOptions = new String[] {
+			"View All",
+			"View By Customer",
+			BACK
+	};
 	private final String[] applicationOptions = new String[] {
 			"Approve Application",
 			"Deny Application",
+			"Refresh View",
 			BACK
 	};
 	private final String[] accountOptions = new String[] {
@@ -50,10 +56,11 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 	};
 	private final int ROOT 					= 0;
 	private final int MAIN 					= 1;
-	private final int APPLICATION 			= 2;
-	private final int ACCOUNT	 			= 3;
-	private final int ACCOUNT_TRANSACTION 	= 4;
-	private final int ACCOUNT_APPROVAL		= 5;
+	private final int CUSTOMER				= 2;
+	private final int APPLICATION 			= 3;
+	private final int ACCOUNT	 			= 4;
+	private final int ACCOUNT_TRANSACTION 	= 5;
+	private final int ACCOUNT_APPROVAL		= 6;
 	
 	private final String NO_MATCHING_RECORDS = "\nNo MATCHING RECORDS";
 	private final String NO_ARCHIVED_RECORDS = "No ARCHIVED RECORDS";
@@ -71,6 +78,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 			return rootOptions;
 		case MAIN:
 			return mainOptions;
+		case CUSTOMER:
+			return customerInfoOptions;
 		case APPLICATION:
 			return applicationOptions;
 		case ACCOUNT:
@@ -127,14 +136,38 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				break;
 			case 2:
 				String accounts = administrator.viewAllAccounts();
-				if (accounts.length() > 0) {
+				if (accounts.length() > 0)
 					System.out.println(accounts);
-					view = ACCOUNT;
-				}
 				else
 					System.out.println(NO_ARCHIVED_RECORDS);
+				view = ACCOUNT;
 				break;
-			case 3:
+			case 3:{
+				String records = administrator.viewAllCustomersPersonalInformation();
+				if (records.length() > 0)
+					System.out.println(records);
+				else
+					System.out.println(NO_ARCHIVED_RECORDS);
+				view = CUSTOMER;
+			}
+			break;
+			case 4:
+				view = ROOT;
+				administrator.resetEmployeeId();
+			} 
+			break;
+			
+		case CUSTOMER:
+			switch (choice) {
+			case 1: {
+				String records = administrator.viewAllCustomersPersonalInformation();
+				if (records.length() > 0)
+					System.out.println(records);
+				else
+					System.out.println(NO_ARCHIVED_RECORDS);	
+			}
+			break;
+			case 2:
 				System.out.print("Please Enter Customer ID: ");
 				if (!scanner.hasNextLong()) {
 					purgeLine(scanner);
@@ -147,10 +180,10 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				System.out.println(recordDump.length() == 0 ? NO_MATCHING_RECORDS :
 					recordDump);
 				break;
-			case 4:
-				view = ROOT;
-				administrator.resetEmployeeId();
-			} 
+			case 3:
+				view = MAIN;
+				break;
+			}
 			break;
 			
 		case APPLICATION: {
@@ -164,8 +197,10 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 					break;
 				result = administrator.approveApplication(id, 
 						administrator.getEmployeeId());
-				if (result)
-					System.out.println("Success");
+				if (result) {
+					System.out.println("Success, New Account Created: ");
+					System.out.println(administrator.getNewAccount());
+				}
 				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
@@ -178,15 +213,24 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 					break;
 				result = administrator.denyApplication(id, 
 						administrator.getEmployeeId());
-				if (result)
-					System.out.println("Success");
+				if (result) {
+					System.out.println("Success, Application Denied");
+				}
 				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				break;
 			case 3:
+				String applications = administrator.viewAllApplications();
+				if (applications.length() > 0)
+					System.out.println(applications);
+				else
+					System.out.println(NO_ARCHIVED_RECORDS);
+				break;
+			case 4:
 				view = MAIN;
+				break;
 			}
 		} 
 		break;

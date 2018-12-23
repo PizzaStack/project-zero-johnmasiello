@@ -11,6 +11,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	private String jointCustomerSSN;
 	private int type;
 	
+	private static final String DELIMITER = Util.PRINT_COLUMN_DELIMITER;
 	public static final int NO_ID = -1;
 	private static Builder builder = new Builder(); 
 	
@@ -103,6 +104,11 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		return jointCustomerSSN;
 	}
 	
+	public boolean isJointApplication() {
+		return jointCustomerId != ApplicationModel.NO_ID
+				|| jointCustomerSSN.length() != 0;
+	}
+	
 	public boolean setJointCustomerSSN(@NotNull String ssn) {
 		if (ssn == null)
 			return false;
@@ -162,13 +168,13 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		return new StringBuilder()
 				.append("Account Id: ")
 				.append(Util.zeroPadId(applicationId))
-				.append("\nCustomer \tId: ")
+				.append(DELIMITER).append("Customer Id: ")
 				.append(Util.zeroPadCondensedId(customerId))
-				.append("\nCustomer, Joint Id: ")
-				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : "")
-				.append("\nSSN: ")
+				.append(DELIMITER).append("Customer, Joint Id: ")
+				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : Util.NOT_AVAILABLE)
+				.append(DELIMITER).append("SSN: ")
 				.append(prettyPrintLast4SSN())
-				.append("\nType: ")
+				.append(DELIMITER).append("Type: ")
 				.append(prettyPrintType())
 				.toString();
 	}

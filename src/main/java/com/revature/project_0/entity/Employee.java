@@ -5,11 +5,14 @@ import static com.revature.project_0.repository.TableOutcome.NO_SUCH_RECORD;
 import static com.revature.project_0.repository.TableOutcome.OK;
 
 import com.revature.project_0.repository.Repository;
+import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.ApplicationModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
+import com.revature.project_0.util.Util;
 
 public class Employee {
 	private Repository repository;
+	private AccountInfoModel newAccountCreated;
 	private String employeeId;
 	private int errorCode;
 
@@ -24,18 +27,14 @@ public class Employee {
 	/*
 	 * View Infos
 	 */
-	private String viewCustomerApplications(long cutomerId) {
-		StringBuilder strBuilder = new StringBuilder();
-		repository.getAllAssociatedApplications(cutomerId).
-			forEach(($) -> {strBuilder.append($).append("\n\n");});
-		return strBuilder.toString();
+	private String viewCustomerApplications(long customerId) {
+		return Util.printAllRecords(
+				repository.getAllAssociatedApplications(customerId));
 	}
 	
 	private String viewCustomerAccounts(long customerId) {
-		StringBuilder strBuilder = new StringBuilder();
-		repository.getAllAssociatedAccounts(customerId)
-			.forEach(($) -> {strBuilder.append($).append("\n\n");});
-		return strBuilder.toString();
+		return Util.printAllRecords(
+				repository.getAllAssociatedAccounts(customerId));
 	}
 	
 	private String viewCustomerPersonalInformation(long customerId) {
@@ -51,17 +50,15 @@ public class Employee {
 	}
 	
 	public String viewAllApplications() {
-		StringBuilder strBuilder = new StringBuilder();
-		repository.getAllApplications()
-			.forEach(($) -> {strBuilder.append($).append("\n\n");});
-		return strBuilder.toString();
+		return Util.printAllRecords(repository.getAllApplications());
 	}
 	
 	public String viewAllAccounts() {
-		StringBuilder strBuilder = new StringBuilder();
-		repository.getAllAccounts()
-			.forEach(($) -> {strBuilder.append($).append("\n\n");});
-		return strBuilder.toString();
+		return Util.printAllRecords(repository.getAllAccounts());
+	}
+	
+	public String viewAllCustomersPersonalInformation() {
+		return Util.printAllRecords(repository.getAllCustomersPersonalInformation());
 	}
 	
 	/*
@@ -84,29 +81,37 @@ public class Employee {
 	 */
 	public boolean approveApplication(long appId, String empId) {
 		errorCode = OK;
-		ApplicationModel applicationModel = repository.getApplicationModel(appId);
-		if (applicationModel == null) {
+		ApplicationModel application = repository.getApplicationModel(appId);
+		if (application == null) {
 			errorCode = NO_SUCH_RECORD;
 			return false;
-		} else if (repository.approveApplication(applicationModel, empId) == null) {
+		}
+		newAccountCreated = repository.approveApplication(application, empId);
+		if (newAccountCreated == null) {
 			errorCode = FAIL_TO_UPDATE;
 			return false;
-		} return true;
+		}
+		return true;
 	}
 	
 	public boolean denyApplication(long appId, String empId) {
 		errorCode = OK;
-		ApplicationModel applicationModel = repository.getApplicationModel(appId);
-		if (applicationModel == null) {
+		ApplicationModel application = repository.getApplicationModel(appId);
+		if (application == null) {
 			errorCode = NO_SUCH_RECORD;
 			return false;
-		} else if (repository.rejectApplication(applicationModel, empId) == null) {
+		} else if (repository.rejectApplication(application, empId) == null) {
 			errorCode = FAIL_TO_UPDATE;
 			return false;
-		} return true;
+		}
+		return true;
 	}
 
 	public int getErrorCode() {
 		return errorCode;
+	}
+	
+	public AccountInfoModel getNewAccount() {
+		return newAccountCreated;
 	}
 }

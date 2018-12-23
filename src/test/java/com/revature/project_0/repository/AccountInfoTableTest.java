@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.revature.project_0.repository.model.AccountInfoModel;
+import com.revature.project_0.util.Util;
 
 public class AccountInfoTableTest {
 	private AccountInfoModel[] accountInfos;
@@ -79,7 +80,7 @@ public class AccountInfoTableTest {
 		assertEquals(0, associatedAccounts.get(0).getAccountId());
 		assertEquals(3, associatedAccounts.get(1).getAccountId());
 		
-		associatedAccounts.forEach(($) -> {System.out.println($ + "\n");});
+		System.out.println(Util.printAllRecords(associatedAccounts));
 	}
 	
 	@Test

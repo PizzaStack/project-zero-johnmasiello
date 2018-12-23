@@ -18,6 +18,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private String adminId;
 	private String empId;
 	
+	private static final String DELIMITER = Util.PRINT_COLUMN_DELIMITER;
 	private static final Builder builder = new Builder();
 	
 	public static final long NO_ID = -1;
@@ -226,32 +227,37 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return new StringBuilder()
 				.append("Account Id: ")
 				.append(Util.zeroPadId(accountId))
-				.append("\nBalance: ")
+				.append(DELIMITER).append("Balance: ")
 				.append(Util.currencyFormat(balance))
-				.append("\nCustomer \tId: ")
+				.append(DELIMITER).append("Customer Id: ")
 				.append(Util.zeroPadCondensedId(customerId))
-				.append("\nCustomer, Joint Id: ")
-				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : "")
-				.append("\nOpened On: ")
+				.append(DELIMITER).append("Customer, Joint Id: ")
+				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : Util.NOT_AVAILABLE)
+				.append(DELIMITER).append("Opened On: ")
 				.append(dateOpened != null ? dateOpened : Util.NOT_AVAILABLE)
-				.append("\nClosed On: ")
+				.append(DELIMITER).append("Closed On: ")
 				.append(dateClosed != null ? dateClosed : Util.NOT_AVAILABLE)
-				.append("\nType: ")
+				.append(DELIMITER).append("Type: ")
 				.append(prettyPrintType())
-				.append("\nStatus: ")
+				.append(DELIMITER).append("Status: ")
 				.append(prettyPrintStatus())
-				.append("\nEmpl Id: ")
+				.append(DELIMITER).append("Empl Id: ")
 				.append(empId != null ? empId : Util.NOT_AVAILABLE)
-				.append("\nAdmin Id: ")
+				.append(DELIMITER).append("Admin Id: ")
 				.append(adminId != null ? adminId : Util.NOT_AVAILABLE)
 				.toString();
 	}
 	
 	public String provideGlimpse() {
-		return "Id: " + Util.zeroPadCondensedId(accountId) 
-				+ "    Type: " + prettyPrintType()
-				+ "    Balance: " + Util.currencyFormat(balance);
-					
+		return new StringBuilder("Id: ")
+				.append(Util.zeroPadCondensedId(accountId))
+				.append(DELIMITER)
+				.append("Type: ")
+				.append(prettyPrintType())
+				.append(DELIMITER)
+				.append("Balance: ")
+				.append(Util.currencyFormat(balance))
+				.toString();					
 	}
 
 	@Override

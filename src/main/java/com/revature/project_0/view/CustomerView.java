@@ -137,10 +137,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (!customer.fetchAccounts(customer.getCustomerId()))
 					System.out.println("No Accounts On Record");
 				else {
-					customer.getAccounts().forEach(($) -> {
-						System.out.println($); 
-						System.out.println();
-					});
+					customer.viewAllAccounts();
 					view = TRANSACTION;
 				}
 				break;

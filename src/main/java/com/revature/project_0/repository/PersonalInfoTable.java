@@ -1,5 +1,9 @@
 package com.revature.project_0.repository;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.revature.project_0.repository.model.PersonalInfoModel;
 
 public class PersonalInfoTable extends AbstractTable<Long, PersonalInfoModel> {
@@ -23,5 +27,14 @@ public class PersonalInfoTable extends AbstractTable<Long, PersonalInfoModel> {
 	@Override
 	Long firstPrimaryKey() {
 		return 0l;
+	}
+	
+	public PersonalInfoModel fetchCustomerBySSN(@NotNull String SSN) {
+		Collection<PersonalInfoModel> people = getTable().values();
+		for (PersonalInfoModel person : people) {
+			if (SSN.equals(person.getSSN()))
+				return person;
+		}
+		return null;
 	}
 }

@@ -7,11 +7,12 @@ import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.ApplicationModel;
 import com.revature.project_0.repository.model.CustomerLoginModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
+import com.revature.project_0.util.Util;
 
 public class Customer {
 	final private Repository repository;
 	final private FundsTransactionManager fundsTransactionManager;
-	private List<AccountInfoModel> listOfAccounts;
+	private List<AccountInfoModel> cachedAccounts;
 	private CustomerLoginModel customerLoginModel;
 	private PersonalInfoModel personalInfoModel;
 	private ApplicationModel applicationModel;
@@ -23,7 +24,7 @@ public class Customer {
 	}
 	
 	private void reset() {
-		listOfAccounts = null;
+		cachedAccounts = null;
 		customerLoginModel = null;
 		personalInfoModel = null;
 		applicationModel = null;
@@ -75,16 +76,24 @@ public class Customer {
 	 * Manage Accounts
 	 */	
 	public boolean fetchAccounts(long customerId) {
-		listOfAccounts = repository.getAllAssociatedAccounts(customerId);
-		return !listOfAccounts.isEmpty();
+		cachedAccounts = repository.getAllAssociatedAccounts(customerId);
+		return !cachedAccounts.isEmpty();
 	}
 	
 	public List<AccountInfoModel> getAccounts() {
-		return listOfAccounts;
+		return cachedAccounts;
 	}
 	
 	public FundsTransactionManager getFundsTransactionManager() {
 		return fundsTransactionManager;
+	}
+	
+	public String viewAllAccounts(long customerId) {
+		return Util.printAllRecords(repository.getAllAssociatedAccounts(customerId));
+	}
+	
+	public String viewAllAccounts() {
+		return Util.printAllRecords(cachedAccounts);
 	}
 	
 	/*

@@ -16,7 +16,8 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	private String email;
 	private String phoneNumber;
 	private String beneficiary;
-	
+
+	private static final String DELIMITER = Util.PRINT_COLUMN_DELIMITER;	
 	public static final long NO_ID = -1;
 	
 	private static final Builder builder = new Builder();
@@ -245,21 +246,21 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		return new StringBuilder()
 				.append("Customer Id: ")
 				.append(Util.zeroPadCondensedId(customerId))
-				.append("\nLast name: ")
+				.append(DELIMITER).append("Last name: ")
 				.append(lastName)
-				.append("\nFirst name (MI): ")
+				.append(DELIMITER).append("First name (MI): ")
 				.append(firstName)
-				.append(' ')
+				.append(DELIMITER)
 				.append(middleInitial)
-				.append("\nDOB: ")
+				.append(DELIMITER).append("DOB: ")
 				.append(dob == null ? "" : dob)
-				.append("\nSSN: ")
+				.append(DELIMITER).append("SSN: ")
 				.append(prettyPrintLast4SSN())
-				.append("\nEmail: ")
+				.append(DELIMITER).append("Email: ")
 				.append(email)
-				.append("\nPhn (xxx)xxx-xxxx: ")
+				.append(DELIMITER).append("Phn (xxx)xxx-xxxx: ")
 				.append(prettyPrintPhoneNumber())
-				.append("\nBeneficiary: ")
+				.append(DELIMITER).append("Beneficiary: ")
 				.append(beneficiary)
 				.toString();
 	}
