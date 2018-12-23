@@ -1,10 +1,12 @@
 package com.revature.project_0.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.ApplicationModel;
+import com.revature.project_0.repository.model.CustomerFriendlyAccount;
 import com.revature.project_0.repository.model.CustomerLoginModel;
 import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
@@ -89,11 +91,28 @@ public class Customer {
 	}
 	
 	public String viewAllAccounts(long customerId) {
-		return Util.printAllRecords(repository.getAllAssociatedAccounts(customerId));
+		List<AccountInfoModel> accounts = repository.getAllAssociatedAccounts(customerId);
+		List<CustomerFriendlyAccount> wrappedAccounts = new ArrayList<>();
+		accounts.forEach(($) -> {wrappedAccounts.add(new CustomerFriendlyAccount($));});
+		return Util.printAllRecords(wrappedAccounts);
 	}
 	
 	public String viewAllAccounts() {
-		return Util.printAllRecords(cachedAccounts);
+		List<CustomerFriendlyAccount> wrappedAccounts = new ArrayList<>();
+		cachedAccounts.forEach(($) -> {wrappedAccounts.add(new CustomerFriendlyAccount($));});
+		return Util.printAllRecords(wrappedAccounts);
+	}
+	
+	public String viewAllAcountsAsEnumerated() {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < cachedAccounts.size(); i++) {
+			if (i == 0)
+				str.append(i + 1).append(Util.PRINT_COLUMN_DELIMITER)
+				.append(new CustomerFriendlyAccount(cachedAccounts.get(0)));
+			else
+				str.append(Util.PRINT_ROW_DELIMITER).append(cachedAccounts.get(i));
+		}
+		return str.toString();
 	}
 	
 	/*

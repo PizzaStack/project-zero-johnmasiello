@@ -8,6 +8,7 @@ import com.revature.project_0.util.Util;
 
 public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private final long accountId;
+	private String accountName;
 	private final long customerId;
 	private final long jointCustomerId;
 	private Date dateOpened;
@@ -15,8 +16,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private int type;
 	private int status;
 	private double balance;
-	private String adminId;
-	private String empId;
+	private String approved_2;
+	private String approved_1;
 	
 	private static final String DELIMITER = Util.PRINT_COLUMN_DELIMITER;
 	private static final Builder builder = new Builder();
@@ -25,6 +26,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	
 	public final static class Builder {
 		private long accountId;
+		private String accountName;
 		private long customerId;
 		private long jointCustomerId;
 		private Date dateOpened;
@@ -43,6 +45,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 			accountId = NO_ID;
 			customerId = NO_ID;
 			jointCustomerId = NO_ID;
+			accountName = "";
 			dateOpened = null;
 			dateClosed = null;
 			type = AccountType.CHECKING;
@@ -53,6 +56,10 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		
 		public Builder withAccountId(long accountId) {
 			this.accountId = accountId;
+			return this;
+		}
+		public Builder withAccountName(String accountName) {
+			this.accountName = accountName;
 			return this;
 		}
 		public Builder withCustomerId(Long customerId) {
@@ -95,14 +102,15 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		}
 		
 		public AccountInfoModel build() {
-			return new AccountInfoModel(accountId, customerId, jointCustomerId, dateOpened, dateClosed, type, 
-					status, balance, adminId, empId);
+			return new AccountInfoModel(accountId, accountName, customerId, jointCustomerId, dateOpened, dateClosed, 
+					type, status, balance, adminId, empId);
 		}
 	}
 	
-	private AccountInfoModel(long accountId, long customerId, long jointCustomerId, Date dateOpened, Date dateClosed,
+	private AccountInfoModel(long accountId, String accountName, long customerId, long jointCustomerId, Date dateOpened, Date dateClosed,
 			int type, int status, double balance, String adminId, String empId) {
 		this.accountId = accountId;
+		this.accountName = accountName;
 		this.customerId = customerId;
 		this.jointCustomerId = jointCustomerId;
 		this.dateOpened = dateOpened;
@@ -110,8 +118,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		this.type = type;
 		this.status = status;
 		this.balance = balance;
-		this.adminId = adminId;
-		this.empId = empId;
+		this.approved_2 = adminId;
+		this.approved_1 = empId;
 	}
 	
 	public static Builder getBuilder() {
@@ -121,6 +129,14 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 
 	public long getAccountId() {
 		return accountId;
+	}
+	
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
 
 	public long getCustomerId() {
@@ -207,19 +223,19 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	}
 	
 	public String getAdminId() {
-		return adminId;
+		return approved_2;
 	}
 
 	public void setAdminId(String adminId) {
-		this.adminId = adminId;
+		this.approved_2 = adminId;
 	}
 
 	public String getEmpId() {
-		return empId;
+		return approved_1;
 	}
 
 	public void setEmpId(String empId) {
-		this.empId = empId;
+		this.approved_1 = empId;
 	}
 
 	@Override
@@ -227,37 +243,27 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return new StringBuilder()
 				.append("Account Id: ")
 				.append(Util.zeroPadId(accountId))
+				.append(DELIMITER).append("Account Name: ")
+				.append(accountName)
 				.append(DELIMITER).append("Balance: ")
 				.append(Util.currencyFormat(balance))
 				.append(DELIMITER).append("Customer Id: ")
 				.append(Util.zeroPadCondensedId(customerId))
-				.append(DELIMITER).append("Customer, Joint Id: ")
+				.append(DELIMITER).append("Customer Joint Id: ")
 				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : Util.NOT_AVAILABLE)
 				.append(DELIMITER).append("Opened On: ")
-				.append(dateOpened != null ? dateOpened : Util.NOT_AVAILABLE)
+				.append(dateOpened != null ? Util.printDate_NoTime(dateOpened) : Util.NOT_AVAILABLE)
 				.append(DELIMITER).append("Closed On: ")
-				.append(dateClosed != null ? dateClosed : Util.NOT_AVAILABLE)
+				.append(dateClosed != null ? Util.printDate_NoTime(dateClosed) : Util.NOT_AVAILABLE)
 				.append(DELIMITER).append("Type: ")
 				.append(prettyPrintType())
 				.append(DELIMITER).append("Status: ")
 				.append(prettyPrintStatus())
-				.append(DELIMITER).append("Empl Id: ")
-				.append(empId != null ? empId : Util.NOT_AVAILABLE)
-				.append(DELIMITER).append("Admin Id: ")
-				.append(adminId != null ? adminId : Util.NOT_AVAILABLE)
+				.append(DELIMITER).append("Approved 1: ")
+				.append(approved_1 != null ? approved_1 : Util.NOT_AVAILABLE)
+				.append(DELIMITER).append("Approved 2: ")
+				.append(approved_2 != null ? approved_2 : Util.NOT_AVAILABLE)
 				.toString();
-	}
-	
-	public String provideGlimpse() {
-		return new StringBuilder("Id: ")
-				.append(Util.zeroPadCondensedId(accountId))
-				.append(DELIMITER)
-				.append("Type: ")
-				.append(prettyPrintType())
-				.append(DELIMITER)
-				.append("Balance: ")
-				.append(Util.currencyFormat(balance))
-				.toString();					
 	}
 
 	@Override

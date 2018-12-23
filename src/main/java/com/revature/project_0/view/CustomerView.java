@@ -10,6 +10,7 @@ import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.AccountType;
 import com.revature.project_0.repository.model.ApplicationModel;
+import com.revature.project_0.repository.model.CustomerFriendlyAccount;
 import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
 
@@ -24,10 +25,10 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			BACK
 	};
 	private final String[] mainOptions = new String[] {
-			"Sign Out",
 			"View Accounts",
 			"Open New Account",
-			"Update Personal Info"
+			"Update Personal Info",
+			"Sign Out"
 	};
 	private final String[] transactionsMenu = new String[] {
 			"Deposit",
@@ -131,9 +132,6 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 		case MAIN:
 			switch (choice) {
 			case 1:
-				signCustomerOut();
-				break;
-			case 2:
 				if (!customer.fetchAccounts(customer.getCustomerId()))
 					System.out.println("No Accounts On Record");
 				else {
@@ -141,7 +139,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					view = TRANSACTION;
 				}
 				break;
-			case 3:
+			case 2:
 				if (!customer.hasPersonalRecordOnFile()) {
 					System.out.println("We appreciate your business");
 					System.out.println("We would like to know a little more about you\n");
@@ -151,29 +149,26 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					applyForAccount();
 				}
 				break;
-			case 4:
+			case 3:
 				System.out.println("Stay Up-To-Date");
 				fillOutPersonalInformation();
 				break;
-			} break;
+			case 4:
+				signCustomerOut();
+				break;
+			}
+			break;
 			
 		case TRANSACTION:
 			AccountInfoModel targetAccount;
 			List<AccountInfoModel> accounts = customer.getAccounts();
+			String enumeratedAccounts = customer.viewAllAcountsAsEnumerated();
 			int pickAccount;
 			double amount;
-			StringBuilder snapshotAccounts = new StringBuilder();
-			for (int i = 0; i < accounts.size(); i++) {
-				snapshotAccounts
-				.append(i+1)
-				.append("\t")
-				.append(accounts.get(i).provideGlimpse())
-				.append("\n");
-			}
 			
 			switch (choice) {
 			case 1:
-				System.out.println(snapshotAccounts.toString());
+				System.out.println(enumeratedAccounts);
 				System.out.print("Select Account for Deposit: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
@@ -200,7 +195,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					switch (customer.getFundsTransactionManager().makeDeposit(targetAccount, amount)) {
 					case TransactionOutcome.SUCCESS:
 						System.out.println("Deposit Made Successfully");
-						System.out.println(targetAccount.provideGlimpse());
+						System.out.println(new CustomerFriendlyAccount(targetAccount));
 						break;
 					case TransactionOutcome.ACCOUNT_FROZEN:
 						System.out.println("Deposit Unsuccessful");
@@ -215,7 +210,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				break;
 			case 2:
-				System.out.println(snapshotAccounts.toString());
+				System.out.println(enumeratedAccounts);
 				System.out.print("Select Account for Withdrawal: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
@@ -242,7 +237,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					switch (customer.getFundsTransactionManager().makeWithdrawal(targetAccount, amount)) {
 					case TransactionOutcome.SUCCESS:
 						System.out.println("Withdrawal Made Successfully");
-						System.out.println(targetAccount.provideGlimpse());
+						System.out.println(new CustomerFriendlyAccount(targetAccount));
 						break;
 					case TransactionOutcome.ACCOUNT_FROZEN:
 						System.out.println("Withdrawal Unsuccessful");
@@ -261,7 +256,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				break;
 			case 3:
-				System.out.println(snapshotAccounts.toString());
+				System.out.println(enumeratedAccounts);
 				System.out.print("Transfer Funds Into Account: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
@@ -304,8 +299,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						amount)) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Transfer Made Successfully");
-					System.out.println(targetAccount.provideGlimpse());
-					System.out.println(originAccount.provideGlimpse());
+					System.out.println(new CustomerFriendlyAccount(targetAccount));
+					System.out.println(new CustomerFriendlyAccount(originAccount));
 					break;
 				case TransactionOutcome.ACCOUNT_FROZEN:
 					System.out.println("Transfer Not Made");
@@ -514,8 +509,19 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 		applicationForm = new ApplicationModel.Builder()
 				.withCustomerId(customer.getCustomerId())
 				.build();
-		final String typePrompt = "Select Account Type\n1\tChecking\n2\tSavings\nType: "; 
-		if (!acceptStringAsTokenWithAttempts(typePrompt, 
+		System.out.print("Enter the Name for the Account: ");
+		if (!scanner.hasNextLine()) {
+			System.out.println("Account Name Not Given");
+			return;
+		}
+		String accountName = scanner.nextLine();
+		if (accountName.length() == 0) {
+			System.out.println("Not a Valid Account Name");
+			return;
+		}
+		applicationForm.setAccountName(accountName);
+		
+		if (!acceptStringAsTokenWithAttempts("Select Account Type\n1\tChecking\n2\tSavings\nType: ", 
 				"Enter 1 Or 2", 
 				2,
 				validateAccountType)) {
@@ -523,8 +529,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			return;
 		}
 		System.out.println();
-		final String ownerPrompt = "Account Owner\n1\tIndividual\n2\tJoint\nOwner: ";
-		if (!acceptStringAsTokenWithAttempts(ownerPrompt, 
+		if (!acceptStringAsTokenWithAttempts("Account Owner\n1\tIndividual\n2\tJoint\nOwner: ", 
 				"Enter 1 Or 2", 
 				2,
 				validateAccountOwner)) {

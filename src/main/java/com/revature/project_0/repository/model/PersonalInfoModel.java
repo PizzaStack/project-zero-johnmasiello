@@ -258,7 +258,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 				.append(prettyPrintLast4SSN())
 				.append(DELIMITER).append("Email: ")
 				.append(email)
-				.append(DELIMITER).append("Phn (xxx)xxx-xxxx: ")
+				.append(DELIMITER).append("Phone (xxx)xxx-xxxx: ")
 				.append(prettyPrintPhoneNumber())
 				.append(DELIMITER).append("Beneficiary: ")
 				.append(beneficiary)

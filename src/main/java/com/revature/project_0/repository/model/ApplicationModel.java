@@ -6,6 +6,7 @@ import com.revature.project_0.util.Util;
 
 public class ApplicationModel implements Comparable<ApplicationModel>{
 	private long applicationId;
+	private String accountName;
 	private long customerId;
 	private long jointCustomerId;
 	private String jointCustomerSSN;
@@ -17,6 +18,7 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 	
 	public static class Builder {
 		private long applicationId;
+		private String accountName;
 		private long customerId;
 		private long jointCustomerId;
 		private int type;
@@ -29,11 +31,16 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		private void reset() {
 			applicationId = customerId = jointCustomerId = NO_ID;
 			type = AccountType.CHECKING;
-			jointCustomerSSN = "";
+			jointCustomerSSN = accountName = "";
 		}
 
 		public Builder withApplicationId(long applicationId) {
 			this.applicationId = applicationId;
+			return this;
+		}
+		
+		public Builder withAccountName(String accountName) {
+			this.accountName= accountName;
 			return this;
 		}
 
@@ -53,14 +60,15 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		}
 		
 		public ApplicationModel build() {
-			return new ApplicationModel(applicationId, customerId, jointCustomerId, type,
+			return new ApplicationModel(applicationId, accountName, customerId, jointCustomerId, type,
 					jointCustomerSSN);
 		}
 	}
 	
-	private ApplicationModel(long applicationId, long customerId, long jointCustomerId, int type,
+	private ApplicationModel(long applicationId, String accountName, long customerId, long jointCustomerId, int type,
 			String jointCustomerSSN) {
 		this.applicationId = applicationId;
+		this.accountName= accountName;
 		this.customerId = customerId;
 		this.jointCustomerId = jointCustomerId;
 		this.type = type;
@@ -80,6 +88,14 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		return applicationId;
 	}
 	
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
 	public String prettyPrintApplicationId() {
 		return Util.zeroPadCondensedId(applicationId);
 	}
@@ -168,9 +184,11 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 		return new StringBuilder()
 				.append("Account Id: ")
 				.append(Util.zeroPadId(applicationId))
+				.append(DELIMITER).append("Account Name: ")
+				.append(accountName)
 				.append(DELIMITER).append("Customer Id: ")
 				.append(Util.zeroPadCondensedId(customerId))
-				.append(DELIMITER).append("Customer, Joint Id: ")
+				.append(DELIMITER).append("Customer Joint Id: ")
 				.append(jointCustomerId > NO_ID ? Util.zeroPadCondensedId(jointCustomerId) : Util.NOT_AVAILABLE)
 				.append(DELIMITER).append("SSN: ")
 				.append(prettyPrintLast4SSN())

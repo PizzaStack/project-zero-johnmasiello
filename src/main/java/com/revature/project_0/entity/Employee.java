@@ -1,8 +1,6 @@
 package com.revature.project_0.entity;
 
-import static com.revature.project_0.repository.TableOutcome.FAIL_TO_UPDATE;
-import static com.revature.project_0.repository.TableOutcome.NO_SUCH_RECORD;
-import static com.revature.project_0.repository.TableOutcome.OK;
+import static com.revature.project_0.repository.TableOutcome.*;
 
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
@@ -85,6 +83,12 @@ public class Employee {
 		if (application == null) {
 			errorCode = NO_SUCH_RECORD;
 			return false;
+		}
+		if (application.isJointApplication()) {
+			if (!repository.crossReferenceJointCustomerSSN(application)) {
+				errorCode = JOINT_CUSTOMER_NOT_FOUND;
+				return false;
+			}
 		}
 		newAccountCreated = repository.approveApplication(application, empId);
 		if (newAccountCreated == null) {

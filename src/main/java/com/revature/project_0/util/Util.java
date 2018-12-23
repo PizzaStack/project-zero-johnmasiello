@@ -66,6 +66,10 @@ public final class Util {
 		return 0;
 	}
 	
+	public static final String printDate_NoTime(Date date) {
+		return simpleDateFormat.format(date);
+	}
+	
 	public static final <T> String printAllRecords(Collection<T> records) {
 		return printAllRecords(records, Util.PRINT_ROW_DELIMITER);
 	}

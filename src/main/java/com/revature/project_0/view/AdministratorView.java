@@ -11,6 +11,8 @@ import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.TableOutcome;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.AccountStatus;
+import com.revature.project_0.repository.model.CustomerFriendlyAccount;
+import com.revature.project_0.util.Util;
 
 public class AdministratorView extends InputtingContextMenuView implements Operational {
 	private Administrator administrator;
@@ -47,6 +49,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 			"Deposit Funds",
 			"Withdrawal Funds",
 			"Transfer Funds",
+			"Refresh Accounts",
 			BACK
 	};
 	private final String[] accountApprovalOptions = new String[] {
@@ -106,6 +109,14 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 		purgeLine(scanner);
 		System.out.println();
 		return id;
+	}
+	
+	private void viewAllAccounts() {
+		String accounts = administrator.viewAllAccounts();
+		if (accounts.length() > 0)
+			System.out.println(accounts);
+		else
+			System.out.println(NO_MATCHING_RECORDS);
 	}
 	
 	@Override
@@ -195,16 +206,24 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						"\nA Valid Application Id Was Not Entered");
 				if (id == null)
 					break;
-				result = administrator.approveApplication(id, 
+				administrator.approveApplication(id, 
 						administrator.getEmployeeId());
-				if (result) {
+				switch (administrator.getErrorCode()) {
+				case TableOutcome.OK:
 					System.out.println("Success, New Account Created: ");
 					System.out.println(administrator.getNewAccount());
-				}
-				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+					break;
+				case TableOutcome.JOINT_CUSTOMER_NOT_FOUND:
+					System.out.println("Unable to Create Joint Account");
+					System.out.println("Reason: Joint Customer Not Found");
+					break;
+				case TableOutcome.NO_SUCH_RECORD:
 					System.out.println("No such Application with id = " + id);
-				else
+					break;
+				case TableOutcome.FAIL_TO_UPDATE:
 					System.out.println("System Error");
+					break;
+				}
 				break;
 			case 2:
 				id = promptIdFromUser("Please Enter Application ID to Deny: ", 
@@ -238,14 +257,15 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 		case ACCOUNT:
 			switch (choice) {
 			case 1:
+				viewAllAccounts();
 				view = ACCOUNT_TRANSACTION;
 				break;
 			case 2:
+				viewAllAccounts();
 				view = ACCOUNT_APPROVAL;
 				break;
 			case 3:
-				String accounts = administrator.viewAllAccounts();
-				System.out.println(accounts + "\n");
+				viewAllAccounts();
 				Long id = null;
 				AccountInfoModel result;
 				id = promptIdFromUser("Please Enter Account ID to Cancel: ", 
@@ -269,8 +289,6 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 			
 		case ACCOUNT_APPROVAL:
 		{
-			String accounts = administrator.viewAllAccounts();
-			System.out.println(accounts + "\n");
 			Long id = null;
 			AccountInfoModel result;
 			switch (choice) {
@@ -314,11 +332,9 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 			Long targetId, originId;
 			double amount;
 			String strConfirm;
-			System.out.println(administrator.viewAllAccounts());
 			
 			switch (choice) {
 			case 1:
-				System.out.print("Select Account for Deposit: ");
 				targetId = promptIdFromUser("Please Enter Account ID for Deposit: ", 
 						"\nA Valid Account Id Was Not Entered");
 				if (targetId == null)
@@ -346,11 +362,11 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 								amount)) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Deposit Made Successfully");
-					System.out.println(targetAccount.provideGlimpse());
+					System.out.println(new CustomerFriendlyAccount(targetAccount));
 					break;
 				case TransactionOutcome.ACCOUNT_FROZEN:
-					System.out.println("The Account with Id=" +
-							+ targetAccount.getAccountId()
+					System.out.println("The Account with Id=" 
+							+ Util.zeroPadId(targetAccount.getAccountId())
 							+ " is Frozen");
 					System.out.print("Proceed with Unlocking Account? (y|n) ");
 					if (!scanner.hasNext()) {
@@ -368,8 +384,10 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						targetAccount.setAdminId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
 								.makeDeposit(targetAccount, amount)
-								== TransactionOutcome.SUCCESS)
-							System.out.println("Deposit Made Successfully");	
+								== TransactionOutcome.SUCCESS) {
+							System.out.println("Deposit Made Successfully");
+							System.out.println(new CustomerFriendlyAccount(targetAccount));
+						}
 						else
 							System.out.println("Deposit Unsuccessful");
 					}
@@ -377,7 +395,6 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				} 
 				break;
 			case 2:
-				System.out.print("Select Account for Withdrawal: ");
 				targetId = promptIdFromUser("Please Enter Account ID for Withdrawal: ", 
 						"\nA Valid Account Id Was Not Entered");
 				if (targetId == null)
@@ -405,15 +422,15 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 								amount)) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Withdrawal Made Successfully");
-					System.out.println(targetAccount.provideGlimpse());
+					System.out.println(new CustomerFriendlyAccount(targetAccount));
 					break;
 				case TransactionOutcome.INSUFFICIENT_FUNDS:
 					System.out.println("Withdrawal Unsuccessful");
 					System.out.println("Reason: InSufficient Funds"); 
 					break;
 				case TransactionOutcome.ACCOUNT_FROZEN:
-					System.out.println("The Account with Id=" +
-							+ targetAccount.getAccountId()
+					System.out.println("The Account with Id=" 
+							+ Util.zeroPadId(targetAccount.getAccountId())
 							+ " is Frozen");
 					System.out.print("Proceed with Unlocking Account? (y|n) ");
 					if (!scanner.hasNext()) {
@@ -431,8 +448,10 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						targetAccount.setAdminId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
 								.makeWithdrawal(targetAccount, amount)
-								== TransactionOutcome.SUCCESS)
-							System.out.println("Withdrawal Made Successfully");	
+								== TransactionOutcome.SUCCESS) {
+							System.out.println("Withdrawal Made Successfully");
+							System.out.println(new CustomerFriendlyAccount(targetAccount));
+						}
 						else
 							System.out.println("Withdrawal Unsuccessful");
 					}
@@ -440,7 +459,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				} 
 				break;
 			case 3:
-				targetId = promptIdFromUser("Transfer Funds Into Account: ", 
+				targetId = promptIdFromUser("Transfer Funds Into Account with Id: ", 
 						"\nA Valid Account Id Was Not Entered");
 				if (targetId == null)
 					break;
@@ -453,6 +472,10 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						"\nA Valid Account Id Was Not Entered");
 				if (originId == null)
 					break;
+				if (originId == targetId ) {
+					System.out.println("\nAccounts cannot be the same");
+					break;
+				}
 				originAccount = administrator.getAccountById(originId);
 				if (originAccount == null) {
 					System.out.println("No Account Selected");
@@ -477,7 +500,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 								amount)) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Transfer Made Successfully");
-					System.out.println(targetAccount.provideGlimpse());
+					System.out.println(new CustomerFriendlyAccount(targetAccount));
+					System.out.println(new CustomerFriendlyAccount(originAccount));
 					break;
 				case TransactionOutcome.INSUFFICIENT_FUNDS:
 					System.out.println("Transfer Unsuccessful");
@@ -491,13 +515,13 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 										: null;
 					if (singularlyFrozenAccount != null) {
 						System.out.println("The Account with Id="
-								+ singularlyFrozenAccount.getAccountId()
+								+ Util.zeroPadId(singularlyFrozenAccount.getAccountId())
 								+ " is Frozen");
 						System.out.print("Proceed with Unlocking Account? (y|n) ");
 					} else {
 						System.out.println("Accounts with Id's="
-								+ targetAccount.getAccountId()
-								+ ", " + originAccount.getAccountId()
+								+ Util.zeroPadId(targetAccount.getAccountId())
+								+ ", " + Util.zeroPadId(originAccount.getAccountId())
 								+ " are frozen");
 						System.out.print("Proceed with Unlocking Both Accounts? (y|n) ");
 					}
@@ -526,8 +550,11 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 										originAccount, 
 										targetAccount, 
 										amount)
-								== TransactionOutcome.SUCCESS)
-							System.out.println("Transfer Made Successfully");	
+								== TransactionOutcome.SUCCESS) {
+							System.out.println("Transfer Made Successfully");
+							System.out.println(new CustomerFriendlyAccount(targetAccount));
+							System.out.println(new CustomerFriendlyAccount(originAccount));
+						}
 						else
 							System.out.println("Transfer Unsuccessful");
 					}
@@ -535,6 +562,9 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				} 
 				break;
 			case 4:
+				System.out.println(administrator.viewAllAccounts());
+				break;
+			case 5:
 				view = MAIN;
 				break;
 			} 

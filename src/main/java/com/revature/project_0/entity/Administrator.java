@@ -20,7 +20,7 @@ public class Administrator extends Employee{
 	
 	@Nullable
 	public AccountInfoModel denyAccount(long accountId) {
-		return getRepository().approveAccount(accountId, getEmployeeId());
+		return getRepository().denyAccount(accountId, getEmployeeId());
 	}
 	
 	@Nullable

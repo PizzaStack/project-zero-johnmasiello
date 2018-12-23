@@ -102,22 +102,24 @@ public class Repository {
 	private PersonalInfoModel trackJointCustomerBySSN(String SSN) {
 		return personalInfoTable.fetchCustomerBySSN(SSN);
 	}
+
+	public boolean crossReferenceJointCustomerSSN(@NotNull ApplicationModel application) {
+		PersonalInfoModel person = trackJointCustomerBySSN(application.getJointCustomerSSN());
+		if (person == null)
+			return false;
+		application.setJointCustomerId(person.getCustomerId());
+		return true;
+	}
 	
 	@Nullable
 	public AccountInfoModel approveApplication(@NotNull ApplicationModel application, @NotNull String empId) {
-		long jointCustomerId = PersonalInfoModel.NO_ID;
-		if (application.isJointApplication()) {
-			PersonalInfoModel person = trackJointCustomerBySSN(application.getJointCustomerSSN());
-			if (person == null)
-				return null;
-			jointCustomerId = person.getCustomerId();
-		}
 		final long accountId = accountInfoTable.generateNextPrimaryKey();
 		AccountInfoModel accountInfoModel = new AccountInfoModel.Builder()
 				.withAccountId(accountId)
+				.withAccountName(application.getAccountName())
 				.withBalance(0.00)
 				.withCustomerId(application.getCustomerId())
-				.withJointCustomerId(jointCustomerId)
+				.withJointCustomerId(application.getJointCustomerId())
 				.withDateOpened(Util.getCurrentDate())
 				.withType(application.getType())
 				.withStatus(AccountStatus.OPENED)
@@ -138,7 +140,7 @@ public class Repository {
 	@Nullable
 	public AccountInfoModel approveAccount(long accountId, @NotNull String adminId) {
 		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
-		if (account != null) {
+		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
 			account.setStatus(AccountStatus.APPROVED);
 			account.setAdminId(adminId);
 		}
@@ -148,7 +150,7 @@ public class Repository {
 	@Nullable
 	public AccountInfoModel denyAccount(long accountId, @NotNull String adminId) {
 		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
-		if (account != null) {
+		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
 			account.setStatus(AccountStatus.DENIED);
 			account.setAdminId(adminId);
 		}
