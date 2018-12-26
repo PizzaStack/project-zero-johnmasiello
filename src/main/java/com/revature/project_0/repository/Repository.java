@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.revature.project_0.repository.dao.CustomerLoginDao;
 import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 
@@ -14,12 +15,18 @@ public class Repository {
 	private ApplicationTable applicationTable;
 	private CustomerLoginTable customerLoginTable;
 	private PersonalInfoTable personalInfoTable;
+	private CustomerLoginDao customerLoginDao;
 	
 	private CustomerLoginModel loginValidationHelper;
 	
 	public Repository() {
+		makeDaos();
 		loadTables();
 		loginValidationHelper = new CustomerLoginModel.Builder().build();
+	}
+	
+	private void makeDaos() {
+		customerLoginDao = new CustomerLoginDao();
 	}
 	
 	private void loadTables() {
@@ -40,7 +47,7 @@ public class Repository {
 	// First Create a username and password to get a customer id
 	public boolean isValidAndUniqueUsername(String requestedUsername) {
 		return loginValidationHelper.validateNewUsername(requestedUsername) &&
-				customerLoginTable.selectRecord(requestedUsername) == null;
+				customerLoginDao.queryIsUsernameUnique(requestedUsername);
 	}
 	
 	public boolean isValidPassword(String requestedPassword) {
@@ -50,13 +57,7 @@ public class Repository {
 	@Nullable
 	public CustomerLoginModel createNewCustomerUponValidUsernameAndPassword(String username,
 			String password) {
-		final long customerId = personalInfoTable.generateNextPrimaryKey();
-		CustomerLoginModel newCustomer = new CustomerLoginModel.Builder()
-				.withUsername(username)
-				.withPassword(password)
-				.withCustomerId(customerId)
-				.build();
-		return customerLoginTable.addRecord(username, newCustomer) ? newCustomer : null;
+		return customerLoginDao.insertNewSignUp(username, password);
 	}
 	
 	// Then you fill out personal information, before...
@@ -79,8 +80,7 @@ public class Repository {
 	// Returning Customer side
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	public CustomerLoginModel authenticateCustomer(@NotNull String username, @NotNull String password) {
-		CustomerLoginModel login = customerLoginTable.selectRecord(username);
-		return login != null && password.equals(login.getPassword()) ? login : null;
+		return customerLoginDao.queryLogin(username, password);
 	}
 	
 	public PersonalInfoModel getPersonalRecord(long customerId) {

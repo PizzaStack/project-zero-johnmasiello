@@ -9,15 +9,7 @@ public class PostGresDatabaseDemo {
 	
 	public static void main(String[] args) {
 		try {
-			CustomerLoginModel  customerLoginModel;
-//			customerLoginModel = new CustomerLoginDao().pushNewSignUp("John++", "SWORDFISH");
-//			customerLoginModel = new CustomerLoginDao().queryLogin("John++", "SWORDFISH");
-//			if (customerLoginModel != null)
-//				System.out.println("AUTO-GENERATED CUSTOMER_ID: "+customerLoginModel.getCustomerId());
-//			else
-//				System.out.println("AUTO-GENERATED CUSTOMER_ID: "+-1);
 			
-			System.out.println(Boolean.toString(new CustomerLoginDao().queryIsUsernameUnique("MERRLL")));
 		} finally {
 			connectionHelper.closeConnection();
 		}
