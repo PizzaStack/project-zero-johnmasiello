@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.jetbrains.annotations.Nullable;
+
 public class ConnectionHelper {
 	private String url;
 	private String username;
@@ -54,6 +56,15 @@ public class ConnectionHelper {
 			} finally {
 				connection = null;
 			}
+		}
+	}
+	
+	public void closeThing(@Nullable AutoCloseable thing) {
+		try {
+			if (thing == null)
+				return;
+			thing.close();
+		} catch (Exception ignore) {
 		}
 	}
 	

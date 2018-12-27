@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.revature.project_0.repository.dao.AccountInfoDao;
 import com.revature.project_0.repository.dao.ApplicationDao;
 import com.revature.project_0.repository.dao.CustomerLoginDao;
 import com.revature.project_0.repository.dao.PersonalInfoDao;
@@ -20,6 +21,7 @@ public class Repository {
 	private CustomerLoginDao customerLoginDao;
 	private PersonalInfoDao personalInfoDao;
 	private ApplicationDao applicationDao;
+	private AccountInfoDao accountInfoDao;
 	
 	private CustomerLoginModel loginValidationHelper;
 	
@@ -33,6 +35,7 @@ public class Repository {
 		customerLoginDao = new CustomerLoginDao();
 		personalInfoDao = new PersonalInfoDao();
 		applicationDao = new ApplicationDao();
+		accountInfoDao = new AccountInfoDao();
 	}
 	
 	private void loadTables() {
