@@ -66,7 +66,7 @@ public class CustomerTest {
 				.build();
 		assertTrue(customer.createApplication(applicationModel));
 	}
-	@Test
+//	@Test
 	public void testQueryApplication() {
 		Repository repository = new Repository();
 		Customer customer = new Customer(repository);

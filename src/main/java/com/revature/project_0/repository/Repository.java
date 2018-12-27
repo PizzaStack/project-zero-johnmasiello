@@ -95,7 +95,7 @@ public class Repository {
 	// until The bank employee approves/Disapproves, which generates an accountInfoModel
 	@Nullable
 	public ApplicationModel rejectApplication(@NotNull ApplicationModel applicationModel, @NotNull String empId) {
-		return applicationTable.deleteRecord(applicationModel.getApplicationId()) ? applicationModel :
+		return applicationDao.deleteApplication((int) applicationModel.getApplicationId()) ? applicationModel :
 			null;
 	}
 	
@@ -113,47 +113,29 @@ public class Repository {
 	}
 	
 	@Nullable
-	public AccountInfoModel approveApplication(@NotNull ApplicationModel application, @NotNull String empId) {
-		final long accountId = accountInfoTable.generateNextPrimaryKey();
-		AccountInfoModel accountInfoModel = new AccountInfoModel.Builder()
-				.withAccountId(accountId)
-				.withAccountName(application.getAccountName())
-				.withBalance(0.00)
-				.withCustomerId(application.getCustomerId())
-				.withJointCustomerId(application.getJointCustomerId())
-				.withDateOpened(Util.getCurrentDate())
-				.withType(application.getType())
-				.withStatus(AccountStatus.OPENED)
-				.withEmpId(empId)
-				.build();
-		if (accountInfoTable.addRecord(accountId, accountInfoModel)) {
-			applicationTable.deleteRecord(application.getApplicationId());
-			return accountInfoModel;
-		}
-		return null;
+	public AccountInfoModel approveApplication(@NotNull ApplicationModel application, @NotNull String approverId) {
+		return accountInfoDao.approveApplication(application, approverId);
 	}
 	
 	@Nullable
 	public ApplicationModel getApplicationModel(long applicationId) {
-		return applicationTable.selectRecord(applicationId);
+		return applicationDao.queryApplicationById((int) applicationId);
 	}
 	
 	@Nullable
-	public AccountInfoModel approveAccount(long accountId, @NotNull String adminId) {
-		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
+	public AccountInfoModel approveAccount(long accountId, @NotNull String approveId) {
+		AccountInfoModel account = getAccountInfo(accountId);
 		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
-			account.setStatus(AccountStatus.APPROVED);
-			account.setAdminId(adminId);
+			accountInfoDao.updateOnAccountApproved((int) accountId, AccountStatus.APPROVED, approveId);
 		}
 		return account;
 	}
 	
 	@Nullable
-	public AccountInfoModel denyAccount(long accountId, @NotNull String adminId) {
-		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
+	public AccountInfoModel denyAccount(long accountId, @NotNull String approveId) {
+		AccountInfoModel account = getAccountInfo(accountId);
 		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
-			account.setStatus(AccountStatus.DENIED);
-			account.setAdminId(adminId);
+			accountInfoDao.updateOnAccountApproved((int) accountId, AccountStatus.DENIED, approveId);
 		}
 		return account;
 	}
@@ -163,7 +145,7 @@ public class Repository {
 	}
 	
 	public Collection<AccountInfoModel> getAllAccounts() {
-		return accountInfoTable.getTable().values();
+		return accountInfoDao.queryAllAccountsForAllCustomers();
 	}
 	
 	public Collection<PersonalInfoModel> getAllCustomersPersonalInformation() {
@@ -172,10 +154,13 @@ public class Repository {
 	
 	@Nullable
 	public AccountInfoModel cancelAccount(long accountId) {
-		AccountInfoModel account = accountInfoTable.selectRecord(accountId);
-		account.setStatus(AccountStatus.CLOSED);
-		account.setDateClosed(Util.getCurrentDate());
-		return accountInfoTable.deleteRecord(accountId) ? account : null;
+		AccountInfoModel account = getAccountInfo(accountId);
+		if (account != null) {
+			account.setStatus(AccountStatus.CLOSED);
+			account.setDateClosed(Util.getCurrentDate());
+			return accountInfoDao.deleteAccountInfo((int) accountId) ? account : null;
+		}
+		return null;
 	}
 	
 	public List<ApplicationModel> getAllAssociatedApplications(long customerId) {
@@ -183,7 +168,7 @@ public class Repository {
 	}
 	
 	public List<AccountInfoModel> getAllAssociatedAccounts(long customerId) {
-		return accountInfoTable.getAllAssociatedAccounts(customerId);
+		return accountInfoDao.queryAccountInfoByCustomerId((int) customerId);
 	}
 	
 	public PersonalInfoModel getPersonalInformation(long customerId) {
@@ -192,7 +177,7 @@ public class Repository {
 	
 	@Nullable
 	public AccountInfoModel getAccountInfo(long accountId) {
-		return accountInfoTable.selectRecord(accountId);
+		return accountInfoDao.queryAccountInfoById((int) accountId);
 	}
 
 	AccountInfoTable getAccountInfoTable() {

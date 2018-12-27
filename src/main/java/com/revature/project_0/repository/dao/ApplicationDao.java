@@ -1,6 +1,5 @@
 package com.revature.project_0.repository.dao;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,7 @@ import com.revature.project_0.repository.model.ApplicationModel;
 public class ApplicationDao {
 	public ApplicationModel insertNewApplication(ApplicationModel application) {
 		Connection connection = ConnectionHelper.getinstance().getConnection();
-		try (CallableStatement statement = connection.prepareCall(
+		try (PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO application (account_name, customer_id, joint_customer_id, "
 				+ "joint_customer_ssn, type) VALUES (?, ?, ?, ?, ?)")) {
 			statement.setString(1, application.getAccountName());
@@ -31,7 +30,34 @@ public class ApplicationDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
-			ConnectionHelper.getinstance().closeConnection();
+		}
+		return null;
+	}
+	
+	public boolean deleteApplication(int id) {
+		Connection connection = ConnectionHelper.getinstance().getConnection();
+		try (PreparedStatement statement = connection.prepareStatement(
+				"DELETE FROM application WHERE id = ?")) {
+			statement.setInt(1,  id);
+			return statement.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public ApplicationModel queryApplicationById(int id) {
+		Connection connection = ConnectionHelper.getinstance().getConnection();
+		try (PreparedStatement statement = connection.prepareStatement(
+				"SELECT * FROM application WHERE id = ?")) {
+			statement.setInt(1, id);
+			statement.execute();
+			ResultSet rs = statement.getResultSet();
+			if (rs.next())
+				return loadApplication(rs);
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
 		}
 		return null;
 	}
@@ -49,7 +75,6 @@ public class ApplicationDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
-			ConnectionHelper.getinstance().closeConnection();
 			list.clear();
 		}
 		return list;
@@ -66,7 +91,6 @@ public class ApplicationDao {
 			}
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
-			ConnectionHelper.getinstance().closeConnection();
 			allInfos.clear();
 		}
 		return allInfos;

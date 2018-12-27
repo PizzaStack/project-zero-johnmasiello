@@ -34,8 +34,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		private int type;
 		private int status;
 		private double balance;
-		private String adminId;
-		private String empId;
+		private String approved2;
+		private String approved1;
 		
 		{
 			reset();
@@ -51,7 +51,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 			type = AccountType.CHECKING;
 			status = AccountStatus.OPENED;
 			balance = 0;
-			adminId = empId = null;
+			approved2 = approved1 = null;
 		}		
 		
 		public Builder withAccountId(long accountId) {
@@ -92,23 +92,23 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 			this.balance = balance;
 			return this;
 		}
-		public Builder withAdminId(String adminId) {
-			this.adminId = adminId;
+		public Builder withAcctApproverId(String approverId) {
+			this.approved2 = approverId;
 			return this;
 		}
-		public Builder withEmpId(String empId) {
-			this.empId = empId;
+		public Builder withAppAproverId(String approverId) {
+			this.approved1 = approverId;
 			return this;
 		}
 		
 		public AccountInfoModel build() {
 			return new AccountInfoModel(accountId, accountName, customerId, jointCustomerId, dateOpened, dateClosed, 
-					type, status, balance, adminId, empId);
+					type, status, balance, approved2, approved1);
 		}
 	}
 	
 	private AccountInfoModel(long accountId, String accountName, long customerId, long jointCustomerId, LocalDate dateOpened, LocalDate dateClosed,
-			int type, int status, double balance, String adminId, String empId) {
+			int type, int status, double balance, String approver2Id, String approver1Id) {
 		this.accountId = accountId;
 		this.accountName = accountName;
 		this.customerId = customerId;
@@ -118,8 +118,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		this.type = type;
 		this.status = status;
 		this.balance = balance;
-		this.approved_2 = adminId;
-		this.approved_1 = empId;
+		this.approved_2 = approver2Id;
+		this.approved_1 = approver1Id;
 	}
 	
 	public static Builder getBuilder() {
@@ -222,20 +222,20 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return true;
 	}
 	
-	public String getAdminId() {
+	public String getAcctApproverId() {
 		return approved_2;
 	}
 
-	public void setAdminId(String adminId) {
-		this.approved_2 = adminId;
+	public void setAcctApproverId(String approverId) {
+		this.approved_2 = approverId;
 	}
 
-	public String getEmpId() {
+	public String getAppApproverId() {
 		return approved_1;
 	}
 
-	public void setEmpId(String empId) {
-		this.approved_1 = empId;
+	public void setAppApproverId(String approverId) {
+		this.approved_1 = approverId;
 	}
 
 	@Override
@@ -259,9 +259,9 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 				.append(prettyPrintType())
 				.append(DELIMITER).append("Status: ")
 				.append(prettyPrintStatus())
-				.append(DELIMITER).append("Approved 1: ")
+				.append(DELIMITER).append("App Approved 1: ")
 				.append(approved_1 != null ? approved_1 : Util.NOT_AVAILABLE)
-				.append(DELIMITER).append("Approved 2: ")
+				.append(DELIMITER).append("Acct Approved 2: ")
 				.append(approved_2 != null ? approved_2 : Util.NOT_AVAILABLE)
 				.toString();
 	}

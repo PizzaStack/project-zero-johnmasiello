@@ -152,7 +152,7 @@ public class RepositoryTest {
 		repository.getAccountInfoTable().addRecord(accountId, new AccountInfoModel.Builder()
 				.withAccountId(0)
 				.build());
-		assertEquals(ADMIN_ID, repository.approveAccount(accountId, ADMIN_ID).getAdminId());
+		assertEquals(ADMIN_ID, repository.approveAccount(accountId, ADMIN_ID).getAcctApproverId());
 	}
 	@Test
 	public void denyAccount() {

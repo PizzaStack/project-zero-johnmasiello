@@ -381,7 +381,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						System.out.println("Deposit Unsuccessful");
 					else {
 						targetAccount.setStatus(AccountStatus.APPROVED);
-						targetAccount.setAdminId(administrator.getEmployeeId());
+						targetAccount.setAcctApproverId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
 								.makeDeposit(targetAccount, amount)
 								== TransactionOutcome.SUCCESS) {
@@ -445,7 +445,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						System.out.println("Withdrawal Unsuccessful");
 					else {
 						targetAccount.setStatus(AccountStatus.APPROVED);
-						targetAccount.setAdminId(administrator.getEmployeeId());
+						targetAccount.setAcctApproverId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
 								.makeWithdrawal(targetAccount, amount)
 								== TransactionOutcome.SUCCESS) {
@@ -538,12 +538,12 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 					else {
 						if (singularlyFrozenAccount != null) {
 							singularlyFrozenAccount.setStatus(AccountStatus.APPROVED);
-							singularlyFrozenAccount.setAdminId(administrator.getEmployeeId());
+							singularlyFrozenAccount.setAcctApproverId(administrator.getEmployeeId());
 						} else {
 							targetAccount.setStatus(AccountStatus.APPROVED);
-							targetAccount.setAdminId(administrator.getEmployeeId());
+							targetAccount.setAcctApproverId(administrator.getEmployeeId());
 							originAccount.setStatus(AccountStatus.APPROVED);
-							originAccount.setAdminId(administrator.getEmployeeId());
+							originAccount.setAcctApproverId(administrator.getEmployeeId());
 						}
 						if (administrator.getFundsTransactionManager()
 								.makeTransferOfFunds(
