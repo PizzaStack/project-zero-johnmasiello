@@ -8,8 +8,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.jetbrains.annotations.Nullable;
-
 public class ConnectionHelper {
 	private String url;
 	private String username;

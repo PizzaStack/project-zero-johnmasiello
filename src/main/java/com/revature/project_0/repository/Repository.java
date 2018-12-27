@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.revature.project_0.repository.dao.ApplicationDao;
 import com.revature.project_0.repository.dao.CustomerLoginDao;
 import com.revature.project_0.repository.dao.PersonalInfoDao;
 import com.revature.project_0.repository.model.*;
@@ -18,6 +19,7 @@ public class Repository {
 	private PersonalInfoTable personalInfoTable;
 	private CustomerLoginDao customerLoginDao;
 	private PersonalInfoDao personalInfoDao;
+	private ApplicationDao applicationDao;
 	
 	private CustomerLoginModel loginValidationHelper;
 	
@@ -30,6 +32,7 @@ public class Repository {
 	private void makeDaos() {
 		customerLoginDao = new CustomerLoginDao();
 		personalInfoDao = new PersonalInfoDao();
+		applicationDao = new ApplicationDao();
 	}
 	
 	private void loadTables() {
@@ -72,10 +75,7 @@ public class Repository {
 	// You fill out application, which waits in a pool ...
 	@Nullable
 	public ApplicationModel createNewApplication(ApplicationModel applicationModel) {
-		final long appId = applicationTable.generateNextPrimaryKey();
-		applicationModel.setApplicationId(appId);
-		return applicationTable.addRecord(appId, applicationModel) ? applicationModel :
-			null;
+		return applicationDao.insertNewApplication(applicationModel);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ public class Repository {
 	}
 	
 	public Collection<ApplicationModel> getAllApplications() {
-		return applicationTable.getTable().values();
+		return applicationDao.queryApplicationsForAllCustomers();
 	}
 	
 	public Collection<AccountInfoModel> getAllAccounts() {
@@ -176,7 +176,7 @@ public class Repository {
 	}
 	
 	public List<ApplicationModel> getAllAssociatedApplications(long customerId) {
-		return applicationTable.getAllAssociatedApplications(customerId);
+		return applicationDao.queryApplicationsByCustomerId((int) customerId);
 	}
 	
 	public List<AccountInfoModel> getAllAssociatedAccounts(long customerId) {

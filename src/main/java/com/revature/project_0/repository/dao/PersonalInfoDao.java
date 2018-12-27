@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.revature.project_0.connection.ConnectionHelper;
 import com.revature.project_0.repository.model.PersonalInfoModel;
@@ -92,7 +92,7 @@ public class PersonalInfoDao {
 	}
 
 	public Collection<PersonalInfoModel> queryPersonalInfoForAllCustomers() {
-		Set<PersonalInfoModel> allInfos = new HashSet<>();
+		List<PersonalInfoModel> allInfos = new ArrayList<>();
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet rs = statement.executeQuery(

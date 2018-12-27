@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.revature.project_0.connection.ConnectionHelper;
 import com.revature.project_0.repository.Repository;
+import com.revature.project_0.repository.dao.ApplicationDao;
 import com.revature.project_0.repository.dao.PersonalInfoDao;
 import com.revature.project_0.repository.model.AccountType;
 import com.revature.project_0.repository.model.ApplicationModel;
@@ -17,7 +18,7 @@ import com.revature.project_0.repository.model.PersonalInfoModel;
 import com.revature.project_0.util.Util;
 
 public class CustomerTest {
-	@Test
+//	@Test
 	public void testCreatePersonalInformation() {
 		Customer customer = new Customer(new Repository());
 		assertTrue(customer.signInSuccessful("John++", "SWORDFISH"));
@@ -34,7 +35,7 @@ public class CustomerTest {
 				.build();
 		assertNotEquals(null, customer.createOrUpdatePersonalInfo(personalInfo));
 	}
-	@Test
+//	@Test
 	public void testQueryPersonalInformation() {
 		PersonalInfoModel model; 
 		Customer customer = new Customer(new Repository());
@@ -48,7 +49,7 @@ public class CustomerTest {
 		assertEquals("1231231234", model.getPhoneNumber());
 		assertTrue(customer.hasPersonalRecordOnFile());
 	}
-	@Test
+//	@Test
 	public void testQueryAllPersonalInformation() {
 		new PersonalInfoDao()
 				.queryPersonalInfoForAllCustomers()
@@ -59,11 +60,25 @@ public class CustomerTest {
 		Customer customer = new Customer(new Repository());
 		assertTrue(customer.signInSuccessful("John++", "SWORDFISH"));
 		ApplicationModel applicationModel = ApplicationModel.getBuilder()
-				.withAccountName("Groceries")
+				.withAccountName("Pouring Day")
 				.withCustomerId(customer.getCustomerId())
-				.withType(AccountType.CHECKING)
+				.withType(AccountType.SAVINGS)
 				.build();
 		assertTrue(customer.createApplication(applicationModel));
+	}
+	@Test
+	public void testQueryApplication() {
+		Repository repository = new Repository();
+		Customer customer = new Customer(repository);
+		if (customer.signInSuccessful("John++", "SWORDFISH")) {
+			long customerId = customer.getCustomerId();
+			repository.getAllAssociatedApplications(customerId)
+			.forEach(($)->{System.out.println($);});
+			System.out.println("---------------------------------------------"
+					+ "--------------------------------------------------");
+			repository.getAllApplications()
+			.forEach(($)->{System.out.println($);});
+		}
 	}
 	
 	@After
