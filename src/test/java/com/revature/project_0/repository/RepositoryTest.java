@@ -54,7 +54,7 @@ public class RepositoryTest {
 	@Test
 	public void addRecordToPersonalInfoTable() {
 		assertTrue(repository
-				.createNewPersonalInformation(new PersonalInfoModel.Builder()
+				.createOrUpdateNewPersonalInformation(new PersonalInfoModel.Builder()
 						.withCustomerId(0)
 						.withFirstName("John")
 						.withLastName("Masiello")

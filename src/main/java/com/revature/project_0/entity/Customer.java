@@ -137,12 +137,12 @@ public class Customer {
 		long id = getCustomerId();
 		if (id == CustomerLoginModel.NO_ID)
 			return false;
-		personalInfoModel = repository.getPersonalRecord(id);
+		personalInfoModel = repository.getPersonalInformation(id);
 		return personalInfoModel != null;
 	}
 	
-	public boolean createPersonalInfo(PersonalInfoModel personalInfo) {
-		personalInfoModel = repository.createNewPersonalInformation(personalInfo);
+	public boolean createOrUpdatePersonalInfo(PersonalInfoModel personalInfo) {
+		personalInfoModel = repository.createOrUpdateNewPersonalInformation(personalInfo);
 		return personalInfo != null;
 	}
 

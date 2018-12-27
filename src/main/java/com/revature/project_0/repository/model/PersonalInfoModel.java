@@ -1,6 +1,6 @@
 package com.revature.project_0.repository.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 	private String firstName;
 	private String lastName;
 	private char middleInitial;
-	private Date dob;
+	private LocalDate dob;
 	private String ssn;
 	private String email;
 	private String phoneNumber;
@@ -27,7 +27,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		private String firstName;
 		private String lastName;
 		private char middleInitial;
-		private Date dob;
+		private LocalDate dob;
 		private String ssn;
 		private String email;
 		private String phoneNumber;
@@ -70,7 +70,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 			return this;
 		}
 
-		public Builder withDob(Date dob) {
+		public Builder withDob(LocalDate dob) {
 			this.dob = dob;
 			return this;
 		}
@@ -104,7 +104,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		}
 	}
 	
-	private PersonalInfoModel(long customerId, String firstName, String lastName, char middleInitial, Date dob,
+	private PersonalInfoModel(long customerId, String firstName, String lastName, char middleInitial, LocalDate dob,
 			String ssn, String email, String phoneNumber, String beneficiary) {
 		this.customerId = customerId;
 		this.firstName = firstName;
@@ -158,11 +158,11 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 		return true;
 	}
 
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
 
-	public boolean setDob(@NotNull Date dob) {
+	public boolean setDob(@NotNull LocalDate dob) {
 		if (dob != null) {
 			this.dob = dob;
 			return true;
@@ -258,7 +258,7 @@ public class PersonalInfoModel implements Comparable<PersonalInfoModel> {
 				.append(prettyPrintLast4SSN())
 				.append(DELIMITER).append("Email: ")
 				.append(email)
-				.append(DELIMITER).append("Phone (xxx)xxx-xxxx: ")
+				.append(DELIMITER).append("Phone: ")
 				.append(prettyPrintPhoneNumber())
 				.append(DELIMITER).append("Beneficiary: ")
 				.append(beneficiary)

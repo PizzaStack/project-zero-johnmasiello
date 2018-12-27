@@ -1,6 +1,6 @@
 package com.revature.project_0.repository.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -11,8 +11,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 	private String accountName;
 	private final long customerId;
 	private final long jointCustomerId;
-	private Date dateOpened;
-	private Date dateClosed;
+	private LocalDate dateOpened;
+	private LocalDate dateClosed;
 	private int type;
 	private int status;
 	private double balance;
@@ -29,8 +29,8 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		private String accountName;
 		private long customerId;
 		private long jointCustomerId;
-		private Date dateOpened;
-		private Date dateClosed;
+		private LocalDate dateOpened;
+		private LocalDate dateClosed;
 		private int type;
 		private int status;
 		private double balance;
@@ -72,11 +72,11 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 				this.jointCustomerId = jointCustomerId;
 			return this;
 		}
-		public Builder withDateOpened(Date dateOpened) {
+		public Builder withDateOpened(LocalDate dateOpened) {
 			this.dateOpened = dateOpened;
 			return this;
 		}
-		public Builder withDateClosed(Date dateClosed) {
+		public Builder withDateClosed(LocalDate dateClosed) {
 			this.dateClosed = dateClosed;
 			return this;
 		}
@@ -107,7 +107,7 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		}
 	}
 	
-	private AccountInfoModel(long accountId, String accountName, long customerId, long jointCustomerId, Date dateOpened, Date dateClosed,
+	private AccountInfoModel(long accountId, String accountName, long customerId, long jointCustomerId, LocalDate dateOpened, LocalDate dateClosed,
 			int type, int status, double balance, String adminId, String empId) {
 		this.accountId = accountId;
 		this.accountName = accountName;
@@ -147,22 +147,22 @@ public class AccountInfoModel implements Comparable<AccountInfoModel> {
 		return jointCustomerId;
 	}
 
-	public Date getDateOpened() {
+	public LocalDate getDateOpened() {
 		return dateOpened;
 	}
 
-	public boolean setDateOpened(Date dateOpened) {
+	public boolean setDateOpened(LocalDate dateOpened) {
 		if (dateOpened == null)
 			return false;
 		this.dateOpened = dateOpened;
 		return true;
 	}
 
-	public Date getDateClosed() {
+	public LocalDate getDateClosed() {
 		return dateClosed;
 	}
 
-	public boolean setDateClosed(Date dateClosed) {
+	public boolean setDateClosed(LocalDate dateClosed) {
 		if (dateClosed == null)
 			return false;
 		this.dateClosed = dateClosed;

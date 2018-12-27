@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.revature.project_0.repository.dao.CustomerLoginDao;
+import com.revature.project_0.repository.dao.PersonalInfoDao;
 import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 
@@ -16,6 +17,7 @@ public class Repository {
 	private CustomerLoginTable customerLoginTable;
 	private PersonalInfoTable personalInfoTable;
 	private CustomerLoginDao customerLoginDao;
+	private PersonalInfoDao personalInfoDao;
 	
 	private CustomerLoginModel loginValidationHelper;
 	
@@ -27,6 +29,7 @@ public class Repository {
 	
 	private void makeDaos() {
 		customerLoginDao = new CustomerLoginDao();
+		personalInfoDao = new PersonalInfoDao();
 	}
 	
 	private void loadTables() {
@@ -62,9 +65,8 @@ public class Repository {
 	
 	// Then you fill out personal information, before...
 	@Nullable
-	public PersonalInfoModel createNewPersonalInformation(@NotNull PersonalInfoModel personalInfoModel) {
-		return personalInfoTable.addRecord(personalInfoModel.getCustomerId(), personalInfoModel) ?
-				personalInfoModel : null;
+	public PersonalInfoModel createOrUpdateNewPersonalInformation(@NotNull PersonalInfoModel personalInfoModel) {
+		return personalInfoDao.upsert(personalInfoModel);
 	}
 	
 	// You fill out application, which waits in a pool ...
@@ -83,10 +85,6 @@ public class Repository {
 		return customerLoginDao.queryLogin(username, password);
 	}
 	
-	public PersonalInfoModel getPersonalRecord(long customerId) {
-		return personalInfoTable.selectRecord(customerId);
-	}
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Bank facing side
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,8 +97,8 @@ public class Repository {
 	}
 	
 	@Nullable
-	private PersonalInfoModel trackJointCustomerBySSN(String SSN) {
-		return personalInfoTable.fetchCustomerBySSN(SSN);
+	private PersonalInfoModel trackJointCustomerBySSN(String ssn) {
+		return personalInfoDao.queryPersonalInfoBySSN(ssn);
 	}
 
 	public boolean crossReferenceJointCustomerSSN(@NotNull ApplicationModel application) {
@@ -166,7 +164,7 @@ public class Repository {
 	}
 	
 	public Collection<PersonalInfoModel> getAllCustomersPersonalInformation() {
-		return personalInfoTable.getTable().values();
+		return personalInfoDao.queryPersonalInfoForAllCustomers();
 	}
 	
 	@Nullable
@@ -186,7 +184,7 @@ public class Repository {
 	}
 	
 	public PersonalInfoModel getPersonalInformation(long customerId) {
-		return personalInfoTable.selectRecord(customerId);
+		return personalInfoDao.queryPersonalInfoByCustomerId((int) customerId);
 	}
 	
 	@Nullable

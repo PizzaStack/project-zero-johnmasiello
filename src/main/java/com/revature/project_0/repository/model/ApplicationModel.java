@@ -54,6 +54,11 @@ public class ApplicationModel implements Comparable<ApplicationModel>{
 			return this;
 		}
 		
+		public Builder withJointCustomerSSN(String jointCustomerSSN) {
+			this.jointCustomerSSN = jointCustomerSSN;
+			return this;
+		}
+		
 		public Builder withType(int type) {
 			this.type = type;
 			return this;

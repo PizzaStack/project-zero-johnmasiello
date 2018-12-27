@@ -344,7 +344,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 		case COMPLETE_DETAILS:
 			switch (choice) {
 			case 1:
-				if (!customer.createPersonalInfo(customer.getPersonalInfoModel())) {
+				if (!customer.createOrUpdatePersonalInfo(customer.getPersonalInfoModel())) {
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);
 				} else {
 					System.out.println("Details Updated Successfully");					
