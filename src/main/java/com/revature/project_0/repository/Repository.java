@@ -14,10 +14,6 @@ import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 
 public class Repository {
-	private AccountInfoTable accountInfoTable;
-	private ApplicationTable applicationTable;
-	private CustomerLoginTable customerLoginTable;
-	private PersonalInfoTable personalInfoTable;
 	private CustomerLoginDao customerLoginDao;
 	private PersonalInfoDao personalInfoDao;
 	private ApplicationDao applicationDao;
@@ -27,7 +23,6 @@ public class Repository {
 	
 	public Repository() {
 		makeDaos();
-		loadTables();
 		loginValidationHelper = new CustomerLoginModel.Builder().build();
 	}
 	
@@ -36,13 +31,6 @@ public class Repository {
 		personalInfoDao = new PersonalInfoDao();
 		applicationDao = new ApplicationDao();
 		accountInfoDao = new AccountInfoDao();
-	}
-	
-	private void loadTables() {
-		accountInfoTable 	= new AccountInfoTable();
-		applicationTable 	= new ApplicationTable();
-		customerLoginTable 	= new CustomerLoginTable();
-		personalInfoTable	= new PersonalInfoTable();
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
