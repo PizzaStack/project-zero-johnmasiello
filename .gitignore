@@ -19,7 +19,6 @@ local.properties
 
 # Connection properties with Postgres
 connection.properties
-postgresql/
 
 # External tool builders
 .externalToolBuilders/
