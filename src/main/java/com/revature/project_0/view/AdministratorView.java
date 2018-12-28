@@ -359,7 +359,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				switch (administrator.getFundsTransactionManager()
 						.makeDeposit(
 								targetAccount, 
-								amount)) {
+								amount,
+								administrator.getEmployeeId())) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Deposit Made Successfully");
 					System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -383,7 +384,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						targetAccount.setStatus(AccountStatus.APPROVED);
 						targetAccount.setAcctApproverId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
-								.makeDeposit(targetAccount, amount)
+								.makeDeposit(targetAccount, amount,administrator.getEmployeeId())
 								== TransactionOutcome.SUCCESS) {
 							System.out.println("Deposit Made Successfully");
 							System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -419,7 +420,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				switch (administrator.getFundsTransactionManager()
 						.makeWithdrawal(
 								targetAccount, 
-								amount)) {
+								amount,
+								administrator.getEmployeeId())) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Withdrawal Made Successfully");
 					System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -447,7 +449,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						targetAccount.setStatus(AccountStatus.APPROVED);
 						targetAccount.setAcctApproverId(administrator.getEmployeeId());
 						if (administrator.getFundsTransactionManager()
-								.makeWithdrawal(targetAccount, amount)
+								.makeWithdrawal(targetAccount, amount, administrator.getEmployeeId())
 								== TransactionOutcome.SUCCESS) {
 							System.out.println("Withdrawal Made Successfully");
 							System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -497,7 +499,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 						.makeTransferOfFunds(
 								originAccount, 
 								targetAccount, 
-								amount)) {
+								amount,
+								administrator.getEmployeeId())) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Transfer Made Successfully");
 					System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -549,7 +552,8 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 								.makeTransferOfFunds(
 										originAccount, 
 										targetAccount, 
-										amount)
+										amount,
+										administrator.getEmployeeId())
 								== TransactionOutcome.SUCCESS) {
 							System.out.println("Transfer Made Successfully");
 							System.out.println(new CustomerFriendlyAccount(targetAccount));

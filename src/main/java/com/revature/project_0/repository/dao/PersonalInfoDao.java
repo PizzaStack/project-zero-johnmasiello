@@ -99,7 +99,7 @@ public class PersonalInfoDao {
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet rs = statement.executeQuery(
-					"Select * FROM personal_info");
+					"Select * FROM personal_info ORDER BY customer_id");
 			while (rs.next()) {
 				allInfos.add(loadPersonalInfo(rs));
 			}

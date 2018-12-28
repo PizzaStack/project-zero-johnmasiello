@@ -190,7 +190,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Amount Must Be > 0");
 						break;
 					}
-					switch (customer.getFundsTransactionManager().makeDeposit(targetAccount, amount)) {
+					switch (customer.getFundsTransactionManager().makeDeposit(targetAccount, amount,
+							customer.getUserName())) {
 					case TransactionOutcome.SUCCESS:
 						System.out.println("Deposit Made Successfully");
 						System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -233,7 +234,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Amount Must Be > 0");
 						break;
 					}
-					switch (customer.getFundsTransactionManager().makeWithdrawal(targetAccount, amount)) {
+					switch (customer.getFundsTransactionManager().makeWithdrawal(targetAccount, amount,
+							customer.getUserName())) {
 					case TransactionOutcome.SUCCESS:
 						System.out.println("Withdrawal Made Successfully");
 						System.out.println(new CustomerFriendlyAccount(targetAccount));
@@ -301,7 +303,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				switch (customer.getFundsTransactionManager().makeTransferOfFunds(originAccount, 
 						targetAccount, 
-						amount)) {
+						amount,
+						customer.getUserName())) {
 				case TransactionOutcome.SUCCESS:
 					System.out.println("Transfer Made Successfully");
 					System.out.println(new CustomerFriendlyAccount(targetAccount));

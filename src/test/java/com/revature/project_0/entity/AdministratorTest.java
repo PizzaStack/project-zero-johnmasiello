@@ -22,7 +22,7 @@ public class AdministratorTest {
 				.withAccountId(5)
 				.withBalance(0)
 				.withStatus(AccountStatus.APPROVED)
-				.build(), AMOUNT);
+				.build(), AMOUNT, "tester");
 		assertEquals(TransactionOutcome.SUCCESS, result);
 	}
 //	@Test
@@ -33,7 +33,7 @@ public class AdministratorTest {
 		AccountInfoModel account = repository.getAccountInfo(5);
 		assertNotNull(account);
 		FundsTransactionManager ft = administrator.getFundsTransactionManager();
-		int result = ft.makeWithdrawal(account, AMOUNT);
+		int result = ft.makeWithdrawal(account, AMOUNT, "tester");
 		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, result);
 		assertTrue(500.00 == account.getBalance());
 	}
@@ -45,7 +45,7 @@ public class AdministratorTest {
 		AccountInfoModel account = repository.getAccountInfo(5);
 		assertNotNull(account);
 		FundsTransactionManager ft = administrator.getFundsTransactionManager();
-		int result = ft.makeWithdrawal(account, AMOUNT);
+		int result = ft.makeWithdrawal(account, AMOUNT, "tester");
 		assertEquals(TransactionOutcome.SUCCESS, result);
 	}
 //	@Test
@@ -62,7 +62,7 @@ public class AdministratorTest {
 		administrator.approveAccount(to.getAccountId());
 		assertEquals(AccountStatus.APPROVED, to.getStatus());
 		FundsTransactionManager ft = administrator.getFundsTransactionManager();
-		int result = ft.makeTransferOfFunds(to, from, AMOUNT);
+		int result = ft.makeTransferOfFunds(to, from, AMOUNT, "tester");
 		assertEquals(TransactionOutcome.SUCCESS, result);
 	}
 	@After

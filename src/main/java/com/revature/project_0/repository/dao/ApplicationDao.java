@@ -72,7 +72,7 @@ public class ApplicationDao {
 		List<ApplicationModel> list = new ArrayList<>();
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (PreparedStatement statement = connection.prepareStatement(
-				"SELECT * FROM application WHERE customer_id = ?")) {
+				"SELECT * FROM application ORDER BY id WHERE customer_id = ?")) {
 			statement.setInt(1, id);
 			statement.execute();
 			ResultSet rs = statement.getResultSet();
@@ -93,7 +93,7 @@ public class ApplicationDao {
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet rs = statement.executeQuery(
-					"Select * FROM application");
+					"Select * FROM application ORDER BY id");
 			while (rs.next()) {
 				allInfos.add(loadApplication(rs));
 			}

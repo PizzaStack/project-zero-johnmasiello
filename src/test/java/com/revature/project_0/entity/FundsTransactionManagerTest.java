@@ -22,7 +22,8 @@ public class FundsTransactionManagerTest {
 				.withStatus(AccountStatus.APPROVED)
 				.withBalance(500.00)
 				.build();
-		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager.makeWithdrawal(account, 270));
+		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager
+				.makeWithdrawal(account, 270, "tester"));
 	}
 	@Test
 	public void makeWithdrawalOnReadyAccountWithInsufficientFunds() {
@@ -30,7 +31,8 @@ public class FundsTransactionManagerTest {
 				.withStatus(AccountStatus.APPROVED)
 				.withBalance(500.00)
 				.build();
-		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, fundsTransactionManager.makeWithdrawal(account, 750));
+		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, fundsTransactionManager
+				.makeWithdrawal(account, 750, "tester"));
 	}
 	@Test
 	public void makeWithdrawalFromFrozenAccount() {
@@ -38,7 +40,8 @@ public class FundsTransactionManagerTest {
 				.withStatus(AccountStatus.DENIED)
 				.withBalance(500.00)
 				.build();
-		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager.makeWithdrawal(account, 100));
+		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager
+				.makeWithdrawal(account, 100, "tester"));
 	}
 	@Test
 	public void testMakeDeposits() {
@@ -46,9 +49,11 @@ public class FundsTransactionManagerTest {
 				.withStatus(AccountStatus.DENIED)
 				.withBalance(500.00)
 				.build();
-		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager.makeDeposit(account, 100));
+		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager
+				.makeDeposit(account, 100, "tester"));
 		account.setStatus(AccountStatus.APPROVED);
-		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager.makeDeposit(account, 1000000));
+		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager
+				.makeDeposit(account, 1000000, "tester"));
 	}
 	@Test
 	public void testMakeTransfers() {
@@ -58,12 +63,16 @@ public class FundsTransactionManagerTest {
 		from.setStatus(AccountStatus.APPROVED);
 		to.setStatus(AccountStatus.APPROVED);
 		from.setBalance(amount);
-		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager.makeTransferOfFunds(from, to, amount));
+		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager
+				.makeTransferOfFunds(from, to, amount, "tester"));
 		assertTrue(0 == from.getBalance() && 1 == to.getBalance());
-		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, fundsTransactionManager.makeTransferOfFunds(from, to, amount));
+		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, fundsTransactionManager
+				.makeTransferOfFunds(from, to, amount, "tester"));
 		to.setStatus(AccountStatus.CLOSED);
-		assertEquals(TransactionOutcome.RECIPIENT_ACCOUNT_FROZEN, fundsTransactionManager.makeTransferOfFunds(from, to, amount));
+		assertEquals(TransactionOutcome.RECIPIENT_ACCOUNT_FROZEN, fundsTransactionManager
+				.makeTransferOfFunds(from, to, amount, "tester"));
 		from.setStatus(AccountStatus.CLOSED);
-		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager.makeTransferOfFunds(from, to, amount));
+		assertEquals(TransactionOutcome.ACCOUNT_FROZEN, fundsTransactionManager
+				.makeTransferOfFunds(from, to, amount, "tester"));
 	}
 }

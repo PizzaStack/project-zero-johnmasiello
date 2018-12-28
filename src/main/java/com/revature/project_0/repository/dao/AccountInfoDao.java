@@ -167,7 +167,7 @@ public class AccountInfoDao {
 		List<AccountInfoModel> accounts = new ArrayList<>();
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (PreparedStatement statement = connection.prepareStatement(
-				"SELECT * FROM account_info WHERE customer_id = ?")) {
+				"SELECT * FROM account_info ORDER BY id WHERE customer_id = ?")) {
 			statement.setInt(1,  customer_id);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next())
@@ -185,7 +185,7 @@ public class AccountInfoDao {
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet rs = statement.executeQuery(
-					"SELECT * FROM account_info");
+					"SELECT * FROM account_info ORDER BY id");
 			while (rs.next())
 				accounts.add(loadAccount(rs));
 		} catch (SQLException e) {
