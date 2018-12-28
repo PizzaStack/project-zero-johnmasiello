@@ -43,6 +43,8 @@ public class CustomerLoginDao {
 		catch (SQLException e){
 			System.out.println(e.getMessage());
 			ConnectionHelper.getinstance().closeConnection();
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
 	}
@@ -68,6 +70,8 @@ public class CustomerLoginDao {
 		catch (SQLException e){
 			System.out.println(e.getMessage());
 			ConnectionHelper.getinstance().closeConnection();
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
 	}
@@ -83,6 +87,8 @@ public class CustomerLoginDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
+			ConnectionHelper.getinstance().closeConnection();
+		} finally {
 			ConnectionHelper.getinstance().closeConnection();
 		}
 		return false;

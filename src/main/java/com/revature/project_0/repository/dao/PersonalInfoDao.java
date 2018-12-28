@@ -51,6 +51,7 @@ public class PersonalInfoDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
+		} finally {
 			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
@@ -69,6 +70,7 @@ public class PersonalInfoDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
+		} finally {
 			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
@@ -86,6 +88,7 @@ public class PersonalInfoDao {
 			return null;
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
+		} finally {
 			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
@@ -102,8 +105,9 @@ public class PersonalInfoDao {
 			}
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
-			ConnectionHelper.getinstance().closeConnection();
 			allInfos.clear();
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return allInfos;
 	}

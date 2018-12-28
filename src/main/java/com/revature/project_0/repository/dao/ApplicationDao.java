@@ -30,6 +30,8 @@ public class ApplicationDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
 	}
@@ -42,6 +44,8 @@ public class ApplicationDao {
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return false;
 	}
@@ -58,6 +62,8 @@ public class ApplicationDao {
 		}
 		catch (SQLException e){
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
 	}
@@ -76,6 +82,8 @@ public class ApplicationDao {
 		catch (SQLException e){
 			System.out.println(e.getMessage());
 			list.clear();
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return list;
 	}
@@ -92,6 +100,8 @@ public class ApplicationDao {
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
 			allInfos.clear();
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return allInfos;
 	}

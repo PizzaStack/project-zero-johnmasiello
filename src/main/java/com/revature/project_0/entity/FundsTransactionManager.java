@@ -16,19 +16,27 @@ public class FundsTransactionManager {
 		else if (byAmt > account.getBalance())
 			return TransactionOutcome.INSUFFICIENT_FUNDS;
 		else {
-			account.setBalance(account.getBalance() - byAmt);
-			return TransactionOutcome.SUCCESS;
+			double newAmount = account.getBalance() - byAmt;
+			if (repository.updateBalanceOnDepositOrWithdrawal((int) account.getAccountId(), 
+					newAmount)) {
+				account.setBalance(newAmount);
+				return TransactionOutcome.SUCCESS;				
+			}
+			return TransactionOutcome.ACCOUNT_FROZEN;
 		}
-		// TODO push changes to Repository; It currently updates the model, But the data will have to be pushed from the DAO to remote
 	}
 	
 	public int makeDeposit(AccountInfoModel account, double byAmt) {
 		if (!account.isAccountReadyForTransactions())
 			return TransactionOutcome.ACCOUNT_FROZEN;
 		
-		account.setBalance(account.getBalance() + byAmt);
-		return TransactionOutcome.SUCCESS;
-		// TODO push changes to Repository; It currently updates the model, But the data will have to be pushed from the DAO to remote
+		double newAmount = account.getBalance() + byAmt;
+		if (repository.updateBalanceOnDepositOrWithdrawal((int) account.getAccountId(), 
+				newAmount)) {
+			account.setBalance(newAmount);
+			return TransactionOutcome.SUCCESS;				
+		}
+		return TransactionOutcome.ACCOUNT_FROZEN;
 	}
 	
 	public int makeTransferOfFunds(AccountInfoModel from,
@@ -41,10 +49,17 @@ public class FundsTransactionManager {
 		else if (byAmt > from.getBalance())
 			return TransactionOutcome.INSUFFICIENT_FUNDS;
 		else {
-			from.setBalance(from.getBalance() - byAmt);
-			to.setBalance(to.getBalance() + byAmt);
-			return TransactionOutcome.SUCCESS;
+			double fromAmount = from.getBalance() - byAmt; 
+			double toAmount = to.getBalance() + byAmt;
+			if (repository.updateBalancesOnTransfer((int)from.getAccountId(), 
+					fromAmount, 
+					(int)to.getAccountId(), 
+					toAmount)) {
+				from.setBalance(fromAmount);
+				to.setBalance(toAmount);
+				return TransactionOutcome.SUCCESS;
+			}
+			return TransactionOutcome.ACCOUNT_FROZEN;
 		}
-		// TODO push changes to Repository; It currently updates the model, But the data will have to be pushed from the DAO to remote
 	}
 }

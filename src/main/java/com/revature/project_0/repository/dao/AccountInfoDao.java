@@ -90,8 +90,61 @@ public class AccountInfoDao {
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return false;
+	}
+	
+	public boolean updateBalance(int accountId, double newBalance) {
+		Connection connection = ConnectionHelper.getinstance().getConnection();
+		try (PreparedStatement statement = connection.prepareStatement(
+				"UPDATE account_info SET balance = ? WHERE account_info.id = ?")) {
+			statement.setDouble(1, newBalance);
+			statement.setInt(2, accountId);
+			return statement.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
+		}
+		return false;
+	}
+	
+	public boolean updateMultipleBalancesInSingleTransaction(int accountId_1, double newBalance_1,
+			int accountId_2, double newBalance_2) {
+		boolean result = false;
+		ConnectionHelper connectionHelper = ConnectionHelper.getinstance(); 
+		PreparedStatement p1 = null;
+		PreparedStatement p2 = null;
+		final String SQL_UPDATE = "UPDATE account_info SET balance = ? WHERE id = ?;"; 
+		
+		try (Connection connection = connectionHelper.getConnection()) {
+			connection.setAutoCommit(false);
+			p1 = connection.prepareStatement(SQL_UPDATE);
+			p1.setDouble(1, newBalance_1);
+			p1.setInt(2, accountId_1);
+			if (p1.executeUpdate() > 0) {
+				p2 = connection.prepareStatement(SQL_UPDATE);
+				p2.setDouble(1, newBalance_2);
+				p2.setInt(2, accountId_2);
+				if (p2.executeUpdate() > 0) {
+					result = true;
+				} else {
+					connection.rollback();
+				}
+			} else {
+				connection.rollback();
+			}
+			connection.commit();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			connectionHelper.closeThing(p2);
+			connectionHelper.closeThing(p1);
+		}
+		return result;
 	}
 	
 	public AccountInfoModel queryAccountInfoById(int id) {
@@ -104,6 +157,8 @@ public class AccountInfoDao {
 			return loadAccount(rs);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return null;
 	}
@@ -119,6 +174,8 @@ public class AccountInfoDao {
 				accounts.add(loadAccount(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return accounts;
 	}
@@ -133,6 +190,8 @@ public class AccountInfoDao {
 				accounts.add(loadAccount(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return accounts;
 	}
@@ -145,6 +204,8 @@ public class AccountInfoDao {
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			ConnectionHelper.getinstance().closeConnection();
 		}
 		return false;
 	}

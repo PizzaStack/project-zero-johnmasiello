@@ -180,6 +180,19 @@ public class Repository {
 		return accountInfoDao.queryAccountInfoById((int) accountId);
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Transactions
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	public boolean updateBalanceOnDepositOrWithdrawal(int accountId, double newBalance) {
+		return accountInfoDao.updateBalance(accountId, newBalance);
+	}
+	
+	public boolean updateBalancesOnTransfer(int accountId_1, double newBalance_1,
+			int accountId_2, double newBalance_2) {
+		return accountInfoDao.updateMultipleBalancesInSingleTransaction(accountId_1, newBalance_1, 
+				accountId_2, newBalance_2);
+	}
+	
 	AccountInfoTable getAccountInfoTable() {
 		return accountInfoTable;
 	}
