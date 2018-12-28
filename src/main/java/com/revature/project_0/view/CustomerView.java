@@ -4,7 +4,6 @@ import com.revature.project_0.entity.Customer;
 import com.revature.project_0.entity.TransactionOutcome;
 import com.revature.project_0.io.Validating;
 
-import java.util.List;
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
@@ -135,7 +134,7 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				if (!customer.fetchAccounts(customer.getCustomerId()))
 					System.out.println("No Accounts On Record");
 				else {
-					customer.viewAllAccounts();
+					System.out.println(customer.viewAllAccounts());
 					view = TRANSACTION;
 				}
 				break;
@@ -161,7 +160,6 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			
 		case TRANSACTION:
 			AccountInfoModel targetAccount;
-			List<AccountInfoModel> accounts = customer.getAccounts();
 			String enumeratedAccounts = customer.viewAllAcountsAsEnumerated();
 			int pickAccount;
 			double amount;
@@ -169,7 +167,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 			switch (choice) {
 			case 1:
 				System.out.println(enumeratedAccounts);
-				System.out.print("Select Account for Deposit: ");
+				System.out.println();
+				System.out.print("Enter Account ID for Deposit: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
@@ -177,9 +176,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				pickAccount = scanner.nextInt();
 				purgeLine(scanner);
-				if (pickAccount > 0 && pickAccount <= accounts.size()) {
-					targetAccount = accounts.get(pickAccount - 1);
-					
+				targetAccount = customer.pickAccountByAccountId(pickAccount);
+				if (targetAccount != null) {					
 					System.out.print("Enter Amount for Deposit: $");
 					if (!scanner.hasNextDouble()) {
 						purgeLine(scanner);
@@ -201,7 +199,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Deposit Unsuccessful");
 						System.out.println("Reason: The Account With Id " 
 								+ targetAccount.getAccountId()
-								+ " Is Not Currently Active");
+								+ " is not currently active");
+						System.out.println("Please call our service line, available 24/7");
 						break;
 					}
 					
@@ -211,7 +210,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				break;
 			case 2:
 				System.out.println(enumeratedAccounts);
-				System.out.print("Select Account for Withdrawal: ");
+				System.out.println();
+				System.out.print("Enter Account ID for Withdrawal: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
@@ -219,9 +219,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				pickAccount = scanner.nextInt();
 				purgeLine(scanner);
-				if (pickAccount > 0 && pickAccount <= accounts.size()) {
-					targetAccount = accounts.get(pickAccount - 1);
-					
+				targetAccount = customer.pickAccountByAccountId(pickAccount);
+				if (targetAccount != null) {					
 					System.out.print("Enter Amount for Withdrawal: $");
 					if (!scanner.hasNextDouble()) {
 						purgeLine(scanner);
@@ -243,7 +242,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 						System.out.println("Withdrawal Unsuccessful");
 						System.out.println("Reason: The Account With Id " 
 								+ targetAccount.getAccountId()
-								+ " Is Not Currently Active");
+								+ " is not currently active");
+						System.out.println("Please call our service line, available 24/7");
 						break;
 					case TransactionOutcome.INSUFFICIENT_FUNDS:
 						System.out.println("Withdrawal Unsuccessful");
@@ -257,7 +257,8 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				break;
 			case 3:
 				System.out.println(enumeratedAccounts);
-				System.out.print("Transfer Funds Into Account: ");
+				System.out.println();
+				System.out.print("Transfer Funds Into Account with ID: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
@@ -265,23 +266,27 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 				}
 				pickAccount = scanner.nextInt();
 				purgeLine(scanner);
-				if (pickAccount <= 0 || pickAccount > accounts.size()) {
+				targetAccount = customer.pickAccountByAccountId(pickAccount);
+				if (targetAccount == null) {
 					System.out.println("No Account Selected");
+					break;
 				}
-				targetAccount = accounts.get(pickAccount - 1);
-				System.out.print("From Account: ");
+				System.out.print("From Account with ID: ");
 				if (!scanner.hasNextInt()) {
 					purgeLine(scanner);
 					System.out.println("No Account Selected");
 					break;
 				}
-				int pickAccount2 = scanner.nextInt();
+				pickAccount = scanner.nextInt();
 				purgeLine(scanner);
-				if (pickAccount2 <= 0 || pickAccount2 > accounts.size()) {
+				AccountInfoModel originAccount = customer.pickAccountByAccountId(pickAccount);
+				if (originAccount == null) {
 					System.out.println("No Account Selected");
-				} else if (pickAccount2 == pickAccount)
+					break;
+				} else if (originAccount == targetAccount) {
 					System.out.println("Cannot Pick The Same Account");
-				AccountInfoModel originAccount = accounts.get(pickAccount2 - 1);
+					break;
+				}
 				System.out.print("Enter Transfer Amount: $");
 				if (!scanner.hasNextDouble()) {
 					purgeLine(scanner);
@@ -306,13 +311,15 @@ public class CustomerView extends InputtingContextMenuView implements Operationa
 					System.out.println("Transfer Not Made");
 					System.out.println("Reason: The Account With Id " 
 							+ originAccount.getAccountId()
-							+ " Is Not Currently Active");
+							+ " is not currently active");
+					System.out.println("Please call our service line, available 24/7");
 					break;
 				case TransactionOutcome.RECIPIENT_ACCOUNT_FROZEN:
 					System.out.println("Transfer Not Made");
 					System.out.println("Reason: The Account With Id " 
 							+ targetAccount.getAccountId()
-							+ " Is Not Currently Active");
+							+ " is not currently active");
+					System.out.println("Please call our service line, available 24/7");
 					break;
 				case TransactionOutcome.INSUFFICIENT_FUNDS:
 					System.out.println("Transfer Not Made");

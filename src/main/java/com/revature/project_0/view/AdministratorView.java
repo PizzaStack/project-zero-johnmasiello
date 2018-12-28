@@ -459,7 +459,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				} 
 				break;
 			case 3:
-				targetId = promptIdFromUser("Transfer Funds Into Account with Id: ", 
+				targetId = promptIdFromUser("Transfer Funds Into Account with ID: ", 
 						"\nA Valid Account Id Was Not Entered");
 				if (targetId == null)
 					break;
@@ -468,7 +468,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 					System.out.println("No Account Selected");
 					break;
 				}
-				originId = promptIdFromUser("From Account: ", 
+				originId = promptIdFromUser("From Account with ID: ", 
 						"\nA Valid Account Id Was Not Entered");
 				if (originId == null)
 					break;

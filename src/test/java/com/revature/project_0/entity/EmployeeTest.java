@@ -36,7 +36,7 @@ public class EmployeeTest {
 	}
 //	@Test
 	public void testApproveAccount() {
-		assertTrue(new AccountInfoDao().updateOnAccountApproved(5, 
+		assertTrue(new AccountInfoDao().updateOnAccountApprovedOrDenied(5, 
 				AccountStatus.APPROVED, 
 				"TESTER"));
 		assertEquals(AccountStatus.APPROVED, new AccountInfoDao().queryAccountInfoById(5).getStatus());

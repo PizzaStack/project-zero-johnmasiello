@@ -3,6 +3,8 @@ package com.revature.project_0.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.ApplicationModel;
@@ -82,8 +84,13 @@ public class Customer {
 		return !cachedAccounts.isEmpty();
 	}
 	
-	public List<AccountInfoModel> getAccounts() {
-		return cachedAccounts;
+	@Nullable
+	public AccountInfoModel pickAccountByAccountId(long id) {
+		for (AccountInfoModel a : cachedAccounts) {
+			if (a.getAccountId() == id)
+				return a;
+		}
+		return null;
 	}
 	
 	public FundsTransactionManager getFundsTransactionManager() {
@@ -107,7 +114,7 @@ public class Customer {
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < cachedAccounts.size(); i++) {
 			if (i == 0)
-				str.append(i + 1).append(Util.PRINT_COLUMN_DELIMITER)
+				str.append(i + 1).append(')').append(Util.PRINT_COLUMN_DELIMITER)
 				.append(new CustomerFriendlyAccount(cachedAccounts.get(0)));
 			else
 				str.append(Util.PRINT_ROW_DELIMITER).append(cachedAccounts.get(i));

@@ -126,7 +126,9 @@ public class Repository {
 	public AccountInfoModel approveAccount(long accountId, @NotNull String approveId) {
 		AccountInfoModel account = getAccountInfo(accountId);
 		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
-			accountInfoDao.updateOnAccountApproved((int) accountId, AccountStatus.APPROVED, approveId);
+			accountInfoDao.updateOnAccountApprovedOrDenied((int) accountId, AccountStatus.APPROVED, approveId);
+			account.setStatus(AccountStatus.APPROVED);
+			account.setAcctApproverId(approveId);
 		}
 		return account;
 	}
@@ -135,7 +137,9 @@ public class Repository {
 	public AccountInfoModel denyAccount(long accountId, @NotNull String approveId) {
 		AccountInfoModel account = getAccountInfo(accountId);
 		if (account != null && account.getStatus() != AccountStatus.CLOSED) {
-			accountInfoDao.updateOnAccountApproved((int) accountId, AccountStatus.DENIED, approveId);
+			accountInfoDao.updateOnAccountApprovedOrDenied((int) accountId, AccountStatus.DENIED, approveId);
+			account.setStatus(AccountStatus.DENIED);
+			account.setAcctApproverId(approveId);
 		}
 		return account;
 	}

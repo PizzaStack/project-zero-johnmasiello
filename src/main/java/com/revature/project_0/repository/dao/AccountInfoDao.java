@@ -80,7 +80,7 @@ public class AccountInfoDao {
 		return newAccount;
 	}
 	
-	public boolean updateOnAccountApproved(int accountId, int status, String approveId) {
+	public boolean updateOnAccountApprovedOrDenied(int accountId, int status, String approveId) {
 		Connection connection = ConnectionHelper.getinstance().getConnection();
 		try (PreparedStatement statement = connection.prepareStatement(
 				"UPDATE account_info SET status = ?, approved_acct_id = ? WHERE account_info.id = ?")) {
