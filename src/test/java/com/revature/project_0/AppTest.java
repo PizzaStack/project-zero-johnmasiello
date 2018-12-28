@@ -3,7 +3,7 @@ package com.revature.project_0;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import com.revature.project_0.repository.Repository;
+import com.revature.project_0.repository.MockRepository;
 import com.revature.project_0.view.ConsoleView;
 
 import org.junit.Before;
@@ -235,7 +235,7 @@ public class AppTest
 	public void testAppWithConsole() {
 		Scanner scanner = new Scanner(consoleInput);
 		try {
-			new ConsoleView(new Repository(), scanner).goLive(); 
+			new ConsoleView(new MockRepository(), scanner).goLive(); 
 		} catch (NoSuchElementException e) {
 			System.out.println();
 			System.out.println("...Exiting Banking App, status 0");

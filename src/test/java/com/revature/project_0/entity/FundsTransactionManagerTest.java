@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revature.project_0.repository.MockRepository;
+import com.revature.project_0.repository.BasicMockRepository;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.AccountStatus;
 
@@ -14,7 +14,7 @@ public class FundsTransactionManagerTest {
 	private FundsTransactionManager fundsTransactionManager;
 	@Before
 	public void init() {
-		fundsTransactionManager = new FundsTransactionManager(new MockRepository());
+		fundsTransactionManager = new FundsTransactionManager(new BasicMockRepository());
 	}
 	@Test
 	public void makeWithdrawalOnReadyAccountWithEnoughFunds() {

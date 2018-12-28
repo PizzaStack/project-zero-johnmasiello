@@ -192,20 +192,4 @@ public class Repository {
 		return accountInfoDao.updateMultipleBalancesInSingleTransaction(accountId_1, newBalance_1, 
 				accountId_2, newBalance_2);
 	}
-	
-	AccountInfoTable getAccountInfoTable() {
-		return accountInfoTable;
-	}
-
-	ApplicationTable getApplicationTable() {
-		return applicationTable;
-	}
-
-	CustomerLoginTable getCustomerLoginTable() {
-		return customerLoginTable;
-	}
-
-	PersonalInfoTable getPersonalInfoTable() {
-		return personalInfoTable;
-	}
 }

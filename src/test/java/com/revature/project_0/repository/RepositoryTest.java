@@ -5,22 +5,21 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revature.project_0.entity.TransactionOutcome;
 import com.revature.project_0.repository.model.*;
 import com.revature.project_0.util.Util;
 
 public class RepositoryTest {
-	private Repository repository;
+	private MockRepository repository;
 	private static final String EMP_ID = "EMP_ID_01";
 	private static final String ADMIN_ID = "ADMIN";
 	
 	@Before
 	public void init() {
-		repository = new Repository();
+		repository = new MockRepository();
 	}
 	@Test
 	public void createRepository() {
-		Repository repository = new Repository();
+		Repository repository = new MockRepository();
 	}
 	@Test
 	public void nullUsernameIsNeitherValidNorUnique() {
