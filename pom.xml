@@ -17,6 +17,11 @@
   
   <build>
 	  <plugins>
+	  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <!-- inherits config from parent: can override if required -->
+        </plugin>
 	  	<plugin>
 		  	<!-- Build an executable JAR -->
 	      <groupId>org.apache.maven.plugins</groupId>
@@ -25,8 +30,8 @@
 	      <configuration>
 	        <archive>
 	          <manifest>
-	            <addClasspath>false</addClasspath>
-	            <classpathPrefix></classpathPrefix>
+	            <addClasspath>true</addClasspath>
+	            <classpathPrefix>src/</classpathPrefix>
 	            <mainClass>com.revature.project_0.App</mainClass>
 	          </manifest>
 	        </archive>
@@ -50,7 +55,7 @@
     <dependency>
     	<groupId>log4j</groupId>
     	<artifactId>log4j</artifactId>
-    	<version>1.2.12</version>
+    	<version>1.2.17</version>
     </dependency>
     <dependency>
     	<groupId>org.postgresql</groupId>
