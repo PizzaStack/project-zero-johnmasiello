@@ -5,7 +5,6 @@
   <groupId>com.revature</groupId>
   <artifactId>project-0</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
 
   <name>project-0</name>
   <url>http://maven.apache.org</url>
@@ -15,6 +14,26 @@
    <maven.compiler.source>1.8</maven.compiler.source>
    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+  
+  <build>
+	  <plugins>
+	  	<plugin>
+		  	<!-- Build an executable JAR -->
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-jar-plugin</artifactId>
+	      <version>3.1.1</version>
+	      <configuration>
+	        <archive>
+	          <manifest>
+	            <addClasspath>false</addClasspath>
+	            <classpathPrefix></classpathPrefix>
+	            <mainClass>com.revature.project_0.App</mainClass>
+	          </manifest>
+	        </archive>
+	      </configuration>
+  		</plugin>
+	  </plugins>
+  </build>
 
   <dependencies>
     <dependency>
