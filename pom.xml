@@ -17,11 +17,6 @@
   
   <build>
 	  <plugins>
-	  <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <!-- inherits config from parent: can override if required -->
-        </plugin>
 	  	<plugin>
 		  	<!-- Build an executable JAR -->
 	      <groupId>org.apache.maven.plugins</groupId>
@@ -30,8 +25,8 @@
 	      <configuration>
 	        <archive>
 	          <manifest>
-	            <addClasspath>true</addClasspath>
-	            <classpathPrefix>src/</classpathPrefix>
+	            <addClasspath>false</addClasspath>
+	            <classpathPrefix></classpathPrefix>
 	            <mainClass>com.revature.project_0.App</mainClass>
 	          </manifest>
 	        </archive>
@@ -61,6 +56,11 @@
     	<groupId>org.postgresql</groupId>
     	<artifactId>postgresql</artifactId>
     	<version>42.2.5</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.maven.plugins</groupId>
+    	<artifactId>maven-shade-plugin</artifactId>
+    	<version>2.3</version>
     </dependency>
   </dependencies>
 </project>
