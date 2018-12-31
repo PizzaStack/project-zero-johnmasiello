@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import com.revature.project_0.entity.Administrator;
 import com.revature.project_0.entity.TransactionOutcome;
 import com.revature.project_0.repository.Repository;
-import com.revature.project_0.repository.TableOutcome;
+import com.revature.project_0.repository.RepoOutcome;
 import com.revature.project_0.repository.model.AccountInfoModel;
 import com.revature.project_0.repository.model.AccountStatus;
 import com.revature.project_0.repository.model.CustomerFriendlyAccount;
@@ -209,18 +209,18 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				administrator.approveApplication(id, 
 						administrator.getEmployeeId());
 				switch (administrator.getErrorCode()) {
-				case TableOutcome.OK:
+				case RepoOutcome.OK:
 					System.out.println("Success, New Account Created: ");
 					System.out.println(administrator.getNewAccount());
 					break;
-				case TableOutcome.JOINT_CUSTOMER_NOT_FOUND:
+				case RepoOutcome.JOINT_CUSTOMER_NOT_FOUND:
 					System.out.println("Unable to Create Joint Account");
 					System.out.println("Reason: Joint Customer Not Found");
 					break;
-				case TableOutcome.NO_SUCH_RECORD:
+				case RepoOutcome.NO_SUCH_RECORD:
 					System.out.println("No such Application with id = " + id);
 					break;
-				case TableOutcome.FAIL_TO_UPDATE:
+				case RepoOutcome.FAIL_TO_UPDATE:
 					System.out.println("System Error");
 					break;
 				}
@@ -235,7 +235,7 @@ public class AdministratorView extends InputtingContextMenuView implements Opera
 				if (result) {
 					System.out.println("Success, Application Denied");
 				}
-				else if (administrator.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (administrator.getErrorCode() == RepoOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);

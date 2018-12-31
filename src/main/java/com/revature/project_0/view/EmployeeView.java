@@ -3,7 +3,7 @@ package com.revature.project_0.view;
 import com.revature.project_0.entity.Employee;
 import java.util.Scanner;
 import com.revature.project_0.repository.Repository;
-import com.revature.project_0.repository.TableOutcome;
+import com.revature.project_0.repository.RepoOutcome;
 
 public class EmployeeView extends InputtingContextMenuView implements Operational {
 	private Employee employee;
@@ -155,7 +155,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 					System.out.println("Success, New Account Created: ");
 					System.out.println(employee.getNewAccount());
 				}
-				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (employee.getErrorCode() == RepoOutcome.NO_SUCH_RECORD)
 					System.out.println("No such Application with id = " + id);
 				else
 					System.out.println("System Error");
@@ -174,7 +174,7 @@ public class EmployeeView extends InputtingContextMenuView implements Operationa
 				if (result) {
 					System.out.println("Success, Application Denied");
 				}
-				else if (employee.getErrorCode() == TableOutcome.NO_SUCH_RECORD)
+				else if (employee.getErrorCode() == RepoOutcome.NO_SUCH_RECORD)
 					System.out.println("\nNo such Application with id = " + id);
 				else
 					System.out.println(Operational.VISIBLE_SYSTEMS_ERROR);

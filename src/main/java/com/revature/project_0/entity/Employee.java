@@ -1,6 +1,6 @@
 package com.revature.project_0.entity;
 
-import static com.revature.project_0.repository.TableOutcome.*;
+import static com.revature.project_0.repository.RepoOutcome.*;
 
 import com.revature.project_0.repository.Repository;
 import com.revature.project_0.repository.model.AccountInfoModel;
