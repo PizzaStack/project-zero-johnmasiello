@@ -1,6 +1,7 @@
 package com.revature.project_0.repository.model;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class AccountInfoModelTest {
 		AccountInfoModel model = AccountInfoModel.getBuilder()
 				.withBalance(5.00)
 				.build();
-		assertTrue(5.00 == model.getBalance());
+		assertThat(5.00, comparesEqualTo(model.getBalance()));
 	}
 	
 	@Test
@@ -46,7 +47,7 @@ public class AccountInfoModelTest {
 				.build();
 		AccountInfoModel m2 = AccountInfoModel.getBuilder()
 				.build();
-		assertTrue(0 == m2.getBalance());
+		assertThat(0d, comparesEqualTo(m2.getBalance()));
 	}
 	
 	@Test
@@ -99,7 +100,7 @@ public class AccountInfoModelTest {
 				.withAccountId(1)
 				.build();
 		
-		assertTrue(0 > p1.compareTo(p2));
+		assertThat(0, greaterThan(p1.compareTo(p2)));
 	}
 	@Test
 	public void outOfBoxModelEqualsOutOfBoxModel() {

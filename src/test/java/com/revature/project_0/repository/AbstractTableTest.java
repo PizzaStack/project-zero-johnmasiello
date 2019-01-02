@@ -47,4 +47,13 @@ public class AbstractTableTest {
 	public void selectMissingKeyReturnsNull() {
 		assertEquals(null, table.selectRecord(1));
 	}
+	
+	@Test
+	public void testGenerateKey() {
+		Long firstKey = (Long) table.generateNextPrimaryKey();
+		assertEquals(null, firstKey);
+		assertTrue(table.addRecord(1, "Apple"));
+		Long nextKey = (Long) table.generateNextPrimaryKey();
+		assertEquals(null, nextKey);
+	}
 }

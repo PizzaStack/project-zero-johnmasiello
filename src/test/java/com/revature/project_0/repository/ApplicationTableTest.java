@@ -2,6 +2,7 @@ package com.revature.project_0.repository;
 
 import static org.junit.Assert.*;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,5 +51,11 @@ public class ApplicationTableTest {
 		
 		System.out.println("Application id: " +
 				applicationTable.getAllAssociatedApplications(10l).get(0).prettyPrintApplicationId());
+	}
+	@Test
+	public void testNextKey() {
+		applicationTable.generateNextPrimaryKey();
+		assertTrue(applicationTable.addRecord(applicationInfos[0].getApplicationId(), applicationInfos[0]));
+		assertThat(1l, Matchers.comparesEqualTo(applicationTable.generateNextPrimaryKey()));
 	}
 }

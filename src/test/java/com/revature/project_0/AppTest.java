@@ -13,11 +13,6 @@ public class AppTest
 {
 	private String consoleInput;
 	
-	@Before
-	public void initScannerResource() {
-		consoleInput = testTwoCustomerJointAccountSucceeds();
-	}
-	
 	private String testOneAccount() {
 		String loginUser = 
 				"1\n"
@@ -232,7 +227,32 @@ public class AppTest
 	}
 	
 	@Test 
-	public void testAppWithConsole() {
+	public void testAppWithConsole_suite1() {
+		consoleInput = testOneAccount();
+		Scanner scanner = new Scanner(consoleInput);
+		try {
+			new ConsoleView(new MockRepository(), scanner).goLive(); 
+		} catch (NoSuchElementException e) {
+			System.out.println();
+			System.out.println("...Exiting Banking App, status 0");
+		}
+		scanner.close();
+	}
+	@Test 
+	public void testAppWithConsole_suite2() {
+		consoleInput = testOneCustomerJointAccountFails();
+		Scanner scanner = new Scanner(consoleInput);
+		try {
+			new ConsoleView(new MockRepository(), scanner).goLive(); 
+		} catch (NoSuchElementException e) {
+			System.out.println();
+			System.out.println("...Exiting Banking App, status 0");
+		}
+		scanner.close();
+	}
+	@Test 
+	public void testAppWithConsole_suite3() {
+		consoleInput = testTwoCustomerJointAccountSucceeds();
 		Scanner scanner = new Scanner(consoleInput);
 		try {
 			new ConsoleView(new MockRepository(), scanner).goLive(); 

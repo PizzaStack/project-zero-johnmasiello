@@ -97,13 +97,6 @@ public class Customer {
 		return fundsTransactionManager;
 	}
 	
-	public String viewAllAccounts(long customerId) {
-		List<AccountInfoModel> accounts = repository.getAllAssociatedAccounts(customerId);
-		List<CustomerFriendlyAccount> wrappedAccounts = new ArrayList<>();
-		accounts.forEach(($) -> {wrappedAccounts.add(new CustomerFriendlyAccount($));});
-		return Util.printAllRecords(wrappedAccounts);
-	}
-	
 	public String viewAllAccounts() {
 		List<CustomerFriendlyAccount> wrappedAccounts = new ArrayList<>();
 		cachedAccounts.forEach(($) -> {wrappedAccounts.add(new CustomerFriendlyAccount($));});
@@ -127,7 +120,8 @@ public class Customer {
 	 */
 	
 	public boolean createApplication(ApplicationModel application) {
-		return repository.createNewApplication(application) != null;
+		applicationModel =  repository.createNewApplication(application);
+		return applicationModel != null;
 	}
 
 	public ApplicationModel getApplication() {

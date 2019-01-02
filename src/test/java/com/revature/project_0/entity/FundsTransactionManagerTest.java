@@ -1,8 +1,10 @@
 package com.revature.project_0.entity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,7 +67,8 @@ public class FundsTransactionManagerTest {
 		from.setBalance(amount);
 		assertEquals(TransactionOutcome.SUCCESS, fundsTransactionManager
 				.makeTransferOfFunds(from, to, amount, "tester"));
-		assertTrue(0 == from.getBalance() && 1 == to.getBalance());
+		assertThat(0d, Matchers.comparesEqualTo(from.getBalance()));
+		assertThat(1d, Matchers.comparesEqualTo(to.getBalance()));
 		assertEquals(TransactionOutcome.INSUFFICIENT_FUNDS, fundsTransactionManager
 				.makeTransferOfFunds(from, to, amount, "tester"));
 		to.setStatus(AccountStatus.CLOSED);

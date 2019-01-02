@@ -44,4 +44,13 @@ public class PersonalInfoTableTest {
 		personalInfoTable.addRecord(1l, personalInfos[1]);
 		assertTrue(personalInfoTable.deleteRecord(1l));
 	}
+	@Test
+	public void searchCustomerBySSN() {
+		String ssn = "123456789";
+		assertNull(personalInfoTable.fetchCustomerBySSN(ssn));
+		PersonalInfoModel p1 = personalInfos[0];
+		assertTrue(p1.setSSN(ssn));
+		assertTrue(personalInfoTable.addRecord(0l, p1));
+		assertNotNull(personalInfoTable.fetchCustomerBySSN(ssn));
+	}
 }

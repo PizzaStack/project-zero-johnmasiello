@@ -1,6 +1,7 @@
 package com.revature.project_0.repository.model;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class ApplicationModelTest {
 				.withApplicationId(1)
 				.build();
 		
-		assertTrue(0 > m1.compareTo(m2));
+		assertThat(0, greaterThan(m1.compareTo(m2)));
 	}
 	
 	@Test
@@ -69,7 +70,7 @@ public class ApplicationModelTest {
 				.withApplicationId(0)
 				.build();
 		
-		assertTrue(0 < m1.compareTo(m2));
+		assertThat(0, lessThan(m1.compareTo(m2)));
 	}
 	
 	@Test

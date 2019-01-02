@@ -1,9 +1,11 @@
 package com.revature.project_0.repository;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,12 +87,12 @@ public class AccountInfoTableTest {
 	
 	@Test
 	public void testFirstPrimaryKey( ) {
-		assertTrue(0l == accountInfoTable.generateNextPrimaryKey());
+		assertThat(0l, comparesEqualTo(accountInfoTable.generateNextPrimaryKey()));
 	}
 	
 	@Test
 	public void testNextPrimaryKey( ) {
 		accountInfoTable.addRecord(0, accountInfos[0]);
-		assertTrue(1l == accountInfoTable.generateNextPrimaryKey());
+		assertThat(1l, comparesEqualTo(accountInfoTable.generateNextPrimaryKey()));
 	}
 }

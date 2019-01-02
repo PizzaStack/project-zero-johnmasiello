@@ -1,6 +1,7 @@
 package com.revature.project_0.repository.model;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class PersonalInfoModelTest {
 		p1 = PersonalInfoModel.getBuilder().build();
 		p2 = PersonalInfoModel.getBuilder().build();
 		
-		assertTrue(0 == p1.compareTo(p2));
+		assertThat(0, comparesEqualTo(p1.compareTo(p2)));
 	}
 	
 	@Test
@@ -89,7 +90,7 @@ public class PersonalInfoModelTest {
 				.withCustomerId(1)
 				.build();
 		
-		assertTrue(0 > p1.compareTo(p2));
+		assertThat(0, greaterThan(p1.compareTo(p2)));
 	}
 	
 	@Test
@@ -103,7 +104,7 @@ public class PersonalInfoModelTest {
 				.withCustomerId(0)
 				.build();
 		
-		assertTrue(0 < p1.compareTo(p2));
+		assertThat(0, lessThan(p1.compareTo(p2)));
 	}
 	
 	@Test

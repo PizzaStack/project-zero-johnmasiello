@@ -35,8 +35,8 @@ public class RepositoryTest {
 	}
 	@Test
 	public void addRecordToCustomerLoginTable() {
-		assertTrue(repository.
-				createNewCustomerUponValidUsernameAndPassword("_John_", "psswrd") != null);
+		assertNotNull(repository.
+				createNewCustomerUponValidUsernameAndPassword("_John_", "psswrd"));
 	}
 	@Test
 	public void failValidateRequestedUsernameAsDuplicate() {
@@ -52,22 +52,22 @@ public class RepositoryTest {
 	}
 	@Test
 	public void addRecordToPersonalInfoTable() {
-		assertTrue(repository
+		assertNotNull(repository
 				.createOrUpdateNewPersonalInformation(new PersonalInfoModel.Builder()
 						.withCustomerId(0)
 						.withFirstName("John")
 						.withLastName("Masiello")
 						.withDob(Util.getCurrentDate())
 						.build()
-						) != null);
+						));
 	}
 	@Test
 	public void addRecordToApplicationTable() {
-		assertTrue(repository
+		assertNotNull(repository
 				.createNewApplication(new ApplicationModel.Builder()
 						.withCustomerId(0)
 						.withType(AccountType.SAVINGS)
-						.build()) != null);
+						.build()));
 	}
 	@Test
 	public void newApplicationRecordIndicatesTypeSavings() {
@@ -86,7 +86,7 @@ public class RepositoryTest {
 						.withCustomerId(0)
 						.withType(AccountType.SAVINGS)
 						.build());
-		assertTrue(repository.rejectApplication(applicationRequest, EMP_ID) != null);
+		assertNotNull(repository.rejectApplication(applicationRequest, EMP_ID));
 	}
 	@Test
 	public void approveApplication() {
@@ -95,7 +95,7 @@ public class RepositoryTest {
 						.withCustomerId(0)
 						.withType(AccountType.SAVINGS)
 						.build());
-		assertTrue(repository.approveApplication(applicationRequest, EMP_ID) != null);
+		assertNotNull(repository.approveApplication(applicationRequest, EMP_ID));
 	}
 	@Test
 	public void approveApplicationGrowsAccountTable() {
@@ -161,5 +161,29 @@ public class RepositoryTest {
 				.build());
 		assertEquals(AccountStatus.DENIED, 
 				repository.denyAccount(accountId, ADMIN_ID).getStatus());
+	}
+	@Test 
+	public void getTables() {
+		assertNotNull(repository.getCustomerLoginTable());
+		assertNotNull(repository.getPersonalInfoTable());
+	}
+	@Test
+	public void getCustomerInfo() {
+		assertTrue(repository.getAllAssociatedAccounts(1l).isEmpty());
+		assertTrue(repository.getAllAssociatedApplications(1l).isEmpty());
+		assertTrue(repository.getAllApplications().isEmpty());
+		assertTrue(repository.getAllCustomersPersonalInformation().isEmpty());
+	}
+	@Test
+	public void getPersonalRecord() {
+		assertNull(repository.getPersonalRecord(1l));
+	}
+	@Test
+	public void testAuthenticateCustomer() {
+		assertNull(repository.authenticateCustomer("customer", null));
+		CustomerLoginModel subject = repository.createNewCustomerUponValidUsernameAndPassword("customer", "password");
+		assertNotNull(subject);
+		assertNotNull(repository.authenticateCustomer("customer", "password"));
+		assertNull(repository.authenticateCustomer("customer", "pass"));
 	}
 }

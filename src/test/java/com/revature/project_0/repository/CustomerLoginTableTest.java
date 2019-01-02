@@ -59,4 +59,11 @@ public class CustomerLoginTableTest {
 		String duplicateUsername = USERNAME;
 		assertNotEquals(null, customerLoginTable.selectRecord(duplicateUsername));
 	}
+	@Test
+	public void testKeyGeneration() {
+		String firstKey = customerLoginTable.generateNextPrimaryKey();
+		assertNull(firstKey);
+		assertTrue(customerLoginTable.addRecord(USERNAME, customerLogins[0]));
+		assertEquals(USERNAME, customerLoginTable.generateNextPrimaryKey());
+	}
 }
