@@ -48,7 +48,7 @@ public final class Util {
 	
 	public static final LocalDate parseDate(String strDate) {
 		try {
-			return LocalDate.parse(strDate, dateTimeFormatter);
+			return LocalDate.from(LocalDate.parse(strDate, dateTimeFormatter));
 		} catch (Exception e) {
 		}
 		return null;
